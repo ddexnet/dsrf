@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:choice maxOccurs="unbounded" xmlns:avs="http://ddex.net/xml/avs/avs" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://ddex.net/xml/avs/avs" elementFormDefault="unqualified" attributeFormDefault="unqualified">
+  <xs:element name="SY03" type="dsrf:SY03">
+  </xs:element>
+  <xs:element name="SY04" type="dsrf:SY04">
+  </xs:element>
+</xs:choice>

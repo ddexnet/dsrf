@@ -1,0 +1,29 @@
+<!-- This schema was taken from DSRF 3.0 and is simplified for testing purposes
+     Any block that validates against this schema will validate against 3.0 -->
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://ddex.net/xml/dsrf/30" xmlns:avs="http://ddex.net/xml/avs/avs" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:dsrf="http://ddex.net/xml/dsrf/30" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="http://ddex.net/xml/avs/avs" schemaLocation="avs.xsd"/>
+  <xs:complexType name="ResourceIdentificationGroupingForUgcProfile">
+    <xs:sequence>
+      <xs:choice maxOccurs="unbounded">
+        <xs:sequence>
+          <xs:element name="AS01" type="dsrf:AS01"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="MW01" type="dsrf:MW01"/>
+        </xs:sequence>
+        <xs:element name="AS02" type="dsrf:AS02"/>
+      </xs:choice>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="UgcProfileBlock">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" name="ResourceIdentificationGrouping" type="dsrf:ResourceIdentificationGroupingForUgcProfile"/>
+      <xs:choice maxOccurs="unbounded" minOccurs="0">
+        <xs:element name="RU01" type="dsrf:RU01"/>
+        <xs:element name="RU02" type="dsrf:RU02"/>
+      </xs:choice>
+      <xs:sequence maxOccurs="unbounded" minOccurs="0">
+        <xs:element name="SU03" type="dsrf:SU03"/>
+        <xs:element maxOccurs="unbounded" minOccurs="0" name="LI01" type="dsrf:LI01"/>
+      </xs:sequence>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

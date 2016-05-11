@@ -1,0 +1,64 @@
+<xs:schema xmlns:dsrf="http://ddex.net/xml/dsrf/30"
+           xmlns:avs="http://ddex.net/xml/avs/avs"
+           xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://ddex.net/xml/dsrf/30"
+           elementFormDefault="unqualified"
+           attributeFormDefault="unqualified">
+   <xs:import namespace="http://ddex.net/xml/avs/avs"
+              schemaLocation="avs.xsd"/>
+   <xs:annotation>
+      <xs:documentation>© 2006-2015 Digital Data Exchange, LLC (DDEX)</xs:documentation>
+      <xs:documentation>This XML Schema Definition file is, together with all DDEX standards, subject to two licences: If you wish to evaluate whether the standard meets your needs please have a look at the Evaluation Licence at https://kb.ddex.net/display/HBK/Evaluation+Licence+for+DDEX+Standards. If you want to implement and use this DDEX standard, please take out an Implementation Licence. For details please go to http://ddex.net/apply-ddex-implementation-licence.</xs:documentation>
+   </xs:annotation>
+   <xs:element name="SalesReportMessage">
+      <xs:annotation>
+         <xs:documentation source="ddex:Definition">A SalesReportMessage in the DSR Message Suite, Flat File Profile, sent to a MusicalWork Licensor.</xs:documentation>
+      </xs:annotation>
+      <xs:complexType>
+         <xs:choice>
+            <xs:element name="SingleFileSalesReportMessage"
+                        type="dsrf:SingleFileSalesReportMessage">
+               <xs:annotation>
+                  <xs:documentation source="ddex:Definition">A SingleFileSalesReportMessage in the DSR Message Suite, Flat File Profile, sent to a record company or a MusicalWork Licensor.</xs:documentation>
+               </xs:annotation>
+            </xs:element>
+            <xs:element name="MultiFileSalesReportMessage"
+                        type="dsrf:MultiFileSalesReportMessage">
+               <xs:annotation>
+                  <xs:documentation source="ddex:Definition">A MultiFileSalesReportMessage in the DSR Message Suite, Flat File Profile, sent to a record company or a MusicalWork Licensor.</xs:documentation>
+               </xs:annotation>
+            </xs:element>
+         </xs:choice>
+      </xs:complexType>
+   </xs:element>
+   <xs:complexType name="FileHeader">
+        <xs:annotation>
+           <xs:documentation source="ddex:Definition">File Header Record for all Sales Report Message formatted in accordance with this standard if a Sales Report Message is split into several files.</xs:documentation>
+           <xs:documentation source="ddex:Definition">A Composite placed at the beginning of each File if a Sales
+  Report Message is split into several Files. </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+           <xs:element name="RecordType" type="avs:RecordType">
+              <xs:annotation>
+                 <xs:documentation source="ddex:Definition">The Type of the Record; always to contain 'FHEA'.</xs:documentation>
+              </xs:annotation>
+           </xs:element>
+           <xs:element name="MessageId" type="xs:stringg">
+              <xs:annotation>
+                 <xs:documentation source="ddex:Definition">Identifier of the Sales Report Message. The Message ID should be unique for a MessageSender and never be re-used by the MessageSender.</xs:documentation>
+              </xs:annotation>
+           </xs:element>
+           <xs:element name="FileNumber" type="xs:integer">
+              <xs:annotation>
+                 <xs:documentation source="ddex:Definition">Sequence number of the file within the Flat File Sales Report Message. The first file shall be numbered “1”. As the first file does not contain a FHEA Record, the first FHEA header shall contain a File Number value of “2”.</xs:documentation>
+              </xs:annotation>
+           </xs:element>
+           <xs:element name="NumberOfFiles" minOccurs="0" type="xs:integer">
+              <xs:annotation>
+                 <xs:documentation source="ddex:Definition">Number of files of that the Flat File Sales Report Message has been split into. This can be omitted if not known.</xs:documentation>
+              </xs:annotation>
+           </xs:element>
+        </xs:sequence>
+     </xs:complexType>
+  </xs:schema>

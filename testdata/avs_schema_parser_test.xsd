@@ -1,0 +1,72 @@
+<xs:schema xmlns:avs="http://ddex.net/xml/avs/avs" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://ddex.net/xml/avs/avs" elementFormDefault="unqualified" attributeFormDefault="unqualified">
+  <xs:annotation>
+    <xs:documentation>© 2006-2015 Digital Data Exchange, LLC (DDEX)</xs:documentation>
+  </xs:annotation>
+  <xs:annotation>
+    <xs:documentation>
+      This XML Schema Definition file is, together with all DDEX standards, subject to two licences:
+      If you wish to evaluate whether the standard meets your needs please have a look at the Evaluation Licence at https://kb.ddex.net/display/HBK/Evaluation+Licence+for+DDEX+Standards. If you want to
+      implement and use this DDEX standard, please take out an Implementation Licence. For details please go to http://ddex.net/apply-ddex-implementation-licence.
+    </xs:documentation>
+  </xs:annotation>
+  <xs:simpleType name="CurrentTerritoryCode">
+    <xs:annotation>
+      <xs:documentation source="ddex:Definition">
+        A code representing a Territory. This includes ISO 3166-1 two-letter codes, CISAC TIS codes, plus a code for Worldwide.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:union/>
+  </xs:simpleType>
+  <xs:simpleType name="UseType_DSRF">
+    <xs:annotation>
+      <xs:documentation source="ddex:Definition">
+        A Type of a nature of a Service, or a Release, as used by a Consumer.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="NonInterStream">
+        <xs:annotation>
+          <xs:documentation source="ddex:Definition">
+            A Type of an Entity used when a MessageSender wishes to indicate that the value within the allowed value set is defined by the contractual relationship between MessageSender and MessageRecipient.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Broadcast">
+        <xs:annotation>
+          <xs:documentation source="ddex:Definition">
+            To Deliver a Resource using radio waves on the radio frequency portion of the electromagnetic spectrum. This allowed value is deprecated. DDEX advises that this value will be removed at a future date and therefore recommends against using it.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="ConditionalDownload">
+        <xs:annotation>
+          <xs:documentation source="ddex:Definition">
+            To Download under a condition (e.g. tethered to a service or device).
+          </xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="ContentInfluencedStream">
+        <xs:annotation>
+          <xs:documentation source="ddex:Definition">
+            To Stream where the only interactivity provided allows the Consumer to start, stop, pause, fast forward and rewind the Stream, and where there is limited flexibility to influence the content of the Stream.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Display">
+        <xs:annotation>
+          <xs:documentation source="ddex:Definition">
+            To display a Resource on a device where it will disappear when the device is switched off. This allowed value is deprecated. DDEX advises that this value will be removed at a future date and therefore recommends against using it.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Download">
+        <xs:annotation>
+          <xs:documentation source="ddex:Definition">
+            To transfer a Release from a Service's Computer to a Consumer's Computer for later consumption. This allowed value is deprecated. DDEX advises that this value will be removed at a future date and therefore recommends against using it.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>
+

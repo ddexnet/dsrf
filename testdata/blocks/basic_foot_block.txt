@@ -1,0 +1,16 @@
+file_number: 1
+type: FOOT
+rows {
+  type: "FFOO"
+  row_number: 7
+  cells {
+    name: "RecordType"
+    cell_type: STRING
+    string_value: "FFOO"
+  }
+  cells {
+    name: "NumberOfLines"
+    cell_type: INTEGER
+    integer_value: 123
+  }
+}

@@ -1,0 +1,187 @@
+type: BODY
+number: 1
+file_number: 1
+rows {
+  type: "SU03"
+  cells {
+    name: "RecordType"
+    cell_type: STRING
+    string_value: "SU03"
+  }
+  cells {
+    name: "BlockId"
+    cell_type: STRING
+    string_value: "BL0"
+  }
+  cells {
+    name: "DspResourceId"
+    cell_type: STRING
+    string_value: "A870199188281554"
+  }
+  cells {
+    name: "CommercialModelType"
+    cell_type: STRING
+    string_value: "AdSupport"
+  }
+  cells {
+    name: "UseType"
+    cell_type: STRING
+    string_value: "InterActiveStreaming"
+  }
+  cells {
+    name: "Territory"
+    cell_type: STRING
+    string_value: "GB"
+  }
+  cells {
+    name: "ServiceDescription"
+    cell_type: STRING
+    string_value: "YouTube"
+  }
+  cells {
+    name: "NumberOfUses"
+    cell_type: INTEGER
+    integer_value: 16625
+  }
+  cells {
+    name: "DspNetRevenue"
+    cell_type: DECIMAL
+    decimal_value: 1.927513
+  }
+}
+rows {
+  type: "LI01"
+  cells {
+    name: "RecordType"
+    cell_type: STRING
+    string_value: "LI01"
+  }
+  cells {
+    name: "BlockId"
+    cell_type: STRING
+    string_value: "BL0"
+  }
+  cells {
+    name: "CommercialModelType"
+    cell_type: STRING
+    string_value: "AdSupport"
+  }
+  cells {
+    name: "UseType"
+    cell_type: STRING
+    string_value: "InterActiveStreaming"
+  }
+  cells {
+    name: "Territory"
+    cell_type: STRING
+    string_value: "GB"
+  }
+  cells {
+    name: "RightsControllerName"
+    cell_type: STRING
+    string_value: "Sample_CS"
+  }
+  cells {
+    name: "RightsControllerProprietaryId"
+    cell_type: STRING
+    string_value: ""
+  }
+  cells {
+    name: "RightSharePercent"
+    cell_type: INTEGER
+    integer_value: 84264906
+  }
+  cells {
+    name: "AllocatedNetViews"
+    cell_type: DECIMAL
+    decimal_value: 25
+  }
+  cells {
+    name: "AllocatedNetRevenue"
+    cell_type: DECIMAL
+    decimal_value: 150.851178200327
+  }
+  cells {
+    name: "AllocatedAmount"
+    cell_type: DECIMAL
+    decimal_value: 0.18467234
+  }
+  cells {
+    name: "Currency"
+    cell_type: STRING
+    string_value: "USD"
+  }
+  cells {
+    name: "ValidityPeriod"
+    cell_type: STRING
+    string_value: "2/28/2015"
+  }
+}
+rows {
+  type: "LI01"
+  cells {
+    name: "RecordType"
+    cell_type: STRING
+    string_value: "LI01"
+  }
+  cells {
+    name: "BlockId"
+    cell_type: STRING
+    string_value: "BL0"
+  }
+  cells {
+    name: "CommercialModelType"
+    cell_type: STRING
+    string_value: "AdSupport"
+  }
+  cells {
+    name: "UseType"
+    cell_type: STRING
+    string_value: "InterActiveStreaming"
+  }
+  cells {
+    name: "Territory"
+    cell_type: STRING
+    string_value: "GB"
+  }
+  cells {
+    name: "RightsControllerName"
+    cell_type: STRING
+    string_value: "OWNER1"
+  }
+  cells {
+    name: "RightsControllerProprietaryId"
+    cell_type: STRING
+    string_value: ""
+  }
+  cells {
+    name: "RightSharePercent"
+    cell_type: INTEGER
+    integer_value: 84264906
+  }
+  cells {
+    name: "AllocatedNetViews"
+    cell_type: DECIMAL
+    decimal_value: 75
+  }
+  cells {
+    name: "AllocatedNetRevenue"
+    cell_type: DECIMAL
+    decimal_value: 43.8193459455749
+  }
+  cells {
+    name: "AllocatedAmountPayable"
+    cell_type: DECIMAL
+    decimal_value: 0.5764425
+  }
+  cells {
+    name: "Currency"
+    cell_type: STRING
+    string_value: "USD"
+  }
+  cells {
+    name: "ValidityPeriod"
+    cell_type: STRING
+    string_value: "2/28/2015"
+  }
+}

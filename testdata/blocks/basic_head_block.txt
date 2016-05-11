@@ -1,0 +1,60 @@
+type: HEAD
+file_number: 1
+rows {
+  type: "FHEA"
+  row_number: 3
+  cells {
+    name: "RecordType"
+    cell_type: STRING
+    string_value: "FHEA"
+  }
+  cells {
+    name: "MessageId"
+    cell_type: STRING
+    string_value: "MessageId"
+  }
+  cells {
+    name: "FileNumber"
+    cell_type: INTEGER
+    integer_value: 1
+  }
+  cells {
+    name: "NumberOfFiles"
+    cell_type: INTEGER
+    integer_value: 1
+  }
+}
+rows {
+  type: "SY03"
+  row_number: 4
+  cells {
+    name: "RecordType"
+    cell_type: STRING
+    string_value: "SY03"
+  }
+  cells {
+    name: "CommercialModelType"
+    cell_type: STRING
+    string_value: "AdSupport"
+  }
+  cells {
+    name: "UseType"
+    cell_type: STRING
+    string_value: "NonInterStream"
+  }
+  cells {
+    name: "Territory"
+    cell_type: STRING
+    string_value: "AU"
+  }
+  cells {
+    name: "ServiceDescription"
+    cell_type: STRING
+    string_value: "AdSupport"
+  }
+  cells {
+    name: "NumberOfUsages"
+    cell_type: INTEGER
+    integer_value: 108552
+  }
+}

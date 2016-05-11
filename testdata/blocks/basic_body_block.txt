@@ -1,0 +1,61 @@
+type: BODY
+number: 1
+file_number: 1
+rows {
+  type: "RE01"
+  row_number: 5
+  cells {
+    name: "RecordType"
+    cell_type: STRING
+    string_value: "RE01"
+  }
+  cells {
+    name: "BlockId"
+    cell_type: STRING
+    string_value: "1"
+  }
+  cells {
+    name: "ReleaseReference"
+    cell_type: STRING
+    string_value: "RL1"
+  }
+  cells {
+    name: "DspReleaseId"
+    cell_type: STRING
+    string_value: "of:6616065478244fd394695eccdc930bc1"
+  }
+}
+rows {
+  type: "AS02"
+  row_number: 6
+  cells {
+    name: "RecordType"
+    cell_type: STRING
+    string_value: "AS02"
+  }
+  cells {
+    name: "BlockId"
+    cell_type: STRING
+    string_value: "1"
+  }
+  cells {
+    name: "ResourceReference"
+    cell_type: STRING
+    string_value: "RES1"
+  }
+  cells {
+    name: "DspResourceId"
+    cell_type: STRING
+    string_value: "of:9d01d0c0adff4124b33e56fe60c19092"
+  }
+  cells {
+    name: "ISRC"
+    cell_type: STRING
+    string_value: "USUM70600055"
+  }
+  cells {
+    name: "Title"
+    cell_type: STRING
+    string_value: "Lët Më Gët Thîś Rîght"
+  }
+}

@@ -1,0 +1,372 @@
+<xs:schema xmlns:dsrf="http://ddex.net/xml/dsrf/30"
+           xmlns:avs="http://ddex.net/xml/avs/avs"
+           xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://ddex.net/xml/dsrf/30"
+           elementFormDefault="unqualified"
+           attributeFormDefault="unqualified">
+  <xs:import namespace="http://ddex.net/xml/avs/avs"
+              schemaLocation="avs.xsd"/>
+    <xs:annotation>
+      <xs:documentation>© 2006-2015 Digital Data Exchange, LLC (DDEX)</xs:documentation>
+      <xs:documentation>This XML Schema Definition file is, together with all DDEX standards, subject to two licences: If you wish to evaluate whether the standard meets your needs please have a look at the Evaluation Licence at https://kb.ddex.net/display/HBK/Evaluation+Licence+for+DDEX+Standards. If you want to implement and use this DDEX standard, please take out an Implementation Licence. For details please go to http://ddex.net/apply-ddex-implementation-licence.</xs:documentation>
+    </xs:annotation>
+  <xs:complexType name="HEAD">
+    <xs:annotation>
+      <xs:documentation source="ddex:Definition">
+        File Header Record for all Sales Report Message formatted in accordance with this standard if a Sales Report Message is split into several files.
+      </xs:documentation>
+      <xs:documentation source="ddex:Definition">
+        A Composite placed at the beginning of each File if a Sales Report Message is split into several Files.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="RecordType" type="avs:RecordType">
+        <xs:annotation>
+          <xs:documentation source="ddex:Definition">The Type of the Record; always to contain 'FHEA'.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="MessageId" type="xs:string">
+        <xs:annotation>
+          <xs:documentation source="ddex:Definition">
+            Identifier of the Sales Report Message. The Message ID should be unique for a MessageSender and never be re-used by the MessageSender.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="FileNumber" type="xs:integer">
+        <xs:annotation>
+          <xs:documentation source="ddex:Definition">
+            Sequence number of the file within the Flat File Sales Report Message. The first file shall be numbered “1”. As the first file does not contain a FHEA Record, the first FHEA header shall contain a File Number value of “2”.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="NumberOfFiles" minOccurs="0" type="xs:integer">
+        <xs:annotation>
+          <xs:documentation source="ddex:Definition">
+            Number of files of that the Flat File Sales Report Message has been split into. This can be omitted if not known.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="RU01">
+    <xs:annotation>
+      <xs:documentation source="ddex:Definition">UGC Release Usage Summary Record to provide a summary of the uses of up to 100 uses UGC Releases.</xs:documentation>
+      <xs:documentation source="ddex:Definition">A Composite containing a UGC Release Usage Summary Record with a summary of the Uses of up to 100 uses of UGC Releases.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="RecordType" type="avs:RecordType">
+        <xs:annotation>
+           <xs:documentation source="ddex:Definition">The Type of the Record; always to contain 'RU01'.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="BlockId" type="xs:string">
+        <xs:annotation>
+          <xs:documentation source="ddex:Definition">The Identifier (specific to the Message) of the Block that this Record belongs to. All Records in a single Block shall have the same BlockId.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="DspReleaseId" maxOccurs="unbounded" type="xs:string">
+        <xs:annotation>
+          <xs:documentation source="ddex:Definition">The ProprietaryIdentifier of the UGC Release assigned by the MessageSender.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="NumberOfUsages" maxOccurs="unbounded" type="xs:integer">
+        <xs:annotation>
+          <xs:documentation source="ddex:Definition">The number of times the UGC Release has been used in the sales period covered by the Sales Report Message.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="RU02">
+    <xs:annotation>
+      <xs:documentation source="ddex:Definition">UGC Release Usage Record to provide details of the Uses of a single UGC Release.</xs:documentation>
+      <xs:documentation source="ddex:Definition">A Composite containing a UGC Release Usage Record with details of of the Uses of a single UGC Release with title and URL of the Resource.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="RecordType" type="avs:RecordType">
+        <xs:annotation>
+          <xs:documentation source="ddex:Definition">The Type of the Record; always to contain 'RU02'.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="BlockId" type="xs:string">
+        <xs:annotation>
+          <xs:documentation source="ddex:Definition">The Identifier (specific to the Message) of the Block that this Record belongs to. All Records in a single Block shall have the same BlockId.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="DspReleaseId" type="xs:string">
+        <xs:annotation>
+          <xs:documentation source="ddex:Definition">The ProprietaryIdentifier of the UGC Release assigned by the MessageSender.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="ReleaseTitle" type="xs:string">
+        <xs:annotation>
+          <xs:documentation source="ddex:Definition">The Title of the UGC Release, as given by the user who uploaded the UGC Release.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="ReleaseURL" type="xs:string">
+        <xs:annotation>
+          <xs:documentation source="ddex:Definition">The URL from which the MessageSender made the UGC Release available to Consumers.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="NumberOfUsages" type="xs:integer">
+        <xs:annotation>
+          <xs:documentation source="ddex:Definition">The number of times the “Head” Resource or Work has been used in the sales period covered by the Sales Report Message.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="SU02">
+    <xs:annotation>
+      <xs:documentation source="ddex:Definition">Usage, Revenue or Sales Record for Streaming Services and Webcasts (to be used in accordance with Clause 7.7).</xs:documentation>
+      <xs:documentation source="ddex:Definition">A Composite containing details of Usages, Revenues or Sales of Releases and/or Resources (not UGC) for streaming services or other similar services.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="RecordType" type="avs:RecordType">
+        <xs:annotation>
+          <xs:documentation source="ddex:Definition">The Type of the Record; always to contain 'SU02'.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="BlockId" type="xs:string">
+        <xs:annotation>
+          <xs:documentation source="ddex:Definition">The Identifier (specific to the Message) of the Block that this Record belongs to. All Records in a single Block shall have the same BlockId.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="SalesTransactionId" type="xs:string">
+        <xs:annotation>
+          <xs:documentation source="ddex:Definition">ProprietaryIdentifier of the Sales Transaction, allocated by the MessageSender, which allows an invoice to be tied back to an individual SalesTransaction composite/record. Globally and perpetually unique together with the Message ID. The SalesTransactionId may change when the report is re-generated.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="TransactedReleaseOrResource" type="xs:string">
+        <xs:annotation>
+          <xs:documentation source="ddex:Definition">The Identifier (specific to the Block) of the Record describing the Release (either a Head Release or a SubRelease) or Resource whose Usages, Revenues or Sales are being reported.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="CommercialModelType" type="xs:string">
+        <xs:annotation>
+          <xs:documentation source="ddex:Definition">TheType of CommercialModel of the SalesTransaction. The CommercialModelType indicates how a Consumer pays for a Service or Release.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="UseType" type="avs:UseType">
+        <xs:annotation>
+          <xs:documentation source="ddex:Definition">The nature of a Service, or a Release, as used by a Consumer.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="Territory" type="xs:string">
+        <xs:annotation>
+          <xs:documentation source="ddex:Definition">The Territory for which the Usage, Revenue or Sale is reported.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="ServiceDescription" minOccurs="0" type="xs:string">
+        <xs:annotation>
+          <xs:documentation source="ddex:Definition">A description of the service name (e.g. a service tier) of the MessageSender. If the MessageSender only has one tier, this element may contain the MessageSenderName.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="IsRoyaltyBearing" type="xs:boolean">
+        <xs:annotation>
+          <xs:documentation source="ddex:Definition">The Boolean flag indicating whether the MessageSender is contractually obliged to pay royalties to the RightsController for the SalesTransaction reported in the Record.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="NumberOfStreams" type="xs:integer">
+        <xs:annotation>
+          <xs:documentation source="ddex:Definition">The number of Streams of the Release from the MessageSender to
+Consumers. </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="Currency" minOccurs="0" type="xs:string">
+        <xs:annotation>
+          <xs:documentation source="ddex:Definition">The Currency in which the financial fields are provided in this Records (represented by an ISO 4217 CurrencyCode).</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="PriceConsumerPaidExcSalesTax" minOccurs="0" type="xs:decimal">
+        <xs:annotation>
+          <xs:documentation source="ddex:Definition">A Price paid by Consumers, excluding SalesTax for each SalesTransaction. This may be a nominal price.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="PromotionalActivity" minOccurs="0" type="xs:string">
+        <xs:annotation>
+          <xs:documentation source="ddex:Definition">Free-text Description of a promotional activity that led to the Release being distributed.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="PreviewAvailable" minOccurs="0" type="xs:boolean">
+        <xs:annotation>
+          <xs:documentation source="ddex:Definition">The Boolean flag that indicates whether the service offers Preview facilities (True/False). Setting this flag to true does not mean that all (or even any) of the reported Releases have been made available as a Preview.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="SY03">
+    <xs:annotation>
+      <xs:documentation source="ddex:Definition">UGC Summary for Subscription Services.</xs:documentation>
+      <xs:documentation source="ddex:Definition">
+        A Composite containing summary information about UGC Usages, Sales and Revenues with support for subscription services.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="RecordType" type="avs:RecordType">
+        <xs:annotation>
+          <xs:documentation source="ddex:Definition">The Type of the Record; always to contain 'SY03'.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="CommercialModelType" type="xs:string">
+        <xs:annotation>
+          <xs:documentation source="ddex:Definition">
+            TheType of CommercialModel of the SalesTransaction. The CommercialModelType indicates how a Consumer pays for a Service or Release.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="UseType" type="avs:UseType">
+        <xs:annotation>
+          <xs:documentation source="ddex:Definition">
+            The nature of a Service, or a Release, as used by a Consumer.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="Territory" type="xs:string">
+        <xs:annotation>
+          <xs:documentation source="ddex:Definition">
+            The Territory for which the sale/transaction is reported.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="ServiceDescription" type="xs:string">
+        <xs:annotation>
+          <xs:documentation source="ddex:Definition">
+            The service name (e.g. a service tier) under which the SalesTransaction took place.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="NumberOfUsages" type="xs:integer">
+        <xs:annotation>
+          <xs:documentation source="ddex:Definition">
+            The number of Usages of the Release from the MessageSender to Consumers, including any sales adjustments. Sales adjustments include e.g. file failures.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="AS02">
+    <xs:annotation>
+      <xs:documentation source="ddex:Definition">
+        Basic Sound Recording Record to describe sound recordings and music videos that have been used or sold individually or as part of a Release (with Musical Work Information).
+      </xs:documentation>
+      <xs:documentation source="ddex:Definition">
+        A Composite containing a Basic Sound Recording Record with details of sound recordings and music videos that have been used or sold individually or as part of a Release (with Musical Work Information).
+      </xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="RecordType" type="avs:RecordType">
+        <xs:annotation>
+          <xs:documentation source="ddex:Definition">The Type of the Record; always to contain 'AS02'.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="BlockId" type="xs:string">
+        <xs:annotation>
+          <xs:documentation source="ddex:Definition">
+            The Identifier (specific to the Message) of the Block that this Record belongs to. All Records in a single Block shall have the same BlockId.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="ResourceReference" type="xs:string">
+        <xs:annotation>
+          <xs:documentation source="ddex:Definition">
+            The Identifier (specific to the Block) of the Record, that allows other Records to reference this Record.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="DspResourceId" type="xs:string">
+        <xs:annotation>
+          <xs:documentation source="ddex:Definition">
+            The ProprietaryIdentifier of the Resource assigned by the MessageSender
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="ISRC" type="xs:string">
+        <xs:annotation>
+          <xs:documentation source="ddex:Definition">
+            The ISRC (International Standard Recording Code as defined in ISO 3901) for the SoundRecording. An ISRC comprises four parts: two characters, followed by three alphanumeric characters, then two digits and five digits.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="Title" type="xs:string">
+        <xs:annotation>
+          <xs:documentation source="ddex:Definition">The ReferenceTitle of the SoundRecording.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="FOOT">
+    <xs:annotation>
+      <xs:documentation source="ddex:Definition">
+        File Footer Record for all Sales Report Message formatted in accordance with this standard if a Sales Report Message is split into several files.
+      </xs:documentation>
+      <xs:documentation source="ddex:Definition">
+         Composite placed at the end of each File if a Sales Report Message is split into several Files.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="RecordType" type="avs:RecordType">
+        <xs:annotation>
+          <xs:documentation source="ddex:Definition">The Type of the Record; always to contain 'FFOO'.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="NumberOfLines" type="xs:integer">
+        <xs:annotation>
+          <xs:documentation source="ddex:Definition">
+            Number of data lines communicated in the file, including Header and Footer Records as well as empty Records in accordance with Cl ause 6.6.7 and commented-out Records in accordance with Clause 6.6.9.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="RE01">
+    <xs:annotation>
+      <xs:documentation source="ddex:Definition">
+        Basic Audio Release Record to describe audio Releases that have been used or sold.
+      </xs:documentation>
+      <xs:documentation source="ddex:Definition">
+        A Composite containing a Basic Audio Release Record with details of audio Releases that have been used or sold.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="RecordType" type="avs:RecordType">
+        <xs:annotation>
+          <xs:documentation source="ddex:Definition">The Type of the Record; always to contain 'RE01'.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="BlockId" type="xs:string">
+        <xs:annotation>
+          <xs:documentation source="ddex:Definition">
+            The Identifier (specific to the Message) of the Block that this Record belongs to. All Records in a single Block shall have the same BlockId.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="ReleaseReference" type="xs:string">
+        <xs:annotation>
+          <xs:documentation source="ddex:Definition">
+            The Identifier (specific to the Block) of the Record, that allows other Records to reference this Record.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="DspReleaseId" type="xs:string">
+        <xs:annotation>
+          <xs:documentation source="ddex:Definition">
+            The ProprietaryIdentifier of the Release assigned by the MessageSender.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="ddex_IsoDate">
+    <xs:annotation>
+      <xs:documentation source="ddex:Definition">
+        A Date represented in ISO 8601:2004 format: YYYY[-MM[-DD]].
+      </xs:documentation>
+      <xs:documentation source="ddex:Comment">
+        Format: A Date represented as a calendar Year, Month or Day (in ISO 8601:2004 format: YYYY, YYYY-MM or YYYY-MM-DD).
+      </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[0-9]{4}(-[0-9]{2}){0,1}(-[0-9]{2}){0,1}"/>
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>
