@@ -30,6 +30,16 @@ from dsrf.proto import cell_pb2
 from dsrf.proto import row_pb2
 
 
+class TsvDialect(csv.Dialect):
+  delimiter = constants.FILE_DELIMITER
+  quotechar = ''
+  escapechar = constants.ESCAPER
+  doublequote = False
+  skipinitialspace = False
+  lineterminator = '\n'
+  quoting = csv.QUOTE_NONE
+
+
 class DSRFFileParser(object):
   """Parses a single file in the DSRF report."""
 
@@ -82,19 +92,21 @@ class DSRFFileParser(object):
       cell_proto.boolean_value.extend(cell_parsed_data)
     return cell_proto
 
-  def get_row_object(self, row_validator, line, row_number, block_number):
+  def get_row_object(
+      self, row_validator, line, row_type, row_number, block_number):
     """Parses the row data to a protocol buffer row object.
 
     Args:
       row_validator: A list of subclass of cell_validators.BaseCellValidator.
       line: The row from the file (eg. ['FFOO', '123']).
+      row_type: String row type (eg. 'SY02', 'SY0201').
       row_number: The row number which is now parsed in the original file.
       block_number: The number of the block, for error reporting purposes.
 
     Returns:
       A row_pb2.Row object.
     """
-    row = row_pb2.Row(type=line[0].upper(), row_number=row_number)
+    row = row_pb2.Row(type=row_type, row_number=row_number)
     cells = []
     for cell_validator, cell_content in zip(row_validator, line):
       if not cell_validator:
@@ -121,13 +133,16 @@ class DSRFFileParser(object):
       row_number: The line number of the parsed line.
 
     Returns:
-      A 4 letters row type code.
+      A 4-6 character row type code (eg. "MW01", "SY0201").
     """
     if not line:
       raise error.RowValidationFailure(
           row_number, self.file_name,
           'It is not permissible to include empty Records.')
     row_type = line[0].upper()
+    if constants.VERSIONED_TSV_ROW_TYPE_PATTERN.match(row_type):
+      # We have a row type of the form "SY02.01", convert to "SY0201".
+      row_type = row_type.replace('.', '')
     if row_type not in row_validators_list:
       raise error.RowValidationFailure(
           row_number, self.file_name,
@@ -148,6 +163,7 @@ class DSRFFileParser(object):
       Each yield is a single block object (block_pb2.Block).
     """
     row_number = 0
+    block_number = 0
     if self.is_compressed():
       tsv = gzip.open(self.file_path, 'rU')
     else:
@@ -155,7 +171,7 @@ class DSRFFileParser(object):
     current_block = block_pb2.Block(file_number=file_number)
     self.logger.info(
         'Start parsing the HEAD block in file number %s.', file_number)
-    for line in csv.reader(tsv, delimiter=constants.FILE_DELIMITER):
+    for line in csv.reader(tsv, dialect=TsvDialect):
       row_number += 1
       # Comment row.
       if line[0].startswith(constants.COMMENT_SIGN):
@@ -163,11 +179,12 @@ class DSRFFileParser(object):
       try:
         row_type = self._get_row_type(line, row_validators_list, row_number)
         # End of block check.
-        if self.is_end_of_block(line, row_number, current_block):
+        if self.is_end_of_block(line, row_type, row_number, current_block):
           yield current_block
           current_block = block_pb2.Block(file_number=file_number)
         # HEAD/FOOT row.
-        if row_type in constants.HEAD_ROWS or row_type in constants.FOOT_ROWS:
+        if (constants.HEADER_ROW_PATTERN.match(row_type) or
+            row_type in constants.FOOT_ROWS):
           current_block.type = block_pb2.HEAD
           if row_type in constants.FOOT_ROWS:
             self.logger.info(
@@ -176,12 +193,14 @@ class DSRFFileParser(object):
           if row_type == 'HEAD':
             current_block.version = line[1]
           current_block.rows.extend([self.get_row_object(
-              row_validators_list[row_type], line, row_number, row_type)])
+              row_validators_list[row_type], line, row_type, row_number,
+              block_number)])
           continue
         # Body row.
         block_number = self.get_block_number(line, row_number)
         row = self.get_row_object(
-            row_validators_list[row_type], line, row_number, block_number)
+            row_validators_list[row_type], line, row_type, row_number,
+            block_number)
         if not current_block.type:
           current_block.type = block_pb2.BODY
           current_block.number = block_number
@@ -193,16 +212,16 @@ class DSRFFileParser(object):
 
     yield current_block
 
-  def is_end_of_block(self, line, row_number, current_block):
-    # If the block is a head, it can be the first block (an actual HEAD) or a
-    # new block (new blocks default type is HEAD).
+  def is_end_of_block(self, line, row_type, row_number, current_block):
+    # If the block is part of the header (HEAD or a summary row), we need to
+    # check if we're still in the header.
     if current_block.type == block_pb2.HEAD:
-      return line[0] not in constants.HEAD_ROWS
+      return not constants.HEADER_ROW_PATTERN.match(row_type)
     # Foot block is always the last one in a file.
     elif current_block.type == block_pb2.FOOT:
-      return line[0] not in constants.FOOT_ROWS
+      return row_type not in constants.FOOT_ROWS
     # Cases of a FOOT block after a BODY block or 2 BODY blocks.
     else:
       return (
-          line[0] in constants.FOOT_ROWS or
+          row_type in constants.FOOT_ROWS or
           current_block.number != self.get_block_number(line, row_number))

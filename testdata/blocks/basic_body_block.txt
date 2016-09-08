@@ -56,6 +56,6 @@ rows {
   cells {
     name: "Title"
     cell_type: STRING
-    string_value: "Lët Më Gët Thîś Rîght"
+    string_value: "Lët Më Gët | Thîś \"Rîght"
   }
 }

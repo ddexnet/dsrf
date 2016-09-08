@@ -65,7 +65,20 @@ class XSDProfileParser(object):
     is_choice = node_element.tag == constants.XSD_TAG_PREFIX + 'choice'
     node = conformance_validators.Node(
         min_occurs, max_occurs, is_sequence, is_choice)
-    node_row_type = node_element.attrib.get('type', '')[5:]
+    node_row_type = node_element.attrib.get('type', '')
+    # Strip the DSRF prefix.
+    if (node_row_type and not
+        node_row_type.startswith(constants.DSRF_TYPE_PREFIX)):
+      raise error.XsdParsingFailure(
+          self.dsrf_xsd_file_name,
+          'The element "%s" with type "%s" does not have the "%s" prefix. This '
+          'is likely caused by the type of the parent element not being '
+          'recognized as a valid row type. Please ensure that all row types in '
+          'in the XSD match the pattern "%s".'
+          % (node_element.attrib.get('name'),
+             node_row_type, constants.DSRF_TYPE_PREFIX,
+             constants.VALID_ROW_TYPE_PATTERN.pattern))
+    node_row_type = node_row_type[len(constants.DSRF_TYPE_PREFIX):]
     if node_row_type:
       if constants.VALID_ROW_TYPE_PATTERN.match(node_row_type):
         node.set_row_type(node_row_type)
@@ -80,8 +93,10 @@ class XSDProfileParser(object):
       else:
         raise error.XsdParsingFailure(
             self.dsrf_xsd_file_name,
-            'The element type "%s" does not exist in the dsrf xsd file "%s".'
-            % (node_row_type, self.dsrf_xsd_file_name))
+            'The element "%s" with type "%s" does not exist in the dsrf xsd '
+            'file "%s".'
+            % (node_element.attrib.get('name'), node_row_type,
+               self.dsrf_xsd_file_name))
     if node_element.getchildren():
       for child in node_element:
         if child.tag in PROFILE_NODE_TYPES:

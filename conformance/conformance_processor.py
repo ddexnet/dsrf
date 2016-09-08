@@ -68,8 +68,7 @@ if __name__ == '__main__':
       description='Validates the conformance of the report blocks.')
   arg_parser.add_argument(
       '--profile_name', type=str, required=True,
-      help='The name of the profile to use in the conformance validation. '
-      'Available profiles: %s' % constants.PROFILE_NUMBER_MAP)
+      help='The name of the profile to use in the conformance validation.')
   arg_parser.add_argument(
       '--dsrf_xsd_file', type=str,
       help='The dsrf xsd schema file. This file contains the profiles and the '

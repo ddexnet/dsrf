@@ -177,7 +177,7 @@ class ConformanceProcessorBasicTest(unittest.TestCase):
       except error.BlockConformanceFailure as e:
         self.assertIn(expected_error, str(e))
 
-  def test_conformence_end2end(self):
+  def test_conformance_end2end(self):
     """Tests the full flow, from tsv parsing to conformance validation."""
     self._parse_file(
         '../testdata/DSR_TEST_YouTube_AdSupport-music_2015-Q4_IS_1of1_'
@@ -189,7 +189,7 @@ class ConformanceProcessorBasicTest(unittest.TestCase):
     self.assertEquals(nr_blocks_validated, 4)
     self.assertEquals(nr_rows_validated, 21)
 
-  def test_conformence_end2end_minoccurs_zero(self):
+  def test_conformance_end2end_minoccurs_zero(self):
     """Tests the case where an element in a sequence may be omitted."""
     self._parse_file(
         '../testdata/DSR_TEST2_YouTube_AdSupport-music_2015-Q4_IS_1of1_'

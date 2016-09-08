@@ -115,7 +115,6 @@ class DecimalValidatorTest(BaseValidatorTest):
     return cell_validators.DecimalValidator('decimal_cell', self.logger)
 
 
-# TODO(b/23202991): Add '$' to the end of the pattern in the XSD file.
 class PatternValidatorTest(BaseValidatorTest):
   valid_values = ['PADPIDA0', 'PADPIDAA', 'PADPIDAa']
   invalid_values = ['PADPIDA', 'PADPID', 'YouTube', 'PADPIDA ', True, 0, 10.2,

@@ -26,9 +26,12 @@ BOLD = '\033[1m'
 # The XSD tags prefix.
 XSD_TAG_PREFIX = '{http://www.w3.org/2001/XMLSchema}'
 
-# Four letter code of the form "SY02" (two numbers and two digits), with HEAD
+# Four character code of the form "SY02" (two letters and two digits), with HEAD
 # and FOOT being special values.
-VALID_ROW_TYPE_PATTERN = re.compile('^[A-Z]{2}[0-9]{2}$|HEAD|FOOT')
+VALID_ROW_TYPE_PATTERN = re.compile('^[A-Z]{2}[0-9]{2,4}$|HEAD|FOOT')
+
+# In the TSV, versioned row types contain periods, eg. "SY02.01".
+VERSIONED_TSV_ROW_TYPE_PATTERN = re.compile(r'^[A-Z]{2}\d{2}\.\d{2}$')
 
 # Block Id cell's pattern.
 BLOCK_PATTERN = re.compile('BL[0-9]+')
@@ -39,11 +42,15 @@ FILE_DELIMITER = '\t'
 # The flat file secondary cells delimiter.
 REPEATED_VALUE_DELIMITER = '|'
 
+# The flat file delimiter escaper.
+ESCAPER = '\\'
+
 # A comment line sign.
 COMMENT_SIGN = '#'
 
-# Row types which are considered as block type HEAD.
-HEAD_ROWS = ['HEAD', 'SY01', 'SY02', 'SY03', 'SY04', 'FHEA']
+# Row types which are considered as part of the header, i.e. they occur only at
+# the top of the file.
+HEADER_ROW_PATTERN = re.compile('^SY[0-9]{2,4}$|HEAD|FHEA')
 
 # Row types which are considered as block type FOOT.
 FOOT_ROWS = ['FOOT', 'FFOO']
@@ -128,9 +135,3 @@ DATETIME_PATTERN = re.compile(r'[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:'
 
 # The library default version number.
 DEFAULT_VERSION = 3.0
-
-# TODO(b/24666427): Add profile 7.2 when fixed.
-# A map between profile numbers and their names.
-PROFILE_NUMBER_MAP = {7.3: 'ResourceOnly',
-                      7.4: 'Ugc',
-                      7.6: 'AudioVisualRelease'}

@@ -57,7 +57,7 @@ class AllocatedAmountBlockProcessor(dsrf_block_processor.BaseBlockProcessor):
 
   def validate_rights_controller_name(self, rights_controller_name, head_block):
     """Validates that the rightscontroller is actually in the file."""
-    summary_records = [row for row in head_block.rows if row.type == 'SY02']
+    summary_records = [row for row in head_block.rows if row.type == 'SY0201']
     rights_controllers = [
         str(_get_cell(row, 'RightsController'))
         for row in summary_records]
@@ -88,7 +88,7 @@ class AllocatedAmountBlockProcessor(dsrf_block_processor.BaseBlockProcessor):
       for row in block.rows:
         if _get_cell(row, 'RightsController') != rights_controller_name:
           continue
-        if row.type == 'SY02':
+        if row.type == 'SY0201':
           block_currency = self.get_currency_from_head(
               row, rights_controller_name)
     elif block.type == block_pb2.BODY:

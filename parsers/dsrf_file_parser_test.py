@@ -131,7 +131,7 @@ class FileParserTest(unittest.TestCase):
             [cell_validators.StringValidator('RecordType', self.logger, False),
              cell_validators.IntegerValidator(
                  'NumberOfLines', self.logger, False)],
-            file_row, 8, 1),
+            file_row, 'FFOO', 8, 1),
         self.setup_foot_row())
 
   def test_get_row_object_invalid(self):
@@ -146,7 +146,7 @@ class FileParserTest(unittest.TestCase):
                 'RecordType', self.logger, False),
             cell_validators.IntegerValidator(
                 'NumberOfLines', self.logger, False)],
-        file_row, 8, 1)
+        file_row, 'FFOO', 8, 1)
 
   @classmethod
   def block_from_ascii(cls, text):
@@ -160,14 +160,14 @@ class FileParserTest(unittest.TestCase):
     new_block = block_pb2.Block()
     parser = dsrf_file_parser.DSRFFileParser(self.logger, 'filename')
     self.assertFalse(
-        parser.is_end_of_block(first_line, 5, new_block))
+        parser.is_end_of_block(first_line, 'HEAD', 5, new_block))
 
   def test_is_end_of_block_true(self):
     line = ['SU02', 'BL8', '11', 'SR1', 'AdSupport', 'NonInterStream']
     new_block = block_pb2.Block()
     parser = dsrf_file_parser.DSRFFileParser(self.logger, 'filename')
     self.assertTrue(
-        parser.is_end_of_block(line, 5, new_block))
+        parser.is_end_of_block(line, 'SU02', 5, new_block))
 
   def test_get_row_type_valid(self):
     line = ['AS02', 'BL8', '11', 'SR1', 'AdSupport', 'NonInterStream']
