@@ -42,4 +42,7 @@ message Block {
 
   // The row objects in the block.
   repeated Row rows = 5;
+
+  // The name of the file. Only populated in HEAD blocks
+  optional string filename = 6;
 }

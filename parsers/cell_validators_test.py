@@ -128,12 +128,10 @@ class PatternValidatorTest(BaseValidatorTest):
 
 
 class DurationValidatorTest(BaseValidatorTest):
-  valid_values = ['P', 'P12', 'P1223', 'P122345', 'P12T12', 'PT12', 'P1223T23',
-                  'PT123645']
-  invalid_values = ['12T12', True, 0, 10.2, list(), set(), '']
-  transformed_val_map = {'P12': 'P12', 'P1223': 'P1223', 'PT12': 'PT12',
-                         'P122345': 'P122345', 'P12T12': 'P12T12', 'P': 'P',
-                         'P1223T23': 'P1223T23', 'PT123645': 'PT123645'}
+  valid_values = [
+      'P1Y2M10DT2H30M', 'PT12M', 'PT1H22M30S', 'PT12H23M45S', 'PT12M', 'PT12S',
+      'PT12H23M23S', 'PT12M36S']
+  invalid_values = ['P', 'P12', '12T12', True, 0, 10.2, list(), set(), '']
 
   def get_validator(self):
     return cell_validators.DurationValidator('duration_cell', self.logger)

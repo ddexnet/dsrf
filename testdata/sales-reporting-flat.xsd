@@ -11,7 +11,7 @@
       <xs:documentation>© 2006-2015 Digital Data Exchange, LLC (DDEX)</xs:documentation>
       <xs:documentation>This XML Schema Definition file is, together with all DDEX standards, subject to two licences: If you wish to evaluate whether the standard meets your needs please have a look at the Evaluation Licence at https://kb.ddex.net/display/HBK/Evaluation+Licence+for+DDEX+Standards. If you want to implement and use this DDEX standard, please take out an Implementation Licence. For details please go to http://ddex.net/apply-ddex-implementation-licence.</xs:documentation>
     </xs:annotation>
-  <xs:complexType name="HEAD">
+  <xs:complexType name="RecordType-HEAD">
     <xs:annotation>
       <xs:documentation source="ddex:Definition">
         File Header Record for all Sales Report Message formatted in accordance with this standard if a Sales Report Message is split into several files.
@@ -49,7 +49,7 @@
       </xs:element>
     </xs:sequence>
   </xs:complexType>
-  <xs:complexType name="RU01">
+  <xs:complexType name="RecordType-RU01">
     <xs:annotation>
       <xs:documentation source="ddex:Definition">UGC Release Usage Summary Record to provide a summary of the uses of up to 100 uses UGC Releases.</xs:documentation>
       <xs:documentation source="ddex:Definition">A Composite containing a UGC Release Usage Summary Record with a summary of the Uses of up to 100 uses of UGC Releases.</xs:documentation>
@@ -77,7 +77,7 @@
       </xs:element>
     </xs:sequence>
   </xs:complexType>
-  <xs:complexType name="RU02">
+  <xs:complexType name="RecordType-RU02">
     <xs:annotation>
       <xs:documentation source="ddex:Definition">UGC Release Usage Record to provide details of the Uses of a single UGC Release.</xs:documentation>
       <xs:documentation source="ddex:Definition">A Composite containing a UGC Release Usage Record with details of of the Uses of a single UGC Release with title and URL of the Resource.</xs:documentation>
@@ -115,7 +115,7 @@
       </xs:element>
     </xs:sequence>
   </xs:complexType>
-  <xs:complexType name="SU02">
+  <xs:complexType name="RecordType-SU02">
     <xs:annotation>
       <xs:documentation source="ddex:Definition">Usage, Revenue or Sales Record for Streaming Services and Webcasts (to be used in accordance with Clause 7.7).</xs:documentation>
       <xs:documentation source="ddex:Definition">A Composite containing details of Usages, Revenues or Sales of Releases and/or Resources (not UGC) for streaming services or other similar services.</xs:documentation>
@@ -194,7 +194,7 @@ Consumers. </xs:documentation>
       </xs:element>
     </xs:sequence>
   </xs:complexType>
-  <xs:complexType name="SY03">
+  <xs:complexType name="RecordType-SY03">
     <xs:annotation>
       <xs:documentation source="ddex:Definition">UGC Summary for Subscription Services.</xs:documentation>
       <xs:documentation source="ddex:Definition">
@@ -244,7 +244,7 @@ Consumers. </xs:documentation>
       </xs:element>
     </xs:sequence>
   </xs:complexType>
-  <xs:complexType name="AS02">
+  <xs:complexType name="RecordType-AS02">
     <xs:annotation>
       <xs:documentation source="ddex:Definition">
         Basic Sound Recording Record to describe sound recordings and music videos that have been used or sold individually or as part of a Release (with Musical Work Information).
@@ -318,7 +318,7 @@ Consumers. </xs:documentation>
       </xs:element>
     </xs:sequence>
   </xs:complexType>
-  <xs:complexType name="RE01">
+  <xs:complexType name="RecordType-RE01">
     <xs:annotation>
       <xs:documentation source="ddex:Definition">
         Basic Audio Release Record to describe audio Releases that have been used or sold.

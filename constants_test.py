@@ -28,7 +28,9 @@ class BasePatternTest(unittest.TestCase):
 
   def test_valid_values(self):
     for valid_value in self.valid_values:
-      self.assertIsNotNone(self.pattern.match(valid_value))
+      self.assertIsNotNone(
+          self.pattern.match(valid_value),
+          'Unexpectedly None in %s' % self.__class__)
 
   def test_invalid_values(self):
     for invalid_value in self.invalid_values:
@@ -55,14 +57,14 @@ class MessageCreatedDateTimePatternTest(BasePatternTest):
 
 
 class DurationPatternTest(BasePatternTest):
-  valid_values = ['P', 'P12', 'P1223', 'P122345', 'P12T12', 'PT12', 'P1223T23',
-                  'PT123645', 'P02Y01M01DT12H22M34S', 'PT11H44M22S', 'PT22S',
-                  'PT12M23S', 'P23YT12S']
+  valid_values = [
+      'P1Y2M10DT2H30M', 'PT12M', 'PT1H22M30S', 'PT12H23M45S', 'PT12M', 'PT12S',
+      'PT12H23M23S', 'PT12M36S']
   invalid_values = ['', '12T12']
   pattern = constants.DURATION_PATTERN
 
 
-class DatatimePatternTest(BasePatternTest):
+class DatetimePatternTest(BasePatternTest):
   valid_values = ['2014-12-14T10:05:00Z', '2014-12-14T10:05:00+08:00']
   invalid_values = ['', '20141214T10:05:00Z', '2014-12-14T100500Z',
                     '2014-12-14T10:05:00', '2014-12-14T10:05:0008:00',

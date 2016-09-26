@@ -184,15 +184,6 @@ class SchemaParserBaseTest(unittest.TestCase):
       self.assertEquals(actual_cell.required, expected_cell.required)
       self.assertEquals(actual_cell.repeated, expected_cell.repeated)
 
-  def test_parse_xsd_file_valid_row_types(self):
-    """Tests the types of the rows."""
-    rows_validators = self.dsrf_schema_parser.parse_xsd_file(self.logger)
-    for row_type in rows_validators:
-      if not constants.VALID_ROW_TYPE_PATTERN.match(row_type):
-        self.fail('The value "%s" is not a row type, but parsed as a row.' %
-                  (row_type))
-    self.assertEquals(
-        self.dsrf_schema_parser.simple_types_map.keys(), ['ddex_IsoDate'])
 
 if __name__ == '__main__':
   unittest.main()

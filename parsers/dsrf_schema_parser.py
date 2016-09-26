@@ -244,8 +244,9 @@ class DsrfSchemaParser(object):
     for element in root:
       try:
         if (element.tag == constants.XSD_TAG_PREFIX + 'complexType' and
-            constants.VALID_ROW_TYPE_PATTERN.match(element.attrib['name'])):
-          row_type = element.attrib['name']
+            constants.is_row_type(element.attrib['name'])):
+          row_type = element.attrib['name'][
+              len(constants.VALID_ROW_TYPE_PREFIX):]
           row_cells = self.get_dsrf_xsd_cells(element, logger)
           rows[row_type] = row_cells
       except error.ValidationError as e:

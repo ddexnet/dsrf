@@ -123,6 +123,7 @@ class CalculateAllocatedAmount(dsrf_report_processor.BaseReportProcessor):
     currency = ''
     for block in self.read_blocks_from_queue():
       block_count += 1
+      self.update_filename(block)
       row_amount, row_currency = self.block_processor.process_block(
           block, self.rights_controller_name)
       if not currency:

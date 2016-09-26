@@ -155,6 +155,7 @@ class DSRFReportManager(object):
 
     _validate_party_filename(
         file_name, file_name_dict, message_sender_cells, 'Sender')
+    block.filename = file_name
 
   def parse_report(self, files_list, dsrf_xsd_file, avs_xsd_file, log_file_path,
                    human_readable=False, write_head=True):

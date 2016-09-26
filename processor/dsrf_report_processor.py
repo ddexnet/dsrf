@@ -30,6 +30,12 @@ class BaseReportProcessor(object):
 
   def __init__(self, block_processor):
     self.block_processor = block_processor
+    # Will be updated every time a HEAD block comes in.
+    self.current_filename = None
+
+  def update_filename(self, block):
+    if block.type == block_pb2.HEAD:
+      self.current_filename = block.filename
 
   def read_blocks_from_queue(self):
     """Returns a generator of the blocks in the queue.
@@ -60,4 +66,5 @@ class BaseReportProcessor(object):
 
   def process_report(self):
     for block in self.read_blocks_from_queue():
+      self.update_filename(block)
       self.block_processor.process_block(block)

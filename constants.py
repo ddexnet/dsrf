@@ -26,9 +26,12 @@ BOLD = '\033[1m'
 # The XSD tags prefix.
 XSD_TAG_PREFIX = '{http://www.w3.org/2001/XMLSchema}'
 
-# Four character code of the form "SY02" (two letters and two digits), with HEAD
-# and FOOT being special values.
-VALID_ROW_TYPE_PATTERN = re.compile('^[A-Z]{2}[0-9]{2,4}$|HEAD|FOOT')
+# All row type declarations in the XSD have to start with this value.
+VALID_ROW_TYPE_PREFIX = 'RecordType-'
+
+
+def is_row_type(s):
+  return s.startswith(VALID_ROW_TYPE_PREFIX)
 
 # In the TSV, versioned row types contain periods, eg. "SY02.01".
 VERSIONED_TSV_ROW_TYPE_PATTERN = re.compile(r'^[A-Z]{2}\d{2}\.\d{2}$')
@@ -126,8 +129,15 @@ QUEUE_DELIMITER = '==PIPE_PROTO_DELIMITER=='
 
 # The xs:duration cell pattern.
 DURATION_PATTERN = re.compile(
-    r'(?P<sign>-?)P(?:(?P<years>\d+)Y)?(?:(?P<months>\d+)M)?(?:(?P<days>\d+)D)?'
-    r'(?:T(?:(?P<hours>\d+)H)?(?:(?P<minutes>\d+)M)?(?:(?P<seconds>\d+)S)?)?')
+    r'^(?P<sign>[+-])?'
+    r'P(?!\b)'
+    r'(?P<years>[0-9]+([,.][0-9]+)?Y)?'
+    r'(?P<months>[0-9]+([,.][0-9]+)?M)?'
+    r'(?P<weeks>[0-9]+([,.][0-9]+)?W)?'
+    r'(?P<days>[0-9]+([,.][0-9]+)?D)?'
+    r'((?P<separator>T)(?P<hours>[0-9]+([,.][0-9]+)?H)?'
+    r'(?P<minutes>[0-9]+([,.][0-9]+)?M)?'
+    r'(?P<seconds>[0-9]+([,.][0-9]+)?S)?)?$')
 
 # The xs:dateTime cell pattern.
 DATETIME_PATTERN = re.compile(r'[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:'

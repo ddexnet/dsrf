@@ -9,14 +9,14 @@
     <xs:sequence>
       <xs:choice>
         <xs:sequence>
-          <xs:element name="AS01" type="dsrf:AS01">
+          <xs:element name="AS01" type="dsrf:RecordType-AS01">
             <xs:annotation>
               <xs:documentation source="ddex:Definition">
                 A Composite containing a Record, of type AS01, which contains information regarding the Sound Recordings, Videos and other 'master' Resources that have been used in creating the user-generated content that has been accessed.
               </xs:documentation>
             </xs:annotation>
           </xs:element>
-          <xs:element name="MW01" minOccurs="0" maxOccurs="unbounded" type="dsrf:MW01">
+          <xs:element name="MW01" minOccurs="0" maxOccurs="unbounded" type="dsrf:RecordType-MW01">
             <xs:annotation>
               <xs:documentation source="ddex:Definition">
                 A Composite containing a Musical Work Record, of type MW01 which contains information about the Musical Work utilised.
@@ -24,7 +24,7 @@
             </xs:annotation>
           </xs:element>
         </xs:sequence>
-        <xs:element name="AS02" type="dsrf:AS02">
+        <xs:element name="AS02" type="dsrf:RecordType-AS02">
           <xs:annotation>
             <xs:documentation source="ddex:Definition">
               A Composite containing a Resource Record of type AS02 describing the Resource including basic information of the underlying Work.
@@ -33,14 +33,14 @@
         </xs:element>
       </xs:choice>
       <xs:choice maxOccurs="unbounded">
-        <xs:element name="RU01" type="dsrf:RU01">
+        <xs:element name="RU01" type="dsrf:RecordType-RU01">
           <xs:annotation>
             <xs:documentation source="ddex:Definition">
               A Composite containing a UGC Release Usage Record of type RU01 describing the use of UGC Releases.
             </xs:documentation>
           </xs:annotation>
         </xs:element>
-        <xs:element name="RU02" type="dsrf:RU02">
+        <xs:element name="RU02" type="dsrf:RecordType-RU02">
           <xs:annotation>
             <xs:documentation source="ddex:Definition">
               A Composite containing a RU02 Record for each UGC Release and its use.
@@ -48,14 +48,14 @@
           </xs:annotation>
         </xs:element>
       </xs:choice>
-      <xs:element name="SU03" maxOccurs="unbounded" type="dsrf:SU03">
+      <xs:element name="SU03" maxOccurs="unbounded" type="dsrf:RecordType-SU03">
         <xs:annotation>
           <xs:documentation source="ddex:Definition">
             A Composite containing a Record providing Usage, Revenue or Sales Figures of type SU03.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="LI01" minOccurs="0" maxOccurs="unbounded" type="dsrf:LI01">
+      <xs:element name="LI01" minOccurs="0" maxOccurs="unbounded" type="dsrf:RecordType-LI01">
         <xs:annotation>
           <xs:documentation source="ddex:Definition">
             A Composite containing a LI01 Record providing Revenue information for each content owner. LI01 Records shall not be provided in the single Rights Controller set-up.
@@ -79,7 +79,7 @@
             </xs:documentation>
           </xs:annotation>
         </xs:element>
-        <xs:element name="SY04" type="dsrf:SY04">
+        <xs:element name="SY04" type="dsrf:RecordType-SY04">
           <xs:annotation>
             <xs:documentation source="ddex:Definition">
               A Composite containing details of Sound Recordings, Videos and other Resources that are contained in the Head Release.

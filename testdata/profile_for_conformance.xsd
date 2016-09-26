@@ -6,10 +6,10 @@
     <xs:sequence>
       <xs:choice maxOccurs="unbounded">
         <xs:sequence>
-          <xs:element name="AS01" type="dsrf:AS01"/>
-          <xs:element maxOccurs="unbounded" minOccurs="0" name="MW01" type="dsrf:MW01"/>
+          <xs:element name="RecordType-AS01" type="dsrf:RecordType-AS01"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="RecordType-MW01" type="dsrf:RecordType-MW01"/>
         </xs:sequence>
-        <xs:element name="AS02" type="dsrf:AS02"/>
+        <xs:element name="RecordType-AS02" type="dsrf:RecordType-AS02"/>
       </xs:choice>
     </xs:sequence>
   </xs:complexType>
@@ -17,12 +17,12 @@
     <xs:sequence>
       <xs:element maxOccurs="unbounded" name="ResourceIdentificationGrouping" type="dsrf:ResourceIdentificationGroupingForUgcProfile"/>
       <xs:choice maxOccurs="unbounded" minOccurs="0">
-        <xs:element name="RU01" type="dsrf:RU01"/>
-        <xs:element name="RU02" type="dsrf:RU02"/>
+        <xs:element name="RecordType-RU01" type="dsrf:RecordType-RU01"/>
+        <xs:element name="RecordType-RU02" type="dsrf:RecordType-RU02"/>
       </xs:choice>
       <xs:sequence maxOccurs="unbounded" minOccurs="0">
-        <xs:element name="SU03" type="dsrf:SU03"/>
-        <xs:element maxOccurs="unbounded" minOccurs="0" name="LI01" type="dsrf:LI01"/>
+        <xs:element name="RecordType-SU03" type="dsrf:RecordType-SU03"/>
+        <xs:element maxOccurs="unbounded" minOccurs="0" name="RecordType-LI01" type="dsrf:RecordType-LI01"/>
       </xs:sequence>
     </xs:sequence>
   </xs:complexType>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://ddex.net/xml/dsrf/3/20160819" xmlns:avs="http://ddex.net/xml/avs/avs" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:dsrf="http://ddex.net/xml/dsrf/3/20160819" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://ddex.net/xml/dsrf/3/20160915" xmlns:avs="http://ddex.net/xml/avs/avs" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:dsrf="http://ddex.net/xml/dsrf/3/20160915" xmlns:xs="http://www.w3.org/2001/XMLSchema">
    <xs:import namespace="http://ddex.net/xml/avs/avs" schemaLocation="avs.xsd"/>
    <xs:annotation>
       <xs:documentation>© 2006-2016 Digital Data Exchange, LLC (DDEX)</xs:documentation>
@@ -45,7 +45,268 @@
       </xs:annotation>
       <xs:complexType/>
    </xs:element>
-   <xs:complexType name="AS01">
+   <xs:complexType name="BasicAVProfile">
+      <xs:annotation>
+         <xs:documentation source="ddex:Definition">A Composite containing details of a Report for all Usages, Revenue and/or Sales for audio-visual Releases, excluding those for music videos.</xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:element name="RecordType-HEAD" type="dsrf:RecordType-HEAD">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The MessageHeader for the SalesReportMessage.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:choice maxOccurs="unbounded">
+            <xs:element name="SY02.01" type="dsrf:RecordType-SY0201">
+               <xs:annotation>
+                  <xs:documentation source="ddex:Definition">A Composite containing details of Usage, Revenue or Sales allocated to that RightsController according to the calculations made by the MessageSender.</xs:documentation>
+               </xs:annotation>
+            </xs:element>
+            <xs:element name="RecordType-SY04" type="dsrf:RecordType-SY04">
+               <xs:annotation>
+                  <xs:documentation source="ddex:Definition">A Composite containing details of Usage, Revenue or Sales allocated to that RightsController according to the calculations made by the MessageSender.</xs:documentation>
+               </xs:annotation>
+            </xs:element>
+            <xs:element name="RecordType-SY05" type="dsrf:RecordType-SY05">
+               <xs:annotation>
+                  <xs:documentation source="ddex:Definition">A Composite containing details of Usage, Revenue or Sales allocated to that RightsController according to the calculations made by the MessageSender.</xs:documentation>
+               </xs:annotation>
+            </xs:element>
+            <xs:element name="RecordType-SY06" type="dsrf:RecordType-SY06">
+               <xs:annotation>
+                  <xs:documentation source="ddex:Definition">A Composite containing details of Usage, Revenue or Sales allocated to that RightsController according to the calculations made by the MessageSender.</xs:documentation>
+               </xs:annotation>
+            </xs:element>
+         </xs:choice>
+         <xs:element maxOccurs="unbounded" name="BasicAVProfileBlock" type="dsrf:BasicAVProfileBlock">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">A Composite containing details of a block in the BasicAudioProfile.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="RecordType-FOOT" type="dsrf:RecordType-FOOT">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The MessageFooter for the SalesReportMessage.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name="BasicAVProfileBlock">
+      <xs:annotation>
+         <xs:documentation source="ddex:Definition">A Composite containing details of a block in the BasicAVProfile.</xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:element minOccurs="0" name="RecordType-RE03" type="dsrf:RecordType-RE03">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">A Composite containing a Release Record of type RE03 describing a Head Release.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:sequence maxOccurs="unbounded">
+            <xs:element name="RecordType-AS03" type="dsrf:RecordType-AS03">
+               <xs:annotation>
+                  <xs:documentation source="ddex:Definition">A Composite containing a Resource Record describing Resources of type AS03. These Records provide information regarding all the Videos and other Resources that are contained in the Head Release.</xs:documentation>
+               </xs:annotation>
+            </xs:element>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="RecordType-CU01" type="dsrf:RecordType-CU01">
+               <xs:annotation>
+                  <xs:documentation source="ddex:Definition">A Composite containing a Cue Record of type CU01. Cue Records allow the identification and description of cues, i.e. information about MusicalWorks or Resources that have been used in a specific Resource and how they have been used.</xs:documentation>
+               </xs:annotation>
+            </xs:element>
+         </xs:sequence>
+         <xs:element maxOccurs="unbounded" minOccurs="0" name="RecordType-RE02" type="dsrf:RecordType-RE02">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">A Composite containing a Record describing 'Sub-Releases' of type RE02. These Sub-Releases are either single-Resource Track Releases (as communicated in a NewReleaseMessage) and/or Releases that the MessageSender has generated exclusively from the Resources and/or MusicalWorks that are used in the Head Release.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:choice maxOccurs="unbounded">
+            <xs:element name="RecordType-SU01" type="dsrf:RecordType-SU01">
+               <xs:annotation>
+                  <xs:documentation source="ddex:Definition">A Composite containing a Record providing Usage, Revenue or Sales figures of type SU01.</xs:documentation>
+               </xs:annotation>
+            </xs:element>
+            <xs:element name="RecordType-SU02" type="dsrf:RecordType-SU02">
+               <xs:annotation>
+                  <xs:documentation source="ddex:Definition">A Composite containing a Record providing Usage, Revenue or Sales figures of type SU02.</xs:documentation>
+               </xs:annotation>
+            </xs:element>
+            <xs:element name="SU03.01" type="dsrf:RecordType-SU0301">
+               <xs:annotation>
+                  <xs:documentation source="ddex:Definition">A Composite containing a Record providing Usage, Revenue or Sales Figures of type SU03.01.</xs:documentation>
+               </xs:annotation>
+            </xs:element>
+            <xs:element maxOccurs="unbounded" name="RecordType-SU04" type="dsrf:RecordType-SU04">
+               <xs:annotation>
+                  <xs:documentation source="ddex:Definition">A Composite containing a Record providing Usage, Revenue or Sales figures of type SU04.</xs:documentation>
+               </xs:annotation>
+            </xs:element>
+         </xs:choice>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name="BasicAudioProfile">
+      <xs:annotation>
+         <xs:documentation source="ddex:Definition">A Composite containing details of a Report for audio-only Usage, Revenue or Sales. This Profile is also for reporting Usage, Revenue or Sales for music videos.</xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:element name="RecordType-HEAD" type="dsrf:RecordType-HEAD">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The MessageHeader for the SalesReportMessage.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:choice maxOccurs="unbounded">
+            <xs:element name="RecordType-SY01" type="dsrf:RecordType-SY01">
+               <xs:annotation>
+                  <xs:documentation source="ddex:Definition">A Composite containing details of a type of use, commercial model and territory any Release contained in the Sales Report Message has been traded under.</xs:documentation>
+               </xs:annotation>
+            </xs:element>
+            <xs:element name="SY02.01" type="dsrf:RecordType-SY0201">
+               <xs:annotation>
+                  <xs:documentation source="ddex:Definition">A Composite containing details of a type of use, commercial model and territory any Release contained in the Sales Report Message has been traded under.</xs:documentation>
+               </xs:annotation>
+            </xs:element>
+            <xs:element name="RecordType-SY04" type="dsrf:RecordType-SY04">
+               <xs:annotation>
+                  <xs:documentation source="ddex:Definition">A Composite containing details of a type of use, commercial model and territory any Release contained in the Sales Report Message has been traded under.</xs:documentation>
+               </xs:annotation>
+            </xs:element>
+            <xs:element name="RecordType-SY05" type="dsrf:RecordType-SY05">
+               <xs:annotation>
+                  <xs:documentation source="ddex:Definition">A Composite containing details of a type of use, commercial model and territory any Release contained in the Sales Report Message has been traded under.</xs:documentation>
+               </xs:annotation>
+            </xs:element>
+         </xs:choice>
+         <xs:element maxOccurs="unbounded" minOccurs="0" name="BasicAudioProfileBlock" type="dsrf:BasicAudioProfileBlock">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">A Composite containing details of a block in the BasicAudioProfile.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="RecordType-FOOT" type="dsrf:RecordType-FOOT">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The MessageFooter for the SalesReportMessage.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name="BasicAudioProfileBlock">
+      <xs:annotation>
+         <xs:documentation source="ddex:Definition">A Composite containing details of a block in the BasicAudioProfile.</xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:element minOccurs="0" name="RecordType-RE01" type="dsrf:RecordType-RE01">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">A Composite containing a Release Record of type RE01 describing a Head Release.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element maxOccurs="unbounded" name="ResourceIdentificationGrouping" type="dsrf:ResourceIdentificationGroupingForBasicAudioProfile">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">A Composite containing a grouping for Resource identification.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element maxOccurs="unbounded" minOccurs="0" name="RecordType-RE02" type="dsrf:RecordType-RE02">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">A Composite containing a Record describing 'Sub-Releases' of type RE02. These Sub-Releases are either single-Resource Track Releases (as communicated in a NewReleaseMessage) and/or Releases that the MessageSender has generated exclusively from the Resources and/or MusicalWorks that are used in the Head Release.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:choice maxOccurs="unbounded">
+            <xs:element name="RecordType-SU01" type="dsrf:RecordType-SU01">
+               <xs:annotation>
+                  <xs:documentation source="ddex:Definition">A Composite containing a Record providing Usage, Revenue or Sales figures of type SU01.</xs:documentation>
+               </xs:annotation>
+            </xs:element>
+            <xs:element name="RecordType-SU02" type="dsrf:RecordType-SU02">
+               <xs:annotation>
+                  <xs:documentation source="ddex:Definition">A Composite containing a Record providing Usage, Revenue or Sales figures of type SU02.</xs:documentation>
+               </xs:annotation>
+            </xs:element>
+         </xs:choice>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name="BasicRoyaltyReportingProfile">
+      <xs:annotation>
+         <xs:documentation source="ddex:Definition">A Composite containing details of a Report of royalties based on Usages, Revenues and/or Sales of Releases.</xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:element name="RecordType-HEAD" type="dsrf:RecordType-HEAD">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The MessageHeader for the SalesReportMessage.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element maxOccurs="unbounded" name="RecordType-SY07" type="dsrf:RecordType-SY07">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">A Composite containing details of Usage, Revenue or Sales allocated to that RightsController according to the calculations made by the MessageSender.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element maxOccurs="unbounded" minOccurs="0" name="BasicRoyaltyReportingProfileBlock" type="dsrf:BasicRoyaltyReportingProfileBlock">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">A Composite containing details of a block in the BasicRoyaltyReportingProfile.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="RecordType-FOOT" type="dsrf:RecordType-FOOT">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The MessageFooter for the SalesReportMessage.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name="BasicRoyaltyReportingProfileBlock">
+      <xs:annotation>
+         <xs:documentation source="ddex:Definition">A Composite containing details of a block in the BasicRoyaltyReportingProfile.</xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:element minOccurs="0" name="RecordType-RE01" type="dsrf:RecordType-RE01">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">A Composite containing a Release Record of type RE01 describing a Head Release.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element maxOccurs="unbounded" name="ResourceIdentificationGrouping" type="dsrf:ResourceIdentificationGroupingForBasicRoyaltyReportingProfile">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">A Composite containing a grouping for Resource identification.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name="BroadcastReportingProfile">
+      <xs:annotation>
+         <xs:documentation source="ddex:Definition">A Composite containing details of a Report of royalties based on Broadcasts of Resources.</xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:element name="RecordType-HEAD" type="dsrf:RecordType-HEAD">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The MessageHeader for the SalesReportMessage.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element maxOccurs="unbounded" name="RecordType-SY08" type="dsrf:RecordType-SY08">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">A Composite containing details of Usage, Revenue or Sales allocated to that RightsController according to the calculations made by the MessageSender.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element maxOccurs="unbounded" minOccurs="0" name="BroadcastReportingProfileBlock" type="dsrf:BroadcastReportingProfileBlock">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">A Composite containing details of a block in the BroadcastReportingProfile.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="RecordType-FOOT" type="dsrf:RecordType-FOOT">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The MessageFooter for the SalesReportMessage.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name="BroadcastReportingProfileBlock">
+      <xs:annotation>
+         <xs:documentation source="ddex:Definition">A Composite containing details of a block in the BroadcastReportingProfile.</xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:element minOccurs="0" name="RecordType-RE01" type="dsrf:RecordType-RE01">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">A Composite containing a Release Record of type RE01 describing a Head Release.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="ResourceIdentificationGrouping" type="dsrf:ResourceIdentificationGroupingForBroadcastReportingProfile">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">A Composite containing a grouping for Resource identification.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name="RecordType-AS01">
       <xs:annotation>
          <xs:documentation source="ddex:Definition">A Composite containing a Basic Sound Recording Record with details of sound recordings and music videos that have been used or sold individually or as part of a Release (without Musical Work Information).</xs:documentation>
       </xs:annotation>
@@ -122,7 +383,7 @@
          </xs:element>
       </xs:sequence>
    </xs:complexType>
-   <xs:complexType name="AS0201">
+   <xs:complexType name="RecordType-AS0201">
       <xs:annotation>
          <xs:documentation source="ddex:Definition">A Composite containing a Basic Sound Recording Record with details of sound recordings and music videos that have been used or sold individually or as part of a Release (without Musical Work Information).</xs:documentation>
       </xs:annotation>
@@ -209,7 +470,7 @@
          </xs:element>
       </xs:sequence>
    </xs:complexType>
-   <xs:complexType name="AS03">
+   <xs:complexType name="RecordType-AS03">
       <xs:annotation>
          <xs:documentation source="ddex:Definition">A Composite containing an Audio-visual Resource Record with details of audio-visual Resources that have been used or sold individually or as part of a Release (without information on the underlying (non-musical) Work Information).</xs:documentation>
       </xs:annotation>
@@ -386,268 +647,7 @@
          </xs:element>
       </xs:sequence>
    </xs:complexType>
-   <xs:complexType name="BasicAVProfile">
-      <xs:annotation>
-         <xs:documentation source="ddex:Definition">A Composite containing details of a Report for all Usages, Revenue and/or Sales for audio-visual Releases, excluding those for music videos.</xs:documentation>
-      </xs:annotation>
-      <xs:sequence>
-         <xs:element name="HEAD" type="dsrf:HEAD">
-            <xs:annotation>
-               <xs:documentation source="ddex:Definition">The MessageHeader for the SalesReportMessage.</xs:documentation>
-            </xs:annotation>
-         </xs:element>
-         <xs:choice maxOccurs="unbounded">
-            <xs:element name="SY02.01" type="dsrf:SY0201">
-               <xs:annotation>
-                  <xs:documentation source="ddex:Definition">A Composite containing details of Usage, Revenue or Sales allocated to that RightsController according to the calculations made by the MessageSender.</xs:documentation>
-               </xs:annotation>
-            </xs:element>
-            <xs:element name="SY04" type="dsrf:SY04">
-               <xs:annotation>
-                  <xs:documentation source="ddex:Definition">A Composite containing details of Usage, Revenue or Sales allocated to that RightsController according to the calculations made by the MessageSender.</xs:documentation>
-               </xs:annotation>
-            </xs:element>
-            <xs:element name="SY05" type="dsrf:SY05">
-               <xs:annotation>
-                  <xs:documentation source="ddex:Definition">A Composite containing details of Usage, Revenue or Sales allocated to that RightsController according to the calculations made by the MessageSender.</xs:documentation>
-               </xs:annotation>
-            </xs:element>
-            <xs:element name="SY06" type="dsrf:SY06">
-               <xs:annotation>
-                  <xs:documentation source="ddex:Definition">A Composite containing details of Usage, Revenue or Sales allocated to that RightsController according to the calculations made by the MessageSender.</xs:documentation>
-               </xs:annotation>
-            </xs:element>
-         </xs:choice>
-         <xs:element maxOccurs="unbounded" name="BasicAVProfileBlock" type="dsrf:BasicAVProfileBlock">
-            <xs:annotation>
-               <xs:documentation source="ddex:Definition">A Composite containing details of a block in the BasicAudioProfile.</xs:documentation>
-            </xs:annotation>
-         </xs:element>
-         <xs:element name="FOOT" type="dsrf:FOOT">
-            <xs:annotation>
-               <xs:documentation source="ddex:Definition">The MessageFooter for the SalesReportMessage.</xs:documentation>
-            </xs:annotation>
-         </xs:element>
-      </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name="BasicAVProfileBlock">
-      <xs:annotation>
-         <xs:documentation source="ddex:Definition">A Composite containing details of a block in the BasicAVProfile.</xs:documentation>
-      </xs:annotation>
-      <xs:sequence>
-         <xs:element minOccurs="0" name="RE03" type="dsrf:RE03">
-            <xs:annotation>
-               <xs:documentation source="ddex:Definition">A Composite containing a Release Record of type RE03 describing a Head Release.</xs:documentation>
-            </xs:annotation>
-         </xs:element>
-         <xs:sequence maxOccurs="unbounded">
-            <xs:element name="AS03" type="dsrf:AS03">
-               <xs:annotation>
-                  <xs:documentation source="ddex:Definition">A Composite containing a Resource Record describing Resources of type AS03. These Records provide information regarding all the Videos and other Resources that are contained in the Head Release.</xs:documentation>
-               </xs:annotation>
-            </xs:element>
-            <xs:element maxOccurs="unbounded" minOccurs="0" name="CU01" type="dsrf:CU01">
-               <xs:annotation>
-                  <xs:documentation source="ddex:Definition">A Composite containing a Cue Record of type CU01. Cue Records allow the identification and description of cues, i.e. information about MusicalWorks or Resources that have been used in a specific Resource and how they have been used.</xs:documentation>
-               </xs:annotation>
-            </xs:element>
-         </xs:sequence>
-         <xs:element maxOccurs="unbounded" minOccurs="0" name="RE02" type="dsrf:RE02">
-            <xs:annotation>
-               <xs:documentation source="ddex:Definition">A Composite containing a Record describing 'Sub-Releases' of type RE02. These Sub-Releases are either single-Resource Track Releases (as communicated in a NewReleaseMessage) and/or Releases that the MessageSender has generated exclusively from the Resources and/or MusicalWorks that are used in the Head Release.</xs:documentation>
-            </xs:annotation>
-         </xs:element>
-         <xs:choice maxOccurs="unbounded">
-            <xs:element name="SU01" type="dsrf:SU01">
-               <xs:annotation>
-                  <xs:documentation source="ddex:Definition">A Composite containing a Record providing Usage, Revenue or Sales figures of type SU01.</xs:documentation>
-               </xs:annotation>
-            </xs:element>
-            <xs:element name="SU02" type="dsrf:SU02">
-               <xs:annotation>
-                  <xs:documentation source="ddex:Definition">A Composite containing a Record providing Usage, Revenue or Sales figures of type SU02.</xs:documentation>
-               </xs:annotation>
-            </xs:element>
-            <xs:element name="SU03.01" type="dsrf:SU0301">
-               <xs:annotation>
-                  <xs:documentation source="ddex:Definition">A Composite containing a Record providing Usage, Revenue or Sales Figures of type SU03.01.</xs:documentation>
-               </xs:annotation>
-            </xs:element>
-            <xs:element maxOccurs="unbounded" name="SU04" type="dsrf:SU04">
-               <xs:annotation>
-                  <xs:documentation source="ddex:Definition">A Composite containing a Record providing Usage, Revenue or Sales figures of type SU04.</xs:documentation>
-               </xs:annotation>
-            </xs:element>
-         </xs:choice>
-      </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name="BasicAudioProfile">
-      <xs:annotation>
-         <xs:documentation source="ddex:Definition">A Composite containing details of a Report for audio-only Usage, Revenue or Sales. This Profile is also for reporting Usage, Revenue or Sales for music videos.</xs:documentation>
-      </xs:annotation>
-      <xs:sequence>
-         <xs:element name="HEAD" type="dsrf:HEAD">
-            <xs:annotation>
-               <xs:documentation source="ddex:Definition">The MessageHeader for the SalesReportMessage.</xs:documentation>
-            </xs:annotation>
-         </xs:element>
-         <xs:choice maxOccurs="unbounded">
-            <xs:element name="SY01" type="dsrf:SY01">
-               <xs:annotation>
-                  <xs:documentation source="ddex:Definition">A Composite containing details of a type of use, commercial model and territory any Release contained in the Sales Report Message has been traded under.</xs:documentation>
-               </xs:annotation>
-            </xs:element>
-            <xs:element name="SY02.01" type="dsrf:SY0201">
-               <xs:annotation>
-                  <xs:documentation source="ddex:Definition">A Composite containing details of a type of use, commercial model and territory any Release contained in the Sales Report Message has been traded under.</xs:documentation>
-               </xs:annotation>
-            </xs:element>
-            <xs:element name="SY04" type="dsrf:SY04">
-               <xs:annotation>
-                  <xs:documentation source="ddex:Definition">A Composite containing details of a type of use, commercial model and territory any Release contained in the Sales Report Message has been traded under.</xs:documentation>
-               </xs:annotation>
-            </xs:element>
-            <xs:element name="SY05" type="dsrf:SY05">
-               <xs:annotation>
-                  <xs:documentation source="ddex:Definition">A Composite containing details of a type of use, commercial model and territory any Release contained in the Sales Report Message has been traded under.</xs:documentation>
-               </xs:annotation>
-            </xs:element>
-         </xs:choice>
-         <xs:element maxOccurs="unbounded" minOccurs="0" name="BasicAudioProfileBlock" type="dsrf:BasicAudioProfileBlock">
-            <xs:annotation>
-               <xs:documentation source="ddex:Definition">A Composite containing details of a block in the BasicAudioProfile.</xs:documentation>
-            </xs:annotation>
-         </xs:element>
-         <xs:element name="FOOT" type="dsrf:FOOT">
-            <xs:annotation>
-               <xs:documentation source="ddex:Definition">The MessageFooter for the SalesReportMessage.</xs:documentation>
-            </xs:annotation>
-         </xs:element>
-      </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name="BasicAudioProfileBlock">
-      <xs:annotation>
-         <xs:documentation source="ddex:Definition">A Composite containing details of a block in the BasicAudioProfile.</xs:documentation>
-      </xs:annotation>
-      <xs:sequence>
-         <xs:element minOccurs="0" name="RE01" type="dsrf:RE01">
-            <xs:annotation>
-               <xs:documentation source="ddex:Definition">A Composite containing a Release Record of type RE01 describing a Head Release.</xs:documentation>
-            </xs:annotation>
-         </xs:element>
-         <xs:element maxOccurs="unbounded" name="ResourceIdentificationGrouping" type="dsrf:ResourceIdentificationGroupingForBasicAudioProfile">
-            <xs:annotation>
-               <xs:documentation source="ddex:Definition">A Composite containing a grouping for Resource identification.</xs:documentation>
-            </xs:annotation>
-         </xs:element>
-         <xs:element maxOccurs="unbounded" minOccurs="0" name="RE02" type="dsrf:RE02">
-            <xs:annotation>
-               <xs:documentation source="ddex:Definition">A Composite containing a Record describing 'Sub-Releases' of type RE02. These Sub-Releases are either single-Resource Track Releases (as communicated in a NewReleaseMessage) and/or Releases that the MessageSender has generated exclusively from the Resources and/or MusicalWorks that are used in the Head Release.</xs:documentation>
-            </xs:annotation>
-         </xs:element>
-         <xs:choice maxOccurs="unbounded">
-            <xs:element name="SU01" type="dsrf:SU01">
-               <xs:annotation>
-                  <xs:documentation source="ddex:Definition">A Composite containing a Record providing Usage, Revenue or Sales figures of type SU01.</xs:documentation>
-               </xs:annotation>
-            </xs:element>
-            <xs:element name="SU02" type="dsrf:SU02">
-               <xs:annotation>
-                  <xs:documentation source="ddex:Definition">A Composite containing a Record providing Usage, Revenue or Sales figures of type SU02.</xs:documentation>
-               </xs:annotation>
-            </xs:element>
-         </xs:choice>
-      </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name="BasicRoyaltyReportingProfile">
-      <xs:annotation>
-         <xs:documentation source="ddex:Definition">A Composite containing details of a Report of royalties based on Usages, Revenues and/or Sales of Releases.</xs:documentation>
-      </xs:annotation>
-      <xs:sequence>
-         <xs:element name="HEAD" type="dsrf:HEAD">
-            <xs:annotation>
-               <xs:documentation source="ddex:Definition">The MessageHeader for the SalesReportMessage.</xs:documentation>
-            </xs:annotation>
-         </xs:element>
-         <xs:element maxOccurs="unbounded" name="SY07" type="dsrf:SY07">
-            <xs:annotation>
-               <xs:documentation source="ddex:Definition">A Composite containing details of Usage, Revenue or Sales allocated to that RightsController according to the calculations made by the MessageSender.</xs:documentation>
-            </xs:annotation>
-         </xs:element>
-         <xs:element maxOccurs="unbounded" minOccurs="0" name="BasicRoyaltyReportingProfileBlock" type="dsrf:BasicRoyaltyReportingProfileBlock">
-            <xs:annotation>
-               <xs:documentation source="ddex:Definition">A Composite containing details of a block in the BasicRoyaltyReportingProfile.</xs:documentation>
-            </xs:annotation>
-         </xs:element>
-         <xs:element name="FOOT" type="dsrf:FOOT">
-            <xs:annotation>
-               <xs:documentation source="ddex:Definition">The MessageFooter for the SalesReportMessage.</xs:documentation>
-            </xs:annotation>
-         </xs:element>
-      </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name="BasicRoyaltyReportingProfileBlock">
-      <xs:annotation>
-         <xs:documentation source="ddex:Definition">A Composite containing details of a block in the BasicRoyaltyReportingProfile.</xs:documentation>
-      </xs:annotation>
-      <xs:sequence>
-         <xs:element minOccurs="0" name="RE01" type="dsrf:RE01">
-            <xs:annotation>
-               <xs:documentation source="ddex:Definition">A Composite containing a Release Record of type RE01 describing a Head Release.</xs:documentation>
-            </xs:annotation>
-         </xs:element>
-         <xs:element maxOccurs="unbounded" name="ResourceIdentificationGrouping" type="dsrf:ResourceIdentificationGroupingForBasicRoyaltyReportingProfile">
-            <xs:annotation>
-               <xs:documentation source="ddex:Definition">A Composite containing a grouping for Resource identification.</xs:documentation>
-            </xs:annotation>
-         </xs:element>
-      </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name="BroadcastReportingProfile">
-      <xs:annotation>
-         <xs:documentation source="ddex:Definition">A Composite containing details of a Report of royalties based on Broadcasts of Resources.</xs:documentation>
-      </xs:annotation>
-      <xs:sequence>
-         <xs:element name="HEAD" type="dsrf:HEAD">
-            <xs:annotation>
-               <xs:documentation source="ddex:Definition">The MessageHeader for the SalesReportMessage.</xs:documentation>
-            </xs:annotation>
-         </xs:element>
-         <xs:element maxOccurs="unbounded" name="SY08" type="dsrf:SY08">
-            <xs:annotation>
-               <xs:documentation source="ddex:Definition">A Composite containing details of Usage, Revenue or Sales allocated to that RightsController according to the calculations made by the MessageSender.</xs:documentation>
-            </xs:annotation>
-         </xs:element>
-         <xs:element maxOccurs="unbounded" minOccurs="0" name="BroadcastReportingProfileBlock" type="dsrf:BroadcastReportingProfileBlock">
-            <xs:annotation>
-               <xs:documentation source="ddex:Definition">A Composite containing details of a block in the BroadcastReportingProfile.</xs:documentation>
-            </xs:annotation>
-         </xs:element>
-         <xs:element name="FOOT" type="dsrf:FOOT">
-            <xs:annotation>
-               <xs:documentation source="ddex:Definition">The MessageFooter for the SalesReportMessage.</xs:documentation>
-            </xs:annotation>
-         </xs:element>
-      </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name="BroadcastReportingProfileBlock">
-      <xs:annotation>
-         <xs:documentation source="ddex:Definition">A Composite containing details of a block in the BroadcastReportingProfile.</xs:documentation>
-      </xs:annotation>
-      <xs:sequence>
-         <xs:element minOccurs="0" name="RE01" type="dsrf:RE01">
-            <xs:annotation>
-               <xs:documentation source="ddex:Definition">A Composite containing a Release Record of type RE01 describing a Head Release.</xs:documentation>
-            </xs:annotation>
-         </xs:element>
-         <xs:element name="ResourceIdentificationGrouping" type="dsrf:ResourceIdentificationGroupingForBasicRoyaltyReportingProfile">
-            <xs:annotation>
-               <xs:documentation source="ddex:Definition">A Composite containing a grouping for Resource identification.</xs:documentation>
-            </xs:annotation>
-         </xs:element>
-      </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name="CU01">
+   <xs:complexType name="RecordType-CU01">
       <xs:annotation>
          <xs:documentation source="ddex:Definition">A Composite containing a Basic Cue Record with details of Cues of Creations used in video Resources that are part of an audio-visual Release.</xs:documentation>
       </xs:annotation>
@@ -769,7 +769,7 @@
          </xs:element>
       </xs:sequence>
    </xs:complexType>
-   <xs:complexType name="FOOT">
+   <xs:complexType name="RecordType-FOOT">
       <xs:annotation>
          <xs:documentation source="ddex:Definition">A Composite placed at the end of each SalesReportMessage.</xs:documentation>
       </xs:annotation>
@@ -811,7 +811,7 @@
          </xs:element>
       </xs:sequence>
    </xs:complexType>
-   <xs:complexType name="HEAD">
+   <xs:complexType name="RecordType-HEAD">
       <xs:annotation>
          <xs:documentation source="ddex:Definition">A Composite placed at the beginning of each SalesReportMessage providing information about the Message, such as MessageSender, MessageRecipient and a Message creation time stamp.</xs:documentation>
       </xs:annotation>
@@ -923,7 +923,7 @@
          </xs:element>
       </xs:sequence>
    </xs:complexType>
-   <xs:complexType name="LI01">
+   <xs:complexType name="RecordType-LI01">
       <xs:annotation>
          <xs:documentation source="ddex:Definition">A Composite containing details of UGC-related Revenues and amounts communicated to a RightsController to allow provision of revenue and amounts due to individual RightsControllers.</xs:documentation>
       </xs:annotation>
@@ -990,7 +990,7 @@
          </xs:element>
       </xs:sequence>
    </xs:complexType>
-   <xs:complexType name="MW0101">
+   <xs:complexType name="RecordType-MW0101">
       <xs:annotation>
          <xs:documentation source="ddex:Definition">A Composite containing a Basic Musical Work Record with details of a MusicalWork that has been utilised.</xs:documentation>
       </xs:annotation>
@@ -1112,7 +1112,7 @@
          </xs:element>
       </xs:sequence>
    </xs:complexType>
-   <xs:complexType name="RE01">
+   <xs:complexType name="RecordType-RE01">
       <xs:annotation>
          <xs:documentation source="ddex:Definition">A Composite containing a Basic Audio Release Record with details of AudioReleases that have been used or sold.</xs:documentation>
       </xs:annotation>
@@ -1214,7 +1214,7 @@
          </xs:element>
       </xs:sequence>
    </xs:complexType>
-   <xs:complexType name="RE02">
+   <xs:complexType name="RecordType-RE02">
       <xs:annotation>
          <xs:documentation source="ddex:Definition">A Composite containing a Basic Sub-Release Record with details of Sub-Releases that have been used or sold.</xs:documentation>
       </xs:annotation>
@@ -1261,7 +1261,7 @@
          </xs:element>
       </xs:sequence>
    </xs:complexType>
-   <xs:complexType name="RE03">
+   <xs:complexType name="RecordType-RE03">
       <xs:annotation>
          <xs:documentation source="ddex:Definition">A Composite containing a Basic Audio-Visual Release Record with details of audio-visual Releases that have been used or sold.</xs:documentation>
       </xs:annotation>
@@ -1358,7 +1358,7 @@
          </xs:element>
       </xs:sequence>
    </xs:complexType>
-   <xs:complexType name="RU01">
+   <xs:complexType name="RecordType-RU01">
       <xs:annotation>
          <xs:documentation source="ddex:Definition">A Composite containing a UGC Resource Usage Summary Record with a summary of the Uses of up to 100 uses of UGC Resources.</xs:documentation>
       </xs:annotation>
@@ -1395,7 +1395,7 @@
          </xs:element>
       </xs:sequence>
    </xs:complexType>
-   <xs:complexType name="RU02">
+   <xs:complexType name="RecordType-RU02">
       <xs:annotation>
          <xs:documentation source="ddex:Definition">A Composite containing a UGC Resource Usage Record with details of of the Uses of a single UGC Resource with Title and URL of the Resource.</xs:documentation>
       </xs:annotation>
@@ -1442,127 +1442,7 @@
          </xs:element>
       </xs:sequence>
    </xs:complexType>
-   <xs:complexType name="ResourceIdentificationGroupingForBasicAudioProfile">
-      <xs:annotation>
-         <xs:documentation source="ddex:Definition">A Composite containing a grouping for Resource identification for the BasicAudioProfile.</xs:documentation>
-      </xs:annotation>
-      <xs:sequence>
-         <xs:choice maxOccurs="unbounded">
-            <xs:sequence>
-               <xs:element name="AS01" type="dsrf:AS01">
-                  <xs:annotation>
-                     <xs:documentation source="ddex:Definition">A Composite containing a Resource Record describing Resources of type AS01. These Records provide information regarding all the SoundRecordings, Videos and other Resources that are contained in the Head Release.</xs:documentation>
-                  </xs:annotation>
-               </xs:element>
-               <xs:element maxOccurs="unbounded" name="MW01.01" type="dsrf:MW0101">
-                  <xs:annotation>
-                     <xs:documentation source="ddex:Definition">A Composite containing a Musical Work Record of type MW01.01 describing MusicalWorks. These Records provide information regarding all the MusicalWorks that are utilised in the Head Release and/or one of its Resources.</xs:documentation>
-                  </xs:annotation>
-               </xs:element>
-            </xs:sequence>
-            <xs:element name="AS02.01" type="dsrf:AS0201">
-               <xs:annotation>
-                  <xs:documentation source="ddex:Definition">A Composite containing a Resource Record describing Resources of type AS02.01. These Records provide information regarding all the SoundRecordings, Videos and other Resources that are contained in the Head Release.</xs:documentation>
-               </xs:annotation>
-            </xs:element>
-         </xs:choice>
-      </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name="ResourceIdentificationGroupingForBasicRoyaltyReportingProfile">
-      <xs:annotation>
-         <xs:documentation source="ddex:Definition">A Composite containing a grouping for Resource identification for the BasicRoyaltyReportingProfile.</xs:documentation>
-      </xs:annotation>
-      <xs:sequence>
-         <xs:choice>
-            <xs:sequence>
-               <xs:element name="AS01" type="dsrf:AS01">
-                  <xs:annotation>
-                     <xs:documentation source="ddex:Definition">A Composite containing a Resource Record describing Resources of type AS01. These Records provide information regarding all the Videos and other Resources that are contained in the Head Release. The AS01 Record does not allow the communication of basic details of a MusicalWork or any other Work that underpins the Resource.</xs:documentation>
-                  </xs:annotation>
-               </xs:element>
-               <xs:element maxOccurs="unbounded" name="MW01.01" type="dsrf:MW0101">
-                  <xs:annotation>
-                     <xs:documentation source="ddex:Definition">A Composite containing a Musical Work Record of type MW01.01 describing MusicalWorks. These Records provide information regarding all the MusicalWorks that are utilised in the Head Release and/or one of its Resources.</xs:documentation>
-                  </xs:annotation>
-               </xs:element>
-            </xs:sequence>
-            <xs:element name="AS02.01" type="dsrf:AS0201">
-               <xs:annotation>
-                  <xs:documentation source="ddex:Definition">A Composite containing a Resource Record describing Resources of type AS02.01. These Records provide information regarding all the Videos and other Resources that are contained in the Head Release. The AS02.01 Record allows the communication of basic details of a MusicalWork or any other Work that underpins the Resource.</xs:documentation>
-               </xs:annotation>
-            </xs:element>
-         </xs:choice>
-         <xs:choice maxOccurs="unbounded" minOccurs="0">
-            <xs:sequence>
-               <xs:element name="RU01" type="dsrf:RU01">
-                  <xs:annotation>
-                     <xs:documentation source="ddex:Definition">A Composite containing a UGC Release Usage Record of type RU01 describing the use of UGC Releases.</xs:documentation>
-                  </xs:annotation>
-               </xs:element>
-               <xs:sequence maxOccurs="unbounded">
-                  <xs:element name="SU03.01" type="dsrf:SU0301">
-                     <xs:annotation>
-                        <xs:documentation source="ddex:Definition">A Composite containing a Record providing Usage, Revenue or Sales Figures of type SU03.01.</xs:documentation>
-                     </xs:annotation>
-                  </xs:element>
-                  <xs:element maxOccurs="unbounded" name="LI01" type="dsrf:LI01">
-                     <xs:annotation>
-                        <xs:documentation source="ddex:Definition">A Composite containing a LI01 Record providing Licensor-specific information for the usages reported in the preceding SU03.</xs:documentation>
-                     </xs:annotation>
-                  </xs:element>
-               </xs:sequence>
-            </xs:sequence>
-            <xs:sequence>
-               <xs:element name="RU02" type="dsrf:RU02">
-                  <xs:annotation>
-                     <xs:documentation source="ddex:Definition">A Composite containing a RU02 Record for each UGC Release and its use.</xs:documentation>
-                  </xs:annotation>
-               </xs:element>
-               <xs:sequence maxOccurs="unbounded">
-                  <xs:element name="SU03.01" type="dsrf:SU0301">
-                     <xs:annotation>
-                        <xs:documentation source="ddex:Definition">A Composite containing a Record providing Usage, Revenue or Sales Figures of type SU03.01.</xs:documentation>
-                     </xs:annotation>
-                  </xs:element>
-                  <xs:element maxOccurs="unbounded" name="LI01" type="dsrf:LI01">
-                     <xs:annotation>
-                        <xs:documentation source="ddex:Definition">A Composite containing a LI01 Record providing Licensor-specific information for the usages reported in the preceding SU03.</xs:documentation>
-                     </xs:annotation>
-                  </xs:element>
-               </xs:sequence>
-            </xs:sequence>
-         </xs:choice>
-      </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name="ResourceIdentificationGroupingForUgcProfile">
-      <xs:annotation>
-         <xs:documentation source="ddex:Definition">A Composite containing a grouping for Resource identification in the UgcProfile.</xs:documentation>
-      </xs:annotation>
-      <xs:sequence>
-         <xs:choice maxOccurs="unbounded">
-            <xs:sequence>
-               <xs:element name="AS01" type="dsrf:AS01">
-                  <xs:annotation>
-                     <xs:documentation source="ddex:Definition">A Composite containing a Record, of type AS01, which contains information regarding the SoundRecordings,
-Videos and other 'master' Resources that have been used in creating the user-generated content that has been accessed. </xs:documentation>
-                  </xs:annotation>
-               </xs:element>
-               <xs:element maxOccurs="unbounded" minOccurs="0" name="MW01.01" type="dsrf:MW0101">
-                  <xs:annotation>
-                     <xs:documentation source="ddex:Definition">A Composite containing a Musical Work Record,
-of type MW01.01 which contains information about the MusicalWork utilised. </xs:documentation>
-                  </xs:annotation>
-               </xs:element>
-            </xs:sequence>
-            <xs:element name="AS02.01" type="dsrf:AS0201">
-               <xs:annotation>
-                  <xs:documentation source="ddex:Definition">A Composite containing a Resource Record of type AS02.01 describing the Resource including basic information of the underlying Work.</xs:documentation>
-               </xs:annotation>
-            </xs:element>
-         </xs:choice>
-      </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name="SU01">
+   <xs:complexType name="RecordType-SU01">
       <xs:annotation>
          <xs:documentation source="ddex:Definition">A Composite containing details of Usages, Revenues or Sales of Releases and/or Resources (not UGC) for download services or other similar services.</xs:documentation>
       </xs:annotation>
@@ -1634,7 +1514,7 @@ of type MW01.01 which contains information about the MusicalWork utilised. </xs:
          </xs:element>
       </xs:sequence>
    </xs:complexType>
-   <xs:complexType name="SU02">
+   <xs:complexType name="RecordType-SU02">
       <xs:annotation>
          <xs:documentation source="ddex:Definition">A Composite containing details of Usages, Revenues or Sales of Releases and/or Resources for streaming services or other similar services.</xs:documentation>
       </xs:annotation>
@@ -1696,7 +1576,7 @@ of type MW01.01 which contains information about the MusicalWork utilised. </xs:
          </xs:element>
       </xs:sequence>
    </xs:complexType>
-   <xs:complexType name="SU0301">
+   <xs:complexType name="RecordType-SU0301">
       <xs:annotation>
          <xs:documentation source="ddex:Definition">A Composite containing details of Usages, Revenues or Sales of UGC Resources where there is no need to point to a Summary Record.</xs:documentation>
       </xs:annotation>
@@ -1753,7 +1633,7 @@ of type MW01.01 which contains information about the MusicalWork utilised. </xs:
          </xs:element>
       </xs:sequence>
    </xs:complexType>
-   <xs:complexType name="SU04">
+   <xs:complexType name="RecordType-SU04">
       <xs:annotation>
          <xs:documentation source="ddex:Definition">A Composite containing details of Usages, Revenues or Sales of audio-visual Releases.</xs:documentation>
       </xs:annotation>
@@ -1875,7 +1755,64 @@ of type MW01.01 which contains information about the MusicalWork utilised. </xs:
          </xs:element>
       </xs:sequence>
    </xs:complexType>
-   <xs:complexType name="SY01">
+   <xs:complexType name="RecordType-SU05">
+      <xs:annotation>
+         <xs:documentation source="ddex:Definition">A Composite containing details of Usages, Revenues or Sales of Releases and/or Resources for broadcasting services.</xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:element name="RecordType">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The Type of the Record; always to contain 'SU05'.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:pattern value="SU05"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:element>
+         <xs:element name="BlockId" type="xs:string">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The Identifier (specific to the Message) of the Block that this Record belongs to. All Records in a single Block shall have the same BlockId.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="SummaryRecordId" type="xs:string">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The Identifier (specific to the Message) of the Summary Record that this Usage, Revenue or Sales Record provides details for.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="SalesTransactionId" type="xs:string">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">ProprietaryIdentifier of the SalesTransaction, allocated by the MessageSender, which allows an invoice to be tied back to an individual SalesTransaction composite/record. Globally and perpetually unique together with the Message ID. The SalesTransactionId may change when the report is re-generated.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="TransactedResource" type="xs:string">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The Block-specific ReleaseReference of the Record describing the Resource whose Usages, Revenues or Sales are being reported.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="IsRoyaltyBearing" type="xs:boolean">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The Boolean flag indicating whether the MessageSender is contractually obliged to pay royalties to the RightsController for the SalesTransaction reported in the Record.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="NumberOfBroadcasts" type="xs:integer">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The number of Broadcasts of the Release from the MessageSender to Consumers.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element minOccurs="0" name="NumberOfBroadcastListeners" type="xs:integer">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The number of listeners to these Broadcasts.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element minOccurs="0" name="ListenerDuration" type="xs:duration">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The Duration that the SoundRecording has been listened to as part of the Broadcast (using the ISO 8601:2004 PT[[hhH]mmM]ssS format, where lower case characters indicate variables, upper case characters are part of the string, e.g. one hour, two minutes and three seconds would be PT1H2M3S). The seconds section ss may include fractions (e.g. one minute and 30.5 seconds would be PT1M30.5S).</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name="RecordType-SY01">
       <xs:annotation>
          <xs:documentation source="ddex:Definition">A Composite containing basic summary information about Usages, Sales and Revenues of AudioReleases or Resources for the PayAsYouGoModel.</xs:documentation>
       </xs:annotation>
@@ -1957,7 +1894,7 @@ of type MW01.01 which contains information about the MusicalWork utilised. </xs:
          </xs:element>
       </xs:sequence>
    </xs:complexType>
-   <xs:complexType name="SY0201">
+   <xs:complexType name="RecordType-SY0201">
       <xs:annotation>
          <xs:documentation source="ddex:Definition">A Composite containing basic summary information about Usages, Sales and Revenues of AudioReleases or Resources Ad-Supported and Interactive Streaming Services.</xs:documentation>
       </xs:annotation>
@@ -2069,7 +2006,7 @@ of type MW01.01 which contains information about the MusicalWork utilised. </xs:
          </xs:element>
       </xs:sequence>
    </xs:complexType>
-   <xs:complexType name="SY04">
+   <xs:complexType name="RecordType-SY04">
       <xs:annotation>
          <xs:documentation source="ddex:Definition">A Composite containing basic summary information about usage-independent per subscriber minima that apply to a series of sales/usages, typically in the context of Subscription Services.</xs:documentation>
       </xs:annotation>
@@ -2181,7 +2118,7 @@ of type MW01.01 which contains information about the MusicalWork utilised. </xs:
          </xs:element>
       </xs:sequence>
    </xs:complexType>
-   <xs:complexType name="SY05">
+   <xs:complexType name="RecordType-SY05">
       <xs:annotation>
          <xs:documentation source="ddex:Definition">A Composite containing basic summary information about subscription service-based sales/usages for individual Licensors.</xs:documentation>
       </xs:annotation>
@@ -2289,7 +2226,7 @@ number of AllocatedUsages. </xs:documentation>
          </xs:element>
       </xs:sequence>
    </xs:complexType>
-   <xs:complexType name="SY06">
+   <xs:complexType name="RecordType-SY06">
       <xs:annotation>
          <xs:documentation source="ddex:Definition">A Composite containing basic summary information about audio-visual Sales/Usages.</xs:documentation>
       </xs:annotation>
@@ -2381,7 +2318,7 @@ number of AllocatedUsages. </xs:documentation>
          </xs:element>
       </xs:sequence>
    </xs:complexType>
-   <xs:complexType name="SY07">
+   <xs:complexType name="RecordType-SY07">
       <xs:annotation>
          <xs:documentation source="ddex:Definition">A Composite containing basic summary information about royalties.</xs:documentation>
       </xs:annotation>
@@ -2493,7 +2430,7 @@ number of AllocatedUsages. </xs:documentation>
          </xs:element>
       </xs:sequence>
    </xs:complexType>
-   <xs:complexType name="SY08">
+   <xs:complexType name="RecordType-SY08">
       <xs:annotation>
          <xs:documentation source="ddex:Definition">A Composite containing basic summary information about Broadcast usages.</xs:documentation>
       </xs:annotation>
@@ -2605,6 +2542,177 @@ attributable to the transacted Release or Resource. </xs:documentation>
                <xs:documentation source="ddex:Definition">The amount due to the RightsController for the Uses reported.</xs:documentation>
             </xs:annotation>
          </xs:element>
+         <xs:element minOccurs="0" name="RightsType" type="avs:RightsCoverage">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The right  utilised in broadcasting the Resource.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element minOccurs="0" name="AllocatedNetRevenue" type="xs:decimal">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">Net Revenue of the generated that are to be ascribed to the RightsController.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element minOccurs="0" name="RightsControllerAllocatedNumberOfBroadcasts" type="xs:decimal">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">Number of broadcasts pro rated for the RightsController.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element minOccurs="0" name="AdditionalData" type="xs:string">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">Data specific to the commercial relationship between MessageSender and MessageRecipient that cannot be communicated in any other cell.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name="ResourceIdentificationGroupingForBasicAudioProfile">
+      <xs:annotation>
+         <xs:documentation source="ddex:Definition">A Composite containing a grouping for Resource identification for the BasicAudioProfile.</xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:choice maxOccurs="unbounded">
+            <xs:sequence>
+               <xs:element name="RecordType-AS01" type="dsrf:RecordType-AS01">
+                  <xs:annotation>
+                     <xs:documentation source="ddex:Definition">A Composite containing a Resource Record describing Resources of type AS01. These Records provide information regarding all the SoundRecordings, Videos and other Resources that are contained in the Head Release.</xs:documentation>
+                  </xs:annotation>
+               </xs:element>
+               <xs:element maxOccurs="unbounded" name="MW01.01" type="dsrf:RecordType-MW0101">
+                  <xs:annotation>
+                     <xs:documentation source="ddex:Definition">A Composite containing a Musical Work Record of type MW01.01 describing MusicalWorks. These Records provide information regarding all the MusicalWorks that are utilised in the Head Release and/or one of its Resources.</xs:documentation>
+                  </xs:annotation>
+               </xs:element>
+            </xs:sequence>
+            <xs:element name="AS02.01" type="dsrf:RecordType-AS0201">
+               <xs:annotation>
+                  <xs:documentation source="ddex:Definition">A Composite containing a Resource Record describing Resources of type AS02.01. These Records provide information regarding all the SoundRecordings, Videos and other Resources that are contained in the Head Release.</xs:documentation>
+               </xs:annotation>
+            </xs:element>
+         </xs:choice>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name="ResourceIdentificationGroupingForBasicRoyaltyReportingProfile">
+      <xs:annotation>
+         <xs:documentation source="ddex:Definition">A Composite containing a grouping for Resource identification for the BasicRoyaltyReportingProfile.</xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:choice>
+            <xs:sequence>
+               <xs:element name="RecordType-AS01" type="dsrf:RecordType-AS01">
+                  <xs:annotation>
+                     <xs:documentation source="ddex:Definition">A Composite containing a Resource Record describing Resources of type AS01. These Records provide information regarding all the Videos and other Resources that are contained in the Head Release. The AS01 Record does not allow the communication of basic details of a MusicalWork or any other Work that underpins the Resource.</xs:documentation>
+                  </xs:annotation>
+               </xs:element>
+               <xs:element maxOccurs="unbounded" name="MW01.01" type="dsrf:RecordType-MW0101">
+                  <xs:annotation>
+                     <xs:documentation source="ddex:Definition">A Composite containing a Musical Work Record of type MW01.01 describing MusicalWorks. These Records provide information regarding all the MusicalWorks that are utilised in the Head Release and/or one of its Resources.</xs:documentation>
+                  </xs:annotation>
+               </xs:element>
+            </xs:sequence>
+            <xs:element name="AS02.01" type="dsrf:RecordType-AS0201">
+               <xs:annotation>
+                  <xs:documentation source="ddex:Definition">A Composite containing a Resource Record describing Resources of type AS02.01. These Records provide information regarding all the Videos and other Resources that are contained in the Head Release. The AS02.01 Record allows the communication of basic details of a MusicalWork or any other Work that underpins the Resource.</xs:documentation>
+               </xs:annotation>
+            </xs:element>
+         </xs:choice>
+         <xs:choice maxOccurs="unbounded" minOccurs="0">
+            <xs:sequence>
+               <xs:element name="RecordType-RU01" type="dsrf:RecordType-RU01">
+                  <xs:annotation>
+                     <xs:documentation source="ddex:Definition">A Composite containing a UGC Release Usage Record of type RU01 describing the use of UGC Releases.</xs:documentation>
+                  </xs:annotation>
+               </xs:element>
+               <xs:sequence maxOccurs="unbounded">
+                  <xs:element name="SU03.01" type="dsrf:RecordType-SU0301">
+                     <xs:annotation>
+                        <xs:documentation source="ddex:Definition">A Composite containing a Record providing Usage, Revenue or Sales Figures of type SU03.01.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element maxOccurs="unbounded" name="RecordType-LI01" type="dsrf:RecordType-LI01">
+                     <xs:annotation>
+                        <xs:documentation source="ddex:Definition">A Composite containing a LI01 Record providing Licensor-specific information for the usages reported in the preceding SU03.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+               </xs:sequence>
+            </xs:sequence>
+            <xs:sequence>
+               <xs:element name="RecordType-RU02" type="dsrf:RecordType-RU02">
+                  <xs:annotation>
+                     <xs:documentation source="ddex:Definition">A Composite containing a RU02 Record for each UGC Release and its use.</xs:documentation>
+                  </xs:annotation>
+               </xs:element>
+               <xs:sequence maxOccurs="unbounded">
+                  <xs:element name="SU03.01" type="dsrf:RecordType-SU0301">
+                     <xs:annotation>
+                        <xs:documentation source="ddex:Definition">A Composite containing a Record providing Usage, Revenue or Sales Figures of type SU03.01.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element maxOccurs="unbounded" name="RecordType-LI01" type="dsrf:RecordType-LI01">
+                     <xs:annotation>
+                        <xs:documentation source="ddex:Definition">A Composite containing a LI01 Record providing Licensor-specific information for the usages reported in the preceding SU03.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+               </xs:sequence>
+            </xs:sequence>
+         </xs:choice>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name="ResourceIdentificationGroupingForBroadcastReportingProfile">
+      <xs:annotation>
+         <xs:documentation source="ddex:Definition">A Composite containing a grouping for Resource identification for the BasicRoyaltyReportingProfile.</xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:choice>
+            <xs:sequence>
+               <xs:element name="RecordType-AS01" type="dsrf:RecordType-AS01">
+                  <xs:annotation>
+                     <xs:documentation source="ddex:Definition">A Composite containing a Resource Record describing Resources of type AS01. These Records provide information regarding all the SoundRecordings, Videos and other Resources that are contained in the Head Release.</xs:documentation>
+                  </xs:annotation>
+               </xs:element>
+               <xs:element maxOccurs="unbounded" name="MW01.01" type="dsrf:RecordType-MW0101">
+                  <xs:annotation>
+                     <xs:documentation source="ddex:Definition">A Composite containing a Musical Work Record of type MW01.01 describing MusicalWorks. These Records provide information regarding all the MusicalWorks that are utilised in the Head Release and/or one of its Resources.</xs:documentation>
+                  </xs:annotation>
+               </xs:element>
+            </xs:sequence>
+            <xs:element name="AS02.01" type="dsrf:RecordType-AS0201">
+               <xs:annotation>
+                  <xs:documentation source="ddex:Definition">A Composite containing a Resource Record describing Resources of type AS02.01. These Records provide information regarding all the SoundRecordings, Videos and other Resources that are contained in the Head Release.</xs:documentation>
+               </xs:annotation>
+            </xs:element>
+         </xs:choice>
+         <xs:element maxOccurs="unbounded" name="RecordType-SU05" type="dsrf:RecordType-SU05">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">A Composite containing a Record providing Usage, Revenue or Sales figures of type SU05.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name="ResourceIdentificationGroupingForUgcProfile">
+      <xs:annotation>
+         <xs:documentation source="ddex:Definition">A Composite containing a grouping for Resource identification in the UgcProfile.</xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:choice maxOccurs="unbounded">
+            <xs:sequence>
+               <xs:element name="RecordType-AS01" type="dsrf:RecordType-AS01">
+                  <xs:annotation>
+                     <xs:documentation source="ddex:Definition">A Composite containing a Record, of type AS01, which contains information regarding the SoundRecordings,
+Videos and other 'master' Resources that have been used in creating the user-generated content that has been accessed. </xs:documentation>
+                  </xs:annotation>
+               </xs:element>
+               <xs:element maxOccurs="unbounded" minOccurs="0" name="MW01.01" type="dsrf:RecordType-MW0101">
+                  <xs:annotation>
+                     <xs:documentation source="ddex:Definition">A Composite containing a Musical Work Record,
+of type MW01.01 which contains information about the MusicalWork utilised. </xs:documentation>
+                  </xs:annotation>
+               </xs:element>
+            </xs:sequence>
+            <xs:element name="AS02.01" type="dsrf:RecordType-AS0201">
+               <xs:annotation>
+                  <xs:documentation source="ddex:Definition">A Composite containing a Resource Record of type AS02.01 describing the Resource including basic information of the underlying Work.</xs:documentation>
+               </xs:annotation>
+            </xs:element>
+         </xs:choice>
       </xs:sequence>
    </xs:complexType>
    <xs:complexType name="UgcProfile">
@@ -2612,23 +2720,23 @@ attributable to the transacted Release or Resource. </xs:documentation>
          <xs:documentation source="ddex:Definition">A Composite containing details of a Report for all Usage, Revenue or Sales for user-generated content.</xs:documentation>
       </xs:annotation>
       <xs:sequence>
-         <xs:element name="HEAD" type="dsrf:HEAD">
+         <xs:element name="RecordType-HEAD" type="dsrf:RecordType-HEAD">
             <xs:annotation>
                <xs:documentation source="ddex:Definition">The MessageHeader for the SalesReportMessage.</xs:documentation>
             </xs:annotation>
          </xs:element>
          <xs:choice maxOccurs="unbounded">
-            <xs:element name="SY02.01" type="dsrf:SY0201">
+            <xs:element name="SY02.01" type="dsrf:RecordType-SY0201">
                <xs:annotation>
                   <xs:documentation source="ddex:Definition">A Composite containing details of a type of use, commercial model and territory any Release contained in the Sales Report Message has been traded under.</xs:documentation>
                </xs:annotation>
             </xs:element>
-            <xs:element name="SY04" type="dsrf:SY04">
+            <xs:element name="RecordType-SY04" type="dsrf:RecordType-SY04">
                <xs:annotation>
                   <xs:documentation source="ddex:Definition">A Composite containing details of a type of use, commercial model and territory any Release contained in the Sales Report Message has been traded under.</xs:documentation>
                </xs:annotation>
             </xs:element>
-            <xs:element name="SY05" type="dsrf:SY05">
+            <xs:element name="RecordType-SY05" type="dsrf:RecordType-SY05">
                <xs:annotation>
                   <xs:documentation source="ddex:Definition">A Composite containing details of a type of use, commercial model and territory any Release contained in the Sales Report Message has been traded under.</xs:documentation>
                </xs:annotation>
@@ -2639,7 +2747,7 @@ attributable to the transacted Release or Resource. </xs:documentation>
                <xs:documentation source="ddex:Definition">A Composite containing details of a block in the UgcProfile.</xs:documentation>
             </xs:annotation>
          </xs:element>
-         <xs:element name="FOOT" type="dsrf:FOOT">
+         <xs:element name="RecordType-FOOT" type="dsrf:RecordType-FOOT">
             <xs:annotation>
                <xs:documentation source="ddex:Definition">The MessageFooter for the SalesReportMessage.</xs:documentation>
             </xs:annotation>
@@ -2657,30 +2765,30 @@ attributable to the transacted Release or Resource. </xs:documentation>
             </xs:annotation>
          </xs:element>
          <xs:choice maxOccurs="unbounded" minOccurs="0">
-            <xs:element name="RU01" type="dsrf:RU01">
+            <xs:element name="RecordType-RU01" type="dsrf:RecordType-RU01">
                <xs:annotation>
                   <xs:documentation source="ddex:Definition">A Composite containing a UGC Release Usage Record of type RU01 describing the use of UGC Releases.</xs:documentation>
                </xs:annotation>
             </xs:element>
-            <xs:element name="RU02" type="dsrf:RU02">
+            <xs:element name="RecordType-RU02" type="dsrf:RecordType-RU02">
                <xs:annotation>
                   <xs:documentation source="ddex:Definition">A Composite containing a RU02 Record for each UGC Release and its use.</xs:documentation>
                </xs:annotation>
             </xs:element>
          </xs:choice>
          <xs:sequence maxOccurs="unbounded" minOccurs="0">
-            <xs:element name="SU03.01" type="dsrf:SU0301">
+            <xs:element name="SU03.01" type="dsrf:RecordType-SU0301">
                <xs:annotation>
                   <xs:documentation source="ddex:Definition">A Composite containing a Record providing Usage, Revenue or Sales Figures of type SU03.01.</xs:documentation>
                </xs:annotation>
             </xs:element>
             <xs:sequence maxOccurs="unbounded" minOccurs="0">
-               <xs:element name="LI01" type="dsrf:LI01">
+               <xs:element name="RecordType-LI01" type="dsrf:RecordType-LI01">
                   <xs:annotation>
                      <xs:documentation source="ddex:Definition">A Composite containing a LI01 Record providing Licensor-specific information for the usages reported in the preceding SU03.</xs:documentation>
                   </xs:annotation>
                </xs:element>
-               <xs:element minOccurs="0" name="MW01.01" type="dsrf:MW0101">
+               <xs:element minOccurs="0" name="MW01.01" type="dsrf:RecordType-MW0101">
                   <xs:annotation>
                      <xs:documentation source="ddex:Definition">A Composite containing a Musical Work Record of type MW01.01 describing MusicalWorks. These Records provide Licensor-specific work information.</xs:documentation>
                   </xs:annotation>

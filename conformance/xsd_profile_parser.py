@@ -74,14 +74,14 @@ class XSDProfileParser(object):
           'The element "%s" with type "%s" does not have the "%s" prefix. This '
           'is likely caused by the type of the parent element not being '
           'recognized as a valid row type. Please ensure that all row types in '
-          'in the XSD match the pattern "%s".'
+          'in the XSD start with the prefix "%s".'
           % (node_element.attrib.get('name'),
              node_row_type, constants.DSRF_TYPE_PREFIX,
-             constants.VALID_ROW_TYPE_PATTERN.pattern))
+             constants.VALID_ROW_TYPE_PREFIX))
     node_row_type = node_row_type[len(constants.DSRF_TYPE_PREFIX):]
     if node_row_type:
-      if constants.VALID_ROW_TYPE_PATTERN.match(node_row_type):
-        node.set_row_type(node_row_type)
+      if constants.is_row_type(node_row_type):
+        node.set_row_type(node_row_type[len(constants.VALID_ROW_TYPE_PREFIX):])
         return node
       elif node_row_type in self.complex_elements:
         # All complex elements are sequences.
@@ -114,8 +114,9 @@ class XSDProfileParser(object):
   def is_profile_or_block(self, element):
     # If it's a complex type and it's not a Row definition, it must be a
     # profile or block.
-    return (element.tag == constants.XSD_TAG_PREFIX + 'complexType' and
-            not constants.VALID_ROW_TYPE_PATTERN.match(element.attrib['name']))
+    return (
+        element.tag == constants.XSD_TAG_PREFIX + 'complexType' and
+        not constants.is_row_type(element.attrib['name']))
 
   def is_profile(self, element):
     return (self.is_profile_or_block(element) and
