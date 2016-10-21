@@ -124,6 +124,27 @@ class XSDProfileParser(object):
             not element.attrib['name'].startswith(
                 'ResourceIdentificationGroupingFor'))
 
+  def _parse_elements(
+      self, root, profile_name, parse_complex_types=True, parse_profile=True):
+    """Parses specified children of the root tag."""
+    profile_node = None
+    profile_names = []
+    for element in root:
+      try:
+        if parse_profile and self.is_profile(element):
+          profile_names.append(element.attrib['name'])
+        if self.is_profile_or_block(element):
+          if element.attrib['name'].lower() == profile_name.lower() + 'block':
+            if parse_profile:
+              profile_node = self.create_profile_node(element)
+          elif parse_complex_types:
+            self.complex_elements[element.attrib['name']] = element
+      except KeyError:
+        raise error.XsdParsingFailure(
+            self.dsrf_xsd_file_name,
+            'Unexpected complexType without a name: %s' % element.__dict__)
+    return profile_node, profile_names
+
   def parse_profile_from_xsd(self, profile_name):
     """Returns the conformance_validators of the profiles.
 
@@ -135,21 +156,13 @@ class XSDProfileParser(object):
     """
     tree = ElementTree.parse(self.dsrf_xsd_file_name)
     root = tree.getroot()
-    profile_node = None
-    profile_names = []
-    for element in root:
-      try:
-        if self.is_profile(element):
-          profile_names.append(element.attrib['name'])
-        if self.is_profile_or_block(element):
-          if element.attrib['name'].lower() == profile_name.lower()+'block':
-            profile_node = self.create_profile_node(element)
-          else:
-            self.complex_elements[element.attrib['name']] = element
-      except KeyError:
-        raise error.XsdParsingFailure(
-            self.dsrf_xsd_file_name,
-            'Unexpected complexType without a name: %s' % element.__dict__)
+    # First we scan the file for complex types. This first scan allows elements
+    # to be defined out-of-order.
+    self._parse_elements(
+        root, profile_name, parse_complex_types=True, parse_profile=False)
+    # Now we just parse the profile definition.
+    profile_node, profile_names = self._parse_elements(
+        root, profile_name, parse_complex_types=False, parse_profile=True)
     if not profile_node:
       sys.stderr.write(
           'The profile you entered %s does not exist in the dsrf xsd file: %s. '

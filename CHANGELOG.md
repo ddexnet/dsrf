@@ -1,5 +1,8 @@
 # DSRF Library: Change Log
 
+## Version 1.0.6
+* Fix for XSD parser to allow element definitions in any order.
+
 ## Version 1.0.5
 * Allow any string in TerritoryOfUseOrSale (in the input filename).
 * Log the version of the library that is being run.
