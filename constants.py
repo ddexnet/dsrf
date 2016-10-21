@@ -98,9 +98,14 @@ SUPPORTED_FILE_EXTENSIONS = ['tsv', 'tsv.gz']
 MESSAGE_NOTIFICATION_PERIOD_PATTERN = re.compile(
     r'^\d{4}((-\d{2,3})|(-\d{2}-\d{2}(--\d{4}-\d{2}-\d{2})?)|(-Q\d{1}))?$')
 
-# A pattern for the component TerritoryOfUseOrSale.
+# A pattern for the component TerritoryOfUseOrSale. This accepts the following:
+#  - Empty string
+#  - Two-letter ISO code
+#  - CISAC TIS code
+#  - "Multi"
+#  - "Worldwide"
 TERRITORY_OF_USE_OR_SALE_PATTERN = re.compile(
-    r'^(\w{2}|\d{1,4}|Worldwide|multi)$', re.IGNORECASE)
+    r'^$|^(\w{2}|\d{1,4}|Worldwide|multi)$', re.IGNORECASE)
 
 # A pattern for the component MessageCreated-DateTime.
 MESSAGE_CREATED_DATETIME_PATTERN = re.compile(r'^\d{8}T\d{6}$')

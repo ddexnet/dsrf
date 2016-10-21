@@ -34,10 +34,9 @@ class RevenueProcessorsTest(unittest.TestCase):
     return block
 
   def test_revenue_example_dsrf_3_0(self):
-    report_manager = dsrf_report_manager.DSRFReportManager()
+    report_manager = dsrf_report_manager.DSRFReportManager('/tmp/example.log')
     open('/tmp/queue.txt', 'w')  # Overwrites the file if the file exists.
     sys.stdout = open('/tmp/queue.txt', 'r+')
-    log_file = '/tmp/example.log'
 
     dsrf_xsd_file = path.join(
         path.dirname(__file__), '../schemas/3.0/sales-reporting-flat.xsd')
@@ -48,8 +47,7 @@ class RevenueProcessorsTest(unittest.TestCase):
         '../testdata/DSR_TEST_YouTube_AdSupport-'
         'music_2015-Q4_IS_1of1_20160121T150926.tsv')]
     report_manager.parse_report(
-        files_list, dsrf_xsd_file, avs_xsd_file, log_file,
-        human_readable=False)
+        files_list, dsrf_xsd_file, avs_xsd_file, human_readable=False)
     sys.stdin = open('/tmp/queue.txt', 'rb')
     processor = revenue_processors.CalculateAllocatedAmount('PUB_2')
     amount, currency = processor.process_report()

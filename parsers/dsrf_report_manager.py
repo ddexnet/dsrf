@@ -33,6 +33,21 @@ from dsrf.proto import block_pb2
 from dsrf.proto import cell_pb2
 
 
+def _get_version():
+  try:
+    # pylint: disable=import-not-at-top
+    import pkg_resources
+    from pkg_resources import get_distribution
+  except ImportError:
+    return '[Version Unknown - ImportError]'
+
+  try:
+    return 'v%s - %s' % (
+        get_distribution('dsrf').version, get_distribution('dsrf').location)
+  except pkg_resources.DistributionNotFound:
+    return '[Version Unknown - DistributionNotFound]'
+
+
 def _raise_filename_validation_error(
     file_name, row_number, row_type, cell_name, cell_value, filename_part,
     filename_value, file_number):
@@ -83,6 +98,16 @@ class DSRFReportManager(object):
   -Validating the block numbers (unique per report).
   -Transferring the block objects to a queue.
   """
+
+  def __init__(self, log_file_path):
+    """Initializes the Report Manager.
+
+    Args:
+      log_file_path: The path of the log file, where the library logs will be
+                     written to.
+    """
+    self.logger = dsrf_logger.DSRFLogger(__name__, log_file_path)
+    self.logger.info('>>> Running DSRF Library %s <<<' % _get_version())
 
   def write_to_queue(self, block, logger, human_readable=False):
     """Writes the block object to the output queue.
@@ -157,7 +182,7 @@ class DSRFReportManager(object):
         file_name, file_name_dict, message_sender_cells, 'Sender')
     block.filename = file_name
 
-  def parse_report(self, files_list, dsrf_xsd_file, avs_xsd_file, log_file_path,
+  def parse_report(self, files_list, dsrf_xsd_file, avs_xsd_file,
                    human_readable=False, write_head=True):
     """Parses a dsrf report to block objects.
 
@@ -167,8 +192,6 @@ class DSRFReportManager(object):
       files_list: A list of files in the report to parse.
       dsrf_xsd_file: The path of the xsd rows and profiles file to parse.
       avs_xsd_file: The path of the xsd avs (allowed values) file to parse.
-      log_file_path: The path of the .log file, where the library logs will be
-                     written to.
       human_readable: If True, write the block to the queue in a human readable
                       form. Otherwise, write the block as a raw bytes.
       write_head: If set to False, the header will not be written to the queue.
@@ -178,23 +201,23 @@ class DSRFReportManager(object):
     """
     file_path_to_name_map = {
         file_path: path.basename(file_path) for file_path in files_list}
-    logger = dsrf_logger.DSRFLogger(__name__, log_file_path)
+
     expected_components = constants.FILE_NAME_COMPONENTS
+    self.logger.info('Validating the report file names.')
     report_validator = report_files_validators.ReportFilesValidator(
         file_name_validators.FileNameValidator(expected_components),
-        logger)
-    logger.info('Validating the report file names.')
+        self.logger)
     report_validator.validate_file_names(file_path_to_name_map.values())
     schema_parser = dsrf_schema_parser.DsrfSchemaParser(
         avs_xsd_file, dsrf_xsd_file)
     blocks = defaultdict(set)
-    file_validators = schema_parser.parse_xsd_file(logger)
+    file_validators = schema_parser.parse_xsd_file(self.logger)
     for file_path, file_name in file_path_to_name_map.iteritems():
-      file_parser = dsrf_file_parser.DSRFFileParser(logger, file_path)
+      file_parser = dsrf_file_parser.DSRFFileParser(self.logger, file_path)
       file_name_dict = file_name_validators.FileNameValidator.split_file_name(
           file_name, expected_components)
       file_number = file_name_dict['x']
-      logger.info('Start parsing file number %s.', file_number)
+      self.logger.info('Start parsing file number %s.', file_number)
       for block in file_parser.parse_file(file_validators, int(file_number)):
         if block.type == block_pb2.BODY:
           for compared_file_number, file_blocks in blocks.iteritems():
@@ -209,18 +232,18 @@ class DSRFReportManager(object):
           try:
             self.validate_head_block(block, file_name, file_name_dict)
           except error.FileNameValidationFailure as e:
-            logger.error(e)
+            self.logger.error(e)
           if not write_head:
             # Skip writing the header to the queue, if requested.
             continue
         else:
           # FOOT
           continue
-        self.write_to_queue(block, logger, human_readable)
+        self.write_to_queue(block, self.logger, human_readable)
     try:
-      logger.raise_if_fatal_errors_found()
+      self.logger.raise_if_fatal_errors_found()
     except error.ReportValidationFailure as e:
       sys.stderr.write(
           constants.COLOR_RED + constants.BOLD + '\n[Cell validation] '
           + str(e) + constants.ENDC)
-    return logger
+    return self.logger

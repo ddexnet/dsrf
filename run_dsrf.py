@@ -67,10 +67,9 @@ def run_report_manager():
   if args.log_file:
     log_file = path.expanduser(args.log_file)
 
-  report_manager = dsrf_report_manager.DSRFReportManager()
+  report_manager = dsrf_report_manager.DSRFReportManager(log_file)
   report_manager.parse_report(
-      args.files_list, dsrf_xsd_file, avs_xsd_file, log_file,
-      args.human_readable)
+      args.files_list, dsrf_xsd_file, avs_xsd_file, args.human_readable)
 
 
 if __name__ == '__main__':

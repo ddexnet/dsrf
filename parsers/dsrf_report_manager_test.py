@@ -42,8 +42,8 @@ class DsrfReportManagerTest(unittest.TestCase):
   def setUp(self):
     self.maxDiff = None  # Allow self.assertMultiLineEqual to show all diffs.
     open('/tmp/queue.txt', 'w')  # Overwrites the file if the file exists.
-    self.report_manager = dsrf_report_manager.DSRFReportManager()
-    self.log_file = '/tmp/example.log'
+    self.report_manager = dsrf_report_manager.DSRFReportManager(
+        '/tmp/example.log')
     sys.stdout = open('/tmp/queue.txt', 'r+')
 
   @classmethod
@@ -110,7 +110,7 @@ class DsrfReportManagerTest(unittest.TestCase):
         path.dirname(__file__), '../testdata/DSR_PADPIDA2014999999Z_'
         'PADPIDA2014111801Y_AdSupport_2015-02_AU_1of1_20150723T092522.tsv')]
     self.report_manager.parse_report(
-        files_list, dsrf_xsd_file, avs_xsd_file, self.log_file,
+        files_list, dsrf_xsd_file, avs_xsd_file,
         human_readable=True, write_head=False)
     self.assertMultiLineEqual(
         BODY_BLOCK + '\n' + constants.QUEUE_DELIMITER + '\n',
@@ -125,7 +125,7 @@ class DsrfReportManagerTest(unittest.TestCase):
         path.dirname(__file__), '../testdata/DSR_PADPIDA2014999999Z_'
         'PADPIDA2014111801Y_AdSupport_2015-02_AU_1of1_20150723T092522.tsv')]
     self.report_manager.parse_report(
-        files_list, dsrf_xsd_file, avs_xsd_file, self.log_file,
+        files_list, dsrf_xsd_file, avs_xsd_file,
         human_readable=False, write_head=False)
     serialized_block_str = open('/tmp/queue.txt', 'r').read().split(
         '\n' + constants.QUEUE_DELIMITER)[0]
@@ -144,7 +144,7 @@ class DsrfReportManagerTest(unittest.TestCase):
         path.dirname(__file__), '../testdata/DSR_PADPIDA2014999999Z_'
         'PADPIDA2014111801Y_AdSupport_2015-02_AU_1of1_20140617T092522.tsv')]
     logger = self.report_manager.parse_report(
-        files_list, xsd_filename, avs_filename, self.log_file,
+        files_list, xsd_filename, avs_filename,
         human_readable=True)
     self.assertEquals(
         logger.first_error,
@@ -169,7 +169,7 @@ class DsrfReportManagerTest(unittest.TestCase):
         error.ReportValidationFailure, 'The block number 1 is not unique. It '
         'appears in files number: 1 and 2.',
         self.report_manager.parse_report, files_list, dsrf_xsd_file,
-        avs_xsd_file, self.log_file, True)
+        avs_xsd_file, human_readable=True)
 
   def test_party_filename_head_mismatch(self):
     file_name_dict = {'MessageSender': 'Someone'}

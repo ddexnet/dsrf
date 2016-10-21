@@ -64,7 +64,10 @@ class ReportFilesValidator(object):
           'Please provide a non-empty list of files.'))
     for file_name in sorted(files_to_parse):
       try:
-        file_name_dict = self.file_name_validator.validate_value(file_name)
+        file_name_dict, warnings = self.file_name_validator.validate_value(
+            file_name)
+        for warning in warnings:
+          self.logger.warning(warning)
 
         # Validate file number.
         file_number = file_name_dict['x']

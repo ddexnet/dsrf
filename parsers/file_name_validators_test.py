@@ -43,8 +43,22 @@ class FileNameValidatorTest(unittest.TestCase):
         'MessageNotificationPeriod': '2015-02', 'TerritoryOfUseOrSale': 'AU',
         'x': '3', 'y': '4', 'MessageCreatedDateTime': '20150723T092522',
         'ext': 'tsv'}
-    actual_file_name_dict = validator.validate_value(self._get_filename())
+    actual_file_name_dict, warnings = validator.validate_value(
+        self._get_filename())
+    self.assertEquals(set(), warnings)
     self.assertEquals(actual_file_name_dict, expected_file_name_dict)
+
+  def test_invalid_territory_warns(self):
+    validator = file_name_validators.FileNameValidator(
+        constants.FILE_NAME_COMPONENTS)
+    unused_file_name_dict, warnings = validator.validate_value(
+        self._get_filename(territory_of_use_or_sale='potato'))
+    self.assertEquals(len(warnings), 1)
+    expected_warning = (
+        'It is recommended that the TerritoryOfUseOrSale be set to a CISAC TIS '
+        'code or a two-letter ISO code (use "multi" or "worldwide" for '
+        'multiple territories). Provided value: "potato"')
+    self.assertIn(expected_warning, str(list(warnings)[0]))
 
   def test_invalid_format(self):
     validator = file_name_validators.FileNameValidator(

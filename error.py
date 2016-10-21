@@ -122,3 +122,8 @@ class FileNameValidationFailure(ReportValidationFailure):
   def __str__(self):
     return 'File %s has invalid filename (error = %s).' % (
         self.file_name, self.error)
+
+
+class FileNameValidationWarning(FileNameValidationFailure):
+  """Non-fatal file name validation failure Exception."""
+  pass

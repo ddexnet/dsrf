@@ -35,6 +35,7 @@ class FileNameValidator(object):
       A dictionary of {component_name = component_value}
       (eg. {'ServiceDescription': 'AdSupport'}).
     """
+    warnings = set()
     file_name_dict = self.split_file_name(file_name, self.expected_components)
     try:
       self.validate_xofy(file_name_dict['x'], file_name_dict['y'], file_name)
@@ -50,7 +51,9 @@ class FileNameValidator(object):
       raise error.FileNameValidationFailure(
           file_name, 'bad name structure, expected format: %s.' %
           constants.FILE_NAME_FORMAT)
-    return file_name_dict
+    except error.FileNameValidationWarning as e:
+      warnings.add(e)
+    return file_name_dict, warnings
 
   @classmethod
   def validate_xofy(cls, x, y, file_name):
@@ -88,10 +91,13 @@ class FileNameValidator(object):
 
   @classmethod
   def validate_territory_of_use_or_sale(cls, touos, file_name):
+    """TerritoryOfUseOrSale may also be freeform, so this is just a warning."""
     if not constants.TERRITORY_OF_USE_OR_SALE_PATTERN.match(touos):
-      raise error.FileNameValidationFailure(
-          file_name, 'TerritoryOfUseOrSale "%s" is invalid, should be a '
-          'two-letter ISO code or a CISAC TIS code.' % touos)
+      raise error.FileNameValidationWarning(
+          file_name,
+          'It is recommended that the TerritoryOfUseOrSale be set to a '
+          'CISAC TIS code or a two-letter ISO code (use "multi" or "worldwide" '
+          'for multiple territories). Provided value: "%s"' % touos)
     return touos
 
   @classmethod

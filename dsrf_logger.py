@@ -39,7 +39,8 @@ class DSRFLogger(logging.getLoggerClass()):
     self.fail_fast = fail_fast
     self.logger = logging.getLogger(module)
     self.log_file_path = log_file_path
-    logging.basicConfig(filename=log_file_path, level=logging.DEBUG)
+    logging.basicConfig(
+        filename=log_file_path, filemode='w', level=logging.DEBUG)
     logging.setLoggerClass(DSRFLogger)
 
   def error(self, msg, *args, **kwargs):

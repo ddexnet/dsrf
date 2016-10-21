@@ -73,17 +73,15 @@ class ConformanceProcessorBasicTest(unittest.TestCase):
     return block
 
   def _parse_file(self, filename):
-    report_manager = dsrf_report_manager.DSRFReportManager()
+    report_manager = dsrf_report_manager.DSRFReportManager('/tmp/example.log')
     open('/tmp/queue.txt', 'w')  # Overwrites the file if the file exists.
     sys.stdout = open('/tmp/queue.txt', 'r+')
-    log_file = '/tmp/example.log'
     avs_xsd_file = path.join(
         path.dirname(__file__), '../schemas/3.0/avs.xsd')
     files_list = [path.join(path.dirname(__file__), filename)]
     sys.stdin = open('/tmp/queue.txt', 'rb')
     report_manager.parse_report(
-        files_list, DSRF_XSD_3_0, avs_xsd_file, log_file,
-        human_readable=False)
+        files_list, DSRF_XSD_3_0, avs_xsd_file, human_readable=False)
 
   def test_process_block(self):
     """Constructs a node tree.
