@@ -1,5 +1,11 @@
 # DSRF Library: Change Log
 
+## Version 1.0.7
+* Fix ServiceDescription validation to allow any value in the filename if
+  multiple different ServiceDescriptions are present in the SYxx rows.
+* Allow empty values in repeated cells, eg. "|ISNI::0000000063037346"
+
+
 ## Version 1.0.6
 * Fix for XSD parser to allow element definitions in any order.
 

@@ -148,6 +148,7 @@ class DSRFReportManager(object):
     """
     message_recipient_cells = defaultdict(str)
     message_sender_cells = defaultdict(str)
+    service_descriptions = dict()
     for row in block.rows:
       for cell in row.cells:
         if cell.name in constants.MESSAGE_RECIPIENT_MATCH:
@@ -164,17 +165,25 @@ class DSRFReportManager(object):
                   '%d' % cell.integer_value[0], filename_part,
                   file_name_dict[filename_part], file_name_dict['x'])
           elif cell.cell_type == cell_pb2.STRING:
-            if (filename_part == 'ServiceDescription' and
-                file_name_dict[filename_part].lower() == 'multi'):
-              # If multiple ServiceDescriptions are communicated in the same
-              # report then they are not populated in the filename.
+            if filename_part == 'ServiceDescription':
+              service_descriptions[cell.string_value[0]] = (row, cell)
               continue
             if file_name_dict[filename_part] not in cell.string_value:
               _raise_filename_validation_error(
                   file_name, row.type, row.row_number,
                   cell.name, cell.string_value, filename_part,
                   file_name_dict[filename_part], file_name_dict['x'])
-    # MessageRecipient and MessageSender exist only in a HEAD row.
+
+    if len(service_descriptions) == 1:
+      # There's only one type of ServiceDescription being communicated, it must
+      # match the filename.
+      row, cell = service_descriptions.values()[0]
+      if file_name_dict['ServiceDescription'] not in service_descriptions:
+        _raise_filename_validation_error(
+            file_name, row.type, row.row_number,
+            cell.name, cell.string_value, filename_part,
+            file_name_dict[filename_part], file_name_dict['x'])
+
     _validate_party_filename(
         file_name, file_name_dict, message_recipient_cells, 'Recipient')
 

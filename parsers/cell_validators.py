@@ -79,8 +79,10 @@ class BaseCellValidator(object):
           value, row_number, file_name, block_number)
     validated_values = []
     for val in value.split(constants.REPEATED_VALUE_DELIMITER):
-      validated_values.append(
-          self.validate_single_value(val, row_number, file_name, block_number))
+      if val:
+        validated_values.append(
+            self.validate_single_value(
+                val, row_number, file_name, block_number))
     return validated_values
 
   def validate_single_value(self, value, row_number, file_name, block_number):

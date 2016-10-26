@@ -88,8 +88,9 @@ class DsrfReportManagerTest(unittest.TestCase):
         file_name_dict)
 
   def test_validate_head_block_multi_service(self):
-    block = self.block_from_ascii(HEAD_BLOCK)
-    file_name = ('DSR_PADPIDA2014999999Z_PADPIDA2014111801Y_AdSupport_2015-02_'
+    block = self.block_from_ascii(
+        read_test_block('head_block_multi_service.txt'))
+    file_name = ('DSR_PADPIDA2014999999Z_PADPIDA2014111801Y_Multi_2015-02_'
                  'AU_1of1_20150723T092522.tsv')
     file_name_dict = {
         'DSR': 'DSR', 'MessageRecipient': 'PADPIDA2014999999Z',
