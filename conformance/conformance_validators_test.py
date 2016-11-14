@@ -15,6 +15,7 @@
 
 """Tests for dsrf.conformance.conformance_validators."""
 
+import textwrap
 import unittest
 from dsrf.conformance import conformance_validators
 from dsrf.conformance import error
@@ -82,10 +83,16 @@ class RowValidatorsTest(unittest.TestCase):
 
   def test_validate_node_invalid_row(self):
     one_invalid_rows = [RowTest('a', 5)]
-    expected_error = (
-        r'Block 4 starting on row 5 in file number 8 is non-conformant.\n'
-        r'Expected structure:\n\[Sequence \(a and b\) or c\]\+\n'
-        r"Actual structure:\n\['a'\]")
+    expected_error = textwrap.dedent(r"""
+        Block 4 starting on row 5 in file number 8 is non-conformant\.
+
+        First invalid row: 1 \(row 6 in input file\).
+
+        Expected structure:
+        \[Sequence \(a and b\) or c\]\+
+        Actual structure:
+        \['a'\]
+    """).lstrip()
     self.assertRaisesRegexp(
         error.BlockConformanceFailure,
         expected_error, conformance_validators.validate_node, self.root,
@@ -93,10 +100,16 @@ class RowValidatorsTest(unittest.TestCase):
 
   def test_validate_node_invalid_rows(self):
     two_invalid_rows = [RowTest('a', 6), RowTest('d', 7)]
-    expected_error = (
-        r'Block 5 starting on row 6 in file number 8 is non-conformant.\n'
-        r'Expected structure:\n\[Sequence \(a and b\) or c\]\+\n'
-        r"Actual structure:\n\['a', 'd'\]")
+    expected_error = textwrap.dedent(r"""
+        Block 5 starting on row 6 in file number 8 is non-conformant\.
+
+        First invalid row: 1 \(row 7 in input file\).
+
+        Expected structure:
+        \[Sequence \(a and b\) or c\]\+
+        Actual structure:
+        \['a', 'd'\]
+    """).lstrip()
     self.assertRaisesRegexp(
         error.BlockConformanceFailure,
         expected_error, conformance_validators.validate_node, self.root,

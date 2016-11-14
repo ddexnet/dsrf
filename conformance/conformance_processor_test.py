@@ -165,10 +165,9 @@ class ConformanceProcessorBasicTest(unittest.TestCase):
           dsrf_xsd_file, 'UgcProfile')
 
       expected_error = (
-          'Block 0 starting on row 1 in file number 1 is '
-          'non-conformant.\nExpected structure:\nSequence (Sequence (Sequence '
-          '([Sequence (AS01 and MW01*) or AS02]+))+ and [RU01 or RU02]* and '
-          'Sequence (SU03 and LI01*)*)\nActual structure:')
+          'Expected structure:\nSequence (Sequence (Sequence ([Sequence (AS01 '
+          'and MW01*) or AS02]+))+ and [RU01 or RU02]* and Sequence (SU03 and '
+          'LI01*)*)\nActual structure:')
       try:
         report_processor.process_report()
         raise Exception('Row should be invalid but was not: %r' % invalid_row)

@@ -44,7 +44,8 @@ class DSRFLogger(logging.getLoggerClass()):
     logging.setLoggerClass(DSRFLogger)
 
   def error(self, msg, *args, **kwargs):
-    self.logger.error(msg, *args, **kwargs)
+    # As per request, surround the error message by newlines.
+    self.logger.error('\n%s\n' % msg, *args, **kwargs)
     self._counts['error'] += 1
     if self._counts['error'] == 1 and msg:
       self.first_error = str(msg)

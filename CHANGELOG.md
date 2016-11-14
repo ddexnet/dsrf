@@ -1,5 +1,11 @@
 # DSRF Library: Change Log
 
+## Version 1.0.8
+* When conformance validation fails, include the row number of the last row that
+  was validated successfully. Although not guaranteed to be accurate, this helps
+  identify bad input.
+
+
 ## Version 1.0.7
 * Fix ServiceDescription validation to allow any value in the filename if
   multiple different ServiceDescriptions are present in the SYxx rows.
@@ -8,6 +14,7 @@
 
 ## Version 1.0.6
 * Fix for XSD parser to allow element definitions in any order.
+
 
 ## Version 1.0.5
 * Allow any string in TerritoryOfUseOrSale (in the input filename).

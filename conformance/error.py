@@ -18,20 +18,27 @@
 
 class BlockConformanceFailure(Exception):
 
-  def __init__(self, line_number, block_number, file_number, node, rows):
+  def __init__(
+      self, start_line_number, validated_lines, block_number, file_number,
+      node, rows):
     super(BlockConformanceFailure, self).__init__()
-    self.line_number = line_number
+    self.start_line_number = start_line_number
+    self.validated_lines = validated_lines
     self.block_number = block_number
     self.file_number = file_number
     self.node = node
     self.rows = rows
 
   def __str__(self):
-    return ('Block %d starting on row %d in file number %d is non-conformant.\n'
-            'Expected structure:\n%s\n'
-            'Actual structure:\n%s' % (
-                self.block_number, self.line_number, self.file_number,
-                self.node, [str(row.type) for row in self.rows]))
+    return (
+        'Block %d starting on row %d in file number %d is non-conformant.\n\n'
+        'First invalid row: %d (row %d in input file).\n\n'
+        'Expected structure:\n%s\n'
+        'Actual structure:\n%s\n' % (
+            self.block_number, self.start_line_number, self.file_number,
+            self.validated_lines + 1,
+            self.start_line_number + self.validated_lines + 1,
+            self.node, [str(row.type) for row in self.rows]))
 
 
 class CardinalityFailure(Exception):

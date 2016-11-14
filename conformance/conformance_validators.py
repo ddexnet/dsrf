@@ -186,5 +186,6 @@ def validate_node(node, rows, index, block_number, file_number):
         child, rows, index, block_number, file_number)
     if rows and rows_validated != len(rows):
       raise error.BlockConformanceFailure(
-          rows[index].row_number, block_number, file_number, node, rows)
+          rows[index].row_number, rows_validated, block_number, file_number,
+          node, rows)
     return rows_validated
