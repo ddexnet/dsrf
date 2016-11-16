@@ -1,5 +1,12 @@
 # DSRF Library: Change Log
 
+
+## Version 1.0.9
+* Includes a new schema (http://ddex.net/xml/dsrf/3/20161109):
+  * Changed the royalty reporting profile to accurately reflect the standard.
+  * Made sure that all data types for the RecordTypes are now called RecordType_XXXX[.xx].
+
+
 ## Version 1.0.8
 * When conformance validation fails, include the row number of the last row that
   was validated successfully. Although not guaranteed to be accurate, this helps
