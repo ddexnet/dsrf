@@ -19,6 +19,8 @@ import argparse
 from os import path
 import sys
 
+import pkg_resources
+
 from dsrf import constants
 from dsrf.conformance import conformance_validators
 from dsrf.conformance import error
@@ -63,6 +65,25 @@ class ConformanceReportProcessor(dsrf_report_processor.BaseReportProcessor):
       nr_blocks_validated += 1
     return nr_blocks_validated, nr_rows_validated
 
+
+def _get_xsd_file(dsrf_version):
+  """Returns path to installed XSD, or local if no installed one exists."""
+  schema_path = path.join('schemas', dsrf_version, 'sales-reporting-flat.xsd')
+  installed_path = pkg_resources.resource_filename('dsrf', schema_path)
+  try:
+    # Verify file exists and is readable.
+    with open(installed_path) as unused_fp:
+      pass
+  except IOError:
+    # Fall back to local version
+    local_path = path.join(path.dirname(__file__), '..', schema_path)
+    sys.stderr.write(
+        'Could not read installed XSD from %s. Using local version instead: %s'
+        % (installed_path, local_path))
+    return local_path
+
+  return installed_path
+
 if __name__ == '__main__':
   arg_parser = argparse.ArgumentParser(
       description='Validates the conformance of the report blocks.')
@@ -77,15 +98,10 @@ if __name__ == '__main__':
       '--dsrf_version', type=float,
       default=constants.DEFAULT_VERSION, help='The format version')
   args = arg_parser.parse_args()
-  dsrf_xsd_file = path.join(
-      path.dirname(__file__), '../schemas/%s/sales-reporting-flat.xsd'
-      % args.dsrf_version)
-  if not path.isfile(dsrf_xsd_file):
-    raise Exception(
-        'The version %s does not exist in the library. Please update your '
-        'schema files or choose another version.' % args.dsrf_version)
   if args.dsrf_xsd_file:
     dsrf_xsd_file = args.dsrf_xsd_file
+  else:
+    dsrf_xsd_file = _get_xsd_file(args.dsrf_version)
   conformance_processor = ConformanceReportProcessor(
       dsrf_xsd_file, args.profile_name)
   try:

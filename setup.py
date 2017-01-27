@@ -15,13 +15,15 @@
 
 """Setup configuration for the python dsrf modules."""
 
+import collections
 import os
 import subprocess
 import sys
 
-from distutils.core import setup
 from distutils.spawn import find_executable
 from setuptools import find_packages
+from setuptools import findall
+from setuptools import setup
 from setuptools.command.build_py import build_py
 
 
@@ -81,6 +83,21 @@ class MyBuild(build_py):
     build_py.run(self)
 
 
+def _find_data_files():
+  """Traverses the schema directory to identify all XSDs.
+
+  Returns:
+    A list of (target_directory: [files_list]) tuples.
+  """
+  data_files = collections.defaultdict(list)
+  for filepath in findall('schemas'):
+    if not filepath.endswith('.xsd'):
+      continue
+    directory, unused_filename = os.path.split(filepath)
+    data_files[os.path.join('dsrf', directory)].append(filepath)
+  return [(k, v) for k, v in data_files.iteritems()]
+
+
 def _find_dsrf_packages():
   """Traverses the source tree to find the packages.
 
@@ -96,11 +113,12 @@ def _find_dsrf_packages():
 
 
 setup(name='dsrf',
-      version='1.0.9',
+      version='1.0.9a',
       license='Apache 2.0',
       packages=_find_dsrf_packages(),
       description='DSRF Parsing Library',
       author_email='',
       url='https://github.com/ddexnet',
       package_dir={'dsrf': '../dsrf'},
-      cmdclass={'build_py': MyBuild})
+      cmdclass={'build_py': MyBuild},
+      data_files=_find_data_files())
