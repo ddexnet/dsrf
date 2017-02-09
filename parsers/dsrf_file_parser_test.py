@@ -86,17 +86,23 @@ class FileParserTest(unittest.TestCase):
         self.block_from_ascii(BODY_BLOCK),
         self.block_from_ascii(FOOT_BLOCK)]
 
+  def _get_file_parser(self, row_validators=None):
+    parser = dsrf_file_parser.DSRFFileParser(
+        self.logger, None, None, 'filename')
+    parser.row_validators_list = row_validators or self.row_validators_list
+    return parser
+
   def test_get_block_number_valid(self):
     valid_row = ['AS02', '3', 'RES2', 'of:e574ecc9b29949b782cf3e4b82f83bdd',
                  'USWWW0124570', 'Dread River (Jordan River)']
-    parser = dsrf_file_parser.DSRFFileParser(self.logger, 'filename')
+    parser = self._get_file_parser()
     self.assertEquals(parser.get_block_number(valid_row, 3), 3)
 
   def test_get_block_number_invalid(self):
     invalid_row = ['AS02', 'BL3', 'RES2',
                    'of:e574ecc9b29949b782cf3e4b82f83bdd', 'USWWW0124570',
                    'Dread River (Jordan River)']
-    parser = dsrf_file_parser.DSRFFileParser(self.logger, 'filename')
+    parser = self._get_file_parser()
     self.assertRaisesRegexp(
         error.RowValidationFailure,
         'Row number 3 \\(file=filename\\) is invalid \\(error=The block id "BL'
@@ -110,7 +116,7 @@ class FileParserTest(unittest.TestCase):
     cell.name = 'ServiceDescription'
     cell.cell_type = cell_pb2.STRING
     cell.string_value.append('yt')
-    parser = dsrf_file_parser.DSRFFileParser(self.logger, 'filename')
+    parser = self._get_file_parser()
     self.assertEquals(parser.get_cell_object(cell_validator, 'yt'), cell)
 
   def setup_foot_row(self):
@@ -125,28 +131,24 @@ class FileParserTest(unittest.TestCase):
 
   def test_get_row_object(self):
     file_row = ['FFOO', '123']
-    parser = dsrf_file_parser.DSRFFileParser(self.logger, 'filename')
+    parser = self._get_file_parser()
     self.assertEquals(
-        parser.get_row_object(
-            [cell_validators.StringValidator('RecordType', self.logger, False),
-             cell_validators.IntegerValidator(
-                 'NumberOfLines', self.logger, False)],
-            file_row, 'FFOO', 8, 1),
+        parser.get_row_object(file_row, 'FFOO', 8, 1),
         self.setup_foot_row())
 
   def test_get_row_object_invalid(self):
     file_row = ['FFOO', '123a']
-    parser = dsrf_file_parser.DSRFFileParser(self.logger, 'filename')
+    row_validators = {
+        'FFOO': [cell_validators.StringValidator(
+                     'RecordType', self.logger, False),
+                 cell_validators.IntegerValidator(
+                     'NumberOfLines', self.logger, False)]}
+    parser = self._get_file_parser(row_validators)
     self.assertRaisesRegexp(
         error.CellValidationFailure,
         r'Cell "NumberOfLines" contains invalid value "123a". Value was '
         r'expected to be an integer. \[Block: 1, Row: 8, file=filename\]',
-        parser.get_row_object, [
-            cell_validators.StringValidator(
-                'RecordType', self.logger, False),
-            cell_validators.IntegerValidator(
-                'NumberOfLines', self.logger, False)],
-        file_row, 'FFOO', 8, 1)
+        parser.get_row_object, file_row, 'FFOO', 8, 1)
 
   @classmethod
   def block_from_ascii(cls, text):
@@ -158,39 +160,38 @@ class FileParserTest(unittest.TestCase):
   def test_is_end_of_block_false(self):
     first_line = ['HEAD', '123']
     new_block = block_pb2.Block()
-    parser = dsrf_file_parser.DSRFFileParser(self.logger, 'filename')
+    parser = self._get_file_parser()
     self.assertFalse(
         parser.is_end_of_block(first_line, 'HEAD', 5, new_block))
 
   def test_is_end_of_block_true(self):
     line = ['SU02', 'BL8', '11', 'SR1', 'AdSupport', 'NonInterStream']
     new_block = block_pb2.Block()
-    parser = dsrf_file_parser.DSRFFileParser(self.logger, 'filename')
+    parser = self._get_file_parser()
     self.assertTrue(
         parser.is_end_of_block(line, 'SU02', 5, new_block))
 
   def test_get_row_type_valid(self):
     line = ['AS02', 'BL8', '11', 'SR1', 'AdSupport', 'NonInterStream']
-    parser = dsrf_file_parser.DSRFFileParser(self.logger, 'filename')
-    self.assertEquals(
-        parser._get_row_type(
-            line, self.row_validators_list, 3), 'AS02')
+    parser = self._get_file_parser()
+    self.assertEquals(parser._get_row_type(line, 3), 'AS02')
 
   def test_get_row_type_invalid(self):
     line = ['AB12', '8', '11', 'SR1', 'AdSupport', 'NonInterStream']
-    parser = dsrf_file_parser.DSRFFileParser(self.logger, 'file_name')
+    parser = self._get_file_parser()
     self.assertRaisesRegexp(
         error.RowValidationFailure,
-        'Row number 3 \\(file=file_name\\) is invalid \\(error=Row type AB12 '
+        'Row number 3 \\(file=filename\\) is invalid \\(error=Row type AB12 '
         'does not exist in the XSD. Valid row types are:',
-        parser._get_row_type, line, self.row_validators_list, 3)
+        parser._get_row_type, line, 3)
 
   def test_parse_uncompressed_file(self):
     filename = path.join(
         path.dirname(__file__), '../testdata/test_file_parser.tsv')
-    parser = dsrf_file_parser.DSRFFileParser(self.logger, filename)
+    parser = dsrf_file_parser.DSRFFileParser(self.logger, None, None, filename)
+    parser.row_validators_list = self.row_validators_list
     for expected, actual in zip(
-        self.expected_blocks, parser.parse_file(self.row_validators_list, 1)):
+        self.expected_blocks, parser.parse_file(1)):
       self.assertMultiLineEqual(str(expected), str(actual))
       self.assertEquals(self.logger._counts['error'], 0)
       self.assertEquals(self.logger._counts['warn'], 0)
@@ -199,9 +200,10 @@ class FileParserTest(unittest.TestCase):
   def test_parse_compressed_file(self):
     filename = path.join(
         path.dirname(__file__), '../testdata/test_file_parser.tsv.gz')
-    parser = dsrf_file_parser.DSRFFileParser(self.logger, filename)
+    parser = dsrf_file_parser.DSRFFileParser(self.logger, None, None, filename)
+    parser.row_validators_list = self.row_validators_list
     for expected, actual in zip(
-        self.expected_blocks, parser.parse_file(self.row_validators_list, 1)):
+        self.expected_blocks, parser.parse_file(1)):
       self.assertMultiLineEqual(str(expected), str(actual))
       self.assertEquals(self.logger._counts['error'], 0)
       self.assertEquals(self.logger._counts['warn'], 0)

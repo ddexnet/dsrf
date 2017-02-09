@@ -1,5 +1,23 @@
 # DSRF Library: Change Log
 
+## Version 1.1.0
+* Library is refactored to support per-profile schemas, in the structure:
+      schemas/
+      ├── avs/
+      │   ├── 1.0/
+      │   │   └── read.me
+      │   ├── 1.1/
+      │   │   └── avs.xsd
+      │   └── current/
+      │       └── avs.xsd
+      ├── AudioVisualProfile/
+      │   └── 1.0/
+      │       └── AudioVisualProfile.xsd
+      └── UgcProfile/
+
+  * Schemas are now installed with the library and read from the installation
+  directory.
+
 
 ## Version 1.0.9
 * Includes a new schema (http://ddex.net/xml/dsrf/3/20161109):

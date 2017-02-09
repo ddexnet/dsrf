@@ -58,9 +58,9 @@ def _write_block_to_queue(row_types):
 
 BODY_BLOCK = read_test_block('basic_body_block.txt')
 
-DSRF_XSD_3_0 = path.join(
+UGC_XSD_1_0 = path.join(
     path.dirname(__file__),
-    '../schemas/3.0/sales-reporting-flat.xsd')
+    '../schemas/UgcProfile/1.0/UgcProfile.xsd')
 
 
 class ConformanceProcessorBasicTest(unittest.TestCase):
@@ -77,11 +77,11 @@ class ConformanceProcessorBasicTest(unittest.TestCase):
     open('/tmp/queue.txt', 'w')  # Overwrites the file if the file exists.
     sys.stdout = open('/tmp/queue.txt', 'r+')
     avs_xsd_file = path.join(
-        path.dirname(__file__), '../schemas/3.0/avs.xsd')
+        path.dirname(__file__), '../schemas/avs/current/avs.xsd')
     files_list = [path.join(path.dirname(__file__), filename)]
     sys.stdin = open('/tmp/queue.txt', 'rb')
     report_manager.parse_report(
-        files_list, DSRF_XSD_3_0, avs_xsd_file, human_readable=False)
+        files_list, UGC_XSD_1_0, avs_xsd_file, human_readable=False)
 
   def test_process_block(self):
     """Constructs a node tree.
@@ -115,7 +115,8 @@ class ConformanceProcessorBasicTest(unittest.TestCase):
     root = conformance_validators.Node()
     root.add_child(choice)
     conformance_block_processor = (
-        conformance_processor.ConformanceBlockProcessor(root))
+        conformance_processor.ConformanceBlockProcessor())
+    conformance_block_processor.node = root
     # Verify that two rows were validated successfully.
     nr_rows_validated = conformance_block_processor.process_block(
         self.block_from_ascii(BODY_BLOCK))
@@ -140,7 +141,10 @@ class ConformanceProcessorBasicTest(unittest.TestCase):
       dsrf_xsd_file = path.join(
           path.dirname(__file__), '../testdata/profile_for_conformance.xsd')
       report_processor = conformance_processor.ConformanceReportProcessor(
-          dsrf_xsd_file, 'UgcProfile')
+          dsrf_xsd_file)
+      # Need to set this manually since we're not passing a HEAD block.
+      report_processor.profile_name = 'UgcProfile'
+
       nr_blocks_validated, nr_rows_validated = report_processor.process_report()
 
       self.assertEquals(nr_blocks_validated, 1)
@@ -162,7 +166,9 @@ class ConformanceProcessorBasicTest(unittest.TestCase):
       dsrf_xsd_file = path.join(
           path.dirname(__file__), '../testdata/profile_for_conformance.xsd')
       report_processor = conformance_processor.ConformanceReportProcessor(
-          dsrf_xsd_file, 'UgcProfile')
+          dsrf_xsd_file)
+      # Need to set this manually since we're not passing a HEAD block.
+      report_processor.profile_name = 'UgcProfile'
 
       expected_error = (
           'Expected structure:\nSequence (Sequence (Sequence ([Sequence (AS01 '
@@ -180,7 +186,8 @@ class ConformanceProcessorBasicTest(unittest.TestCase):
         '../testdata/DSR_TEST_YouTube_AdSupport-music_2015-Q4_IS_1of1_'
         '20160121T150926.tsv')
     report_processor = conformance_processor.ConformanceReportProcessor(
-        DSRF_XSD_3_0, 'UgcProfile')
+        UGC_XSD_1_0)
+
     sys.stdin = open('/tmp/queue.txt', 'rb')
     nr_blocks_validated, nr_rows_validated = report_processor.process_report()
     self.assertEquals(nr_blocks_validated, 4)
@@ -192,7 +199,7 @@ class ConformanceProcessorBasicTest(unittest.TestCase):
         '../testdata/DSR_TEST2_YouTube_AdSupport-music_2015-Q4_IS_1of1_'
         '20160121T150926.tsv')
     report_processor = conformance_processor.ConformanceReportProcessor(
-        DSRF_XSD_3_0, 'UgcProfile')
+        UGC_XSD_1_0)
     sys.stdin = open('/tmp/queue.txt', 'rb')
     nr_blocks_validated, nr_rows_validated = report_processor.process_report()
     self.assertEquals(nr_blocks_validated, 4)

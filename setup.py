@@ -113,7 +113,7 @@ def _find_dsrf_packages():
 
 
 setup(name='dsrf',
-      version='1.0.9a',
+      version='1.1.0',
       license='Apache 2.0',
       packages=_find_dsrf_packages(),
       description='DSRF Parsing Library',

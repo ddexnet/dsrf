@@ -51,18 +51,20 @@ def run_report_manager():
       '--human_readable', type=bool, default=False, help='If True, write the'
       'block to the queue in a human readable form.')
   args = arg_parser.parse_args()
-  dsrf_xsd_file = file_path('schemas/%s/sales-reporting-flat.xsd' %
-                            args.dsrf_version)
-  avs_xsd_file = file_path('schemas/%s/avs.xsd' % args.dsrf_version)
-  # Check the version
-  if not (file_existance(avs_xsd_file) and file_existance(dsrf_xsd_file)):
-    raise Exception(
-        'The version %s does not exist in the library. Please update your '
-        'schema files or choose another version.' % args.dsrf_version)
+
+  dsrf_xsd_file = None
   if args.dsrf_xsd_file:
     dsrf_xsd_file = path.expanduser(args.dsrf_xsd_file)
+
+  avs_xsd_file = None
   if args.avs_xsd_file:
     avs_xsd_file = path.expanduser(args.avs_xsd_file)
+
+  if bool(avs_xsd_file) != bool(dsrf_xsd_file):
+    raise Exception(
+        'You either have to specify both --dsrf_xsd_file and --avs_xsd_file '
+        '(to use custom XSDs) or neither (to use installed XSDs')
+
   log_file = None
   if args.log_file:
     log_file = path.expanduser(args.log_file)

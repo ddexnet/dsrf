@@ -1,4 +1,4 @@
-HEAD	dsrf/30	UGCProfile	1.1	1453417766009915	2016-01-21T15:09:26Z	1	1	2015-10-01	2015-12-31	PADPIDA2013020802I	YouTube	AdSupport-music	PADPIDA20070627029	TEST	PUB_3|PUB_2|PUB_1|SOC_1|Residual
+HEAD	dsrf/30	UGCProfile	1.0	1453417766009915	2016-01-21T15:09:26Z	1	1	2015-10-01	2015-12-31	PADPIDA2013020802I	YouTube	AdSupport-music	PADPIDA20070627029	TEST	PUB_3|PUB_2|PUB_1|SOC_1|Residual
 #HEAD	MessageVersion	Profile	ProfileVersion	MessageId	MessageCreatedDateTime	FileNumber	NumberofFiles	UsageStartDate	UsageEndDate	SenderPartyId	SenderName	ServiceDescription	RecipientPartyId	RecipientName	RepresentedRepertoire
 #SY02.01	SummaryRecordId	DistributionChannel	DistributionChannelDPID	CommercialModel	UseType	Territory	ServiceDescription	Usages	Users	Currency	NetRevenue	RightsController	RightsControllerPartyId	AllocatedUsages	AllocatedRevenue	AllocatedNetRevenue	RightsType
 #AS01	BlockId	ResourceReference	DspResourceId	ISRC	Title	SubTitle	DisplayArtistName	DisplayArtistPartyId	Duration	ResourceType

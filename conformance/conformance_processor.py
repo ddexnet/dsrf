@@ -16,10 +16,7 @@
 """The library conformance tool."""
 
 import argparse
-from os import path
 import sys
-
-import pkg_resources
 
 from dsrf import constants
 from dsrf.conformance import conformance_validators
@@ -32,9 +29,10 @@ from dsrf.proto import block_pb2
 
 class ConformanceBlockProcessor(dsrf_block_processor.BaseBlockProcessor):
 
-  def __init__(self, node):
+  def __init__(self):
     super(ConformanceBlockProcessor, self).__init__()
-    self.node = node
+    # Will be set when we parse the XSD
+    self.node = None
 
   def process_block(self, block):
     if block.type == block_pb2.BODY:
@@ -47,16 +45,41 @@ class ConformanceBlockProcessor(dsrf_block_processor.BaseBlockProcessor):
 
 class ConformanceReportProcessor(dsrf_report_processor.BaseReportProcessor):
 
-  def __init__(self, dsrf_xsd_file_name, profile_name):
-    xsd_parser = xsd_profile_parser.XSDProfileParser(dsrf_xsd_file_name)
-    profile_node = xsd_parser.parse_profile_from_xsd(profile_name)
+  def __init__(self, dsrf_xsd_file_name):
+    self.dsrf_xsd_file_name = dsrf_xsd_file_name
+    # Will be set when the HEAD block comes in.
+    self.profile_name = None
+    self.profile_version = None
     super(ConformanceReportProcessor, self).__init__(
-        ConformanceBlockProcessor(profile_node))
+        ConformanceBlockProcessor())
+
+  def parse_profile_info_from_head(self, block):
+    if block.type != block_pb2.HEAD:
+      return
+    for cell in block.rows[0].cells:
+      if cell.name == 'Profile':
+        self.profile_name = cell.string_value[0]
+      elif cell.name == 'ProfileVersion':
+        self.profile_version = cell.string_value[0]
+
+  def parse_xsd(self, block):
+    self.parse_profile_info_from_head(block)
+    if not self.dsrf_xsd_file_name:
+      # User did not provided an XSD to validate with.
+      self.dsrf_xsd_file_name = constants.get_xsd_file(
+          self.profile_name, self.profile_version)
+
+    xsd_parser = xsd_profile_parser.XSDProfileParser(self.dsrf_xsd_file_name)
+    self.block_processor.node = xsd_parser.parse_profile_from_xsd(
+        self.profile_name)
 
   def process_report(self):
     nr_rows_validated = 0
     nr_blocks_validated = 0
     for block in self.read_blocks_from_queue():
+      if not self.block_processor.node:
+        self.parse_xsd(block)
+
       sys.stderr.write(
           constants.COLOR_GREEN + '\r[Block conformance] Blocks validated: %s '
           '(rows validated: %s)' % (
@@ -66,30 +89,9 @@ class ConformanceReportProcessor(dsrf_report_processor.BaseReportProcessor):
     return nr_blocks_validated, nr_rows_validated
 
 
-def _get_xsd_file(dsrf_version):
-  """Returns path to installed XSD, or local if no installed one exists."""
-  schema_path = path.join('schemas', dsrf_version, 'sales-reporting-flat.xsd')
-  installed_path = pkg_resources.resource_filename('dsrf', schema_path)
-  try:
-    # Verify file exists and is readable.
-    with open(installed_path) as unused_fp:
-      pass
-  except IOError:
-    # Fall back to local version
-    local_path = path.join(path.dirname(__file__), '..', schema_path)
-    sys.stderr.write(
-        'Could not read installed XSD from %s. Using local version instead: %s'
-        % (installed_path, local_path))
-    return local_path
-
-  return installed_path
-
 if __name__ == '__main__':
   arg_parser = argparse.ArgumentParser(
       description='Validates the conformance of the report blocks.')
-  arg_parser.add_argument(
-      '--profile_name', type=str, required=True,
-      help='The name of the profile to use in the conformance validation.')
   arg_parser.add_argument(
       '--dsrf_xsd_file', type=str,
       help='The dsrf xsd schema file. This file contains the profiles and the '
@@ -98,12 +100,7 @@ if __name__ == '__main__':
       '--dsrf_version', type=float,
       default=constants.DEFAULT_VERSION, help='The format version')
   args = arg_parser.parse_args()
-  if args.dsrf_xsd_file:
-    dsrf_xsd_file = args.dsrf_xsd_file
-  else:
-    dsrf_xsd_file = _get_xsd_file(args.dsrf_version)
-  conformance_processor = ConformanceReportProcessor(
-      dsrf_xsd_file, args.profile_name)
+  conformance_processor = ConformanceReportProcessor(args.dsrf_xsd_file)
   try:
     nr_blocks, nr_rows = conformance_processor.process_report()
   except error.BlockConformanceFailure as e:

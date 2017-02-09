@@ -22,9 +22,11 @@ The output is a list of protocol buffer block objects.
 import csv
 import gzip
 from os import path
+import sys
 
 from dsrf import constants
 from dsrf import error
+from dsrf.parsers import dsrf_schema_parser
 from dsrf.proto import block_pb2
 from dsrf.proto import cell_pb2
 from dsrf.proto import row_pb2
@@ -43,10 +45,22 @@ class TsvDialect(csv.Dialect):
 class DSRFFileParser(object):
   """Parses a single file in the DSRF report."""
 
-  def __init__(self, logger, file_path):
+  def __init__(self, logger, dsrf_xsd_file, avs_xsd_file, file_path):
+    """Initializes the File Parser.
+
+    Args:
+      logger: dsrf_logger.DSRFLogger object
+      dsrf_xsd_file: Optional user-provided path to custom XSD.
+      avs_xsd_file: Optional user-provided path to custom AVS XSD.
+      file_path: Path to the .tsv[.gz] file to parse.
+    """
     self.logger = logger
+    self.dsrf_xsd_file = dsrf_xsd_file
+    self.avs_xsd_file = avs_xsd_file
     self.file_path = file_path
     self.file_name = path.basename(file_path)
+    # Will be set when we parse the XSD
+    self.row_validators_list = None
 
   def get_block_number(self, line, row_number):
     """Returns the line block number if it exists.
@@ -92,12 +106,10 @@ class DSRFFileParser(object):
       cell_proto.boolean_value.extend(cell_parsed_data)
     return cell_proto
 
-  def get_row_object(
-      self, row_validator, line, row_type, row_number, block_number):
+  def get_row_object(self, line, row_type, row_number, block_number):
     """Parses the row data to a protocol buffer row object.
 
     Args:
-      row_validator: A list of subclass of cell_validators.BaseCellValidator.
       line: The row from the file (eg. ['FFOO', '123']).
       row_type: String row type (eg. 'SY02', 'SY0201').
       row_number: The row number which is now parsed in the original file.
@@ -107,6 +119,7 @@ class DSRFFileParser(object):
       A row_pb2.Row object.
     """
     row = row_pb2.Row(type=row_type, row_number=row_number)
+    row_validator = self.row_validators_list[row_type]
     cells = []
     for cell_validator, cell_content in zip(row_validator, line):
       if not cell_validator:
@@ -123,13 +136,11 @@ class DSRFFileParser(object):
   def is_compressed(self):
     return self.file_name.endswith(constants.GZIP_COMPRESSED_FILE_SUFFIX)
 
-  def _get_row_type(self, line, row_validators_list, row_number):
-    """Returns the line's row type.
+  def _get_row_type(self, line, row_number):
+    """Returns the type of the row.
 
     Args:
       line: The line to parse.
-      row_validators_list: A list of subclass of
-                           cell_validators.BaseCellValidator.
       row_number: The line number of the parsed line.
 
     Returns:
@@ -143,20 +154,41 @@ class DSRFFileParser(object):
     if constants.VERSIONED_TSV_ROW_TYPE_PATTERN.match(row_type):
       # We have a row type of the form "SY02.01", convert to "SY0201".
       row_type = row_type.replace('.', '')
-    if row_type not in row_validators_list:
+    if self.row_validators_list and row_type not in self.row_validators_list:
       raise error.RowValidationFailure(
           row_number, self.file_name,
           'Row type %s does not exist in the XSD. Valid row types are: %s. ' % (
-              row_type, row_validators_list.keys()))
+              row_type, self.row_validators_list.keys()))
     return row_type
 
-  def parse_file(self, row_validators_list, file_number):
+  def get_row_validators(self, row):
+    """Parses the row validators from the XSD.
+
+    XSD is either user-specified or inferred from the HEAD row.
+
+    Returns:
+      row_validators_list:
+         A list of subclass of cell_validators.BaseCellValidator.
+        (eg. [[string_validator, decimal_validator],[string_validator]]).
+    """
+    dsrf_xsd_file = self.dsrf_xsd_file
+    if not dsrf_xsd_file:
+      # User did not specify one, read from the library.
+      profile_name, profile_version = row[2:4]
+      try:
+        dsrf_xsd_file = constants.get_xsd_file(profile_name, profile_version)
+      except ValueError as e:
+        sys.stderr.write(str(e))
+        exit(-1)
+    schema_parser = dsrf_schema_parser.DsrfSchemaParser(
+        self.avs_xsd_file, dsrf_xsd_file)
+    return schema_parser.parse_xsd_file(self.logger)
+
+  def parse_file(self, file_number):
     """Parses the file to a protocol buffer block objects.
 
     Args:
-      row_validators_list: A list of subclass of
-                           cell_validators.BaseCellValidator.
-        (eg. [[string_validator, decimal_validator],[string_validator]]).
+
       file_number: The file number in the report (eg. "3of4" -> 3).
 
     Yields:
@@ -177,7 +209,7 @@ class DSRFFileParser(object):
       if line[0].startswith(constants.COMMENT_SIGN):
         continue
       try:
-        row_type = self._get_row_type(line, row_validators_list, row_number)
+        row_type = self._get_row_type(line, row_number)
         # End of block check.
         if self.is_end_of_block(line, row_type, row_number, current_block):
           yield current_block
@@ -191,16 +223,14 @@ class DSRFFileParser(object):
                 'Start parsing the FOOT block in file number %s.', file_number)
             current_block.type = block_pb2.FOOT
           if row_type == 'HEAD':
+            self.row_validators_list = self.get_row_validators(line)
             current_block.version = line[1]
-          current_block.rows.extend([self.get_row_object(
-              row_validators_list[row_type], line, row_type, row_number,
-              block_number)])
+          current_block.rows.extend([
+              self.get_row_object(line, row_type, row_number, block_number)])
           continue
         # Body row.
         block_number = self.get_block_number(line, row_number)
-        row = self.get_row_object(
-            row_validators_list[row_type], line, row_type, row_number,
-            block_number)
+        row = self.get_row_object(line, row_type, row_number, block_number)
         if not current_block.type:
           current_block.type = block_pb2.BODY
           current_block.number = block_number

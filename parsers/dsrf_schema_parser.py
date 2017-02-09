@@ -46,7 +46,6 @@ class DsrfSchemaParser(object):
   """
 
   def __init__(self, avs_xsd_file_name, dsrf_xsd_file_name):
-    self._fixed_string_values = self.parse_fixed_strings(avs_xsd_file_name)
     self.dsrf_xsd_file_name = dsrf_xsd_file_name
     self.avs_xsd_file_name = avs_xsd_file_name
     self.simple_types_map = {}
@@ -253,6 +252,19 @@ class DsrfSchemaParser(object):
         logger.error(e)
     return rows
 
+  def get_avs_location_from_root(self, root):
+    """Inspects the root tag of the profile XSD to find the AVS xsd version."""
+    for child in root:
+      if child.tag == constants.XSD_TAG_PREFIX + 'import':
+        if child.attrib.get('namespace') == constants.AVS_XSD_NAMESPACE:
+          schema_location = child.attrib['schemaLocation']
+          unused_directory, avs_version = path.split(
+              path.split(schema_location)[0])
+          return constants.get_xsd_file('avs', avs_version)
+    raise error.XsdParsingFailure(
+        self.dsrf_xsd_file_name,
+        'No AVS import found (namespace = %s).' % constants.AVS_XSD_NAMESPACE)
+
   def parse_xsd_file(self, logger):
     """Parses an xsd file as a dictionary of {row_name: cells validators list}.
 
@@ -268,6 +280,9 @@ class DsrfSchemaParser(object):
     """
     tree = ElementTree.parse(self.dsrf_xsd_file_name)
     root = tree.getroot()
+    if not self.avs_xsd_file_name:
+      self.avs_xsd_file_name = self.get_avs_location_from_root(root)
+    self._fixed_string_values = self.parse_fixed_strings(self.avs_xsd_file_name)
     self.parse_simple_types(root)
     rows = self.parse_complex_types(root, logger)
     logger.raise_if_fatal_errors_found()

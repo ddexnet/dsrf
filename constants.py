@@ -15,7 +15,79 @@
 
 """The constants of the dsrf parsing library."""
 
+import collections
+import os
+from os import path
 import re
+import sys
+
+import pkg_resources
+
+
+def get_xsd_directory():
+  """Returns path to installed XSD, or local if no installed one exists."""
+  schema_path = 'schemas'
+  installed_path = ''
+  try:
+    # Verify file exists and is readable.
+    installed_path = pkg_resources.resource_filename('dsrf', schema_path)
+    if path.isdir(installed_path):
+      return installed_path
+  except ImportError:
+    # Fall back to local version
+    local_path = path.join(path.dirname(__file__), schema_path)
+    sys.stderr.write(
+        'Could not read installed XSD from %s. Using local version instead: %s'
+        % (installed_path, local_path))
+  return local_path
+
+
+def get_xsd_files():
+  """Builds a map of all the available XSD files."""
+  all_files = []
+  xsd_directory = get_xsd_directory()
+  for root, unused_dirs, files in os.walk(xsd_directory):
+    all_files.extend(
+        os.path.join(root, filename)
+        for filename in files
+        if filename.endswith('.xsd'))
+
+  schemas = collections.defaultdict(dict)
+  for xsd_file in all_files:
+    relative_path = os.path.relpath(xsd_file, xsd_directory)
+    directory, unused_filename = os.path.split(relative_path)
+    profile_name, profile_version = os.path.split(directory)
+    schemas[profile_name][profile_version] = xsd_file
+
+  return schemas
+
+
+# This is a dict of dicts in the form
+# {'ProfileName': {
+#     '1.1': '/path/to/1.1/schema.xsd'
+#     '1.2': '/path/to/1.2/schema.xsd'}}
+XSD_FILES = get_xsd_files()
+
+# We use this to be case-insensitive.
+XSD_LOOKUP_MAP = {xsd_file.lower(): xsd_file for xsd_file in XSD_FILES.keys()}
+
+
+def get_xsd_file(profile_name, profile_version):
+  """Returns path to installed XSD, or local if no installed one exists."""
+  if profile_name.lower() not in XSD_LOOKUP_MAP:
+    raise ValueError(
+        'Profile %s did not match a supported profile: %s.\n'
+        % (profile_name, sorted(XSD_FILES.keys())))
+
+  # Ensure we have the correct case.
+  camelcase_profile_name = XSD_LOOKUP_MAP[profile_name.lower()]
+  if profile_version not in XSD_FILES[camelcase_profile_name]:
+    raise ValueError(
+        'Profile Version %s did not match a supported version: %s.\n'
+        % (profile_version, sorted(XSD_FILES[camelcase_profile_name].keys())))
+
+  return XSD_FILES[camelcase_profile_name][profile_version]
+
 
 COLOR_GREEN = '\033[92m'
 COLOR_RED = '\033[01;31m'
@@ -25,6 +97,9 @@ BOLD = '\033[1m'
 
 # The XSD tags prefix.
 XSD_TAG_PREFIX = '{http://www.w3.org/2001/XMLSchema}'
+
+# Used in the profile schema to identify the AVS file.
+AVS_XSD_NAMESPACE = 'http://ddex.net/xml/avs/avs'
 
 # All row type declarations in the XSD have to start with this value.
 VALID_ROW_TYPE_PREFIX = 'RecordType-'

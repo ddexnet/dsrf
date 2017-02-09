@@ -26,7 +26,6 @@ from dsrf import constants
 from dsrf import dsrf_logger
 from dsrf import error
 from dsrf.parsers import dsrf_file_parser
-from dsrf.parsers import dsrf_schema_parser
 from dsrf.parsers import file_name_validators
 from dsrf.parsers import report_files_validators
 from dsrf.proto import block_pb2
@@ -199,8 +198,8 @@ class DSRFReportManager(object):
 
     Args:
       files_list: A list of files in the report to parse.
-      dsrf_xsd_file: The path of the xsd rows and profiles file to parse.
-      avs_xsd_file: The path of the xsd avs (allowed values) file to parse.
+      dsrf_xsd_file: Optional user-provided path to custom XSD.
+      avs_xsd_file: Optional user-provided path to custom AVS XSD.
       human_readable: If True, write the block to the queue in a human readable
                       form. Otherwise, write the block as a raw bytes.
       write_head: If set to False, the header will not be written to the queue.
@@ -217,17 +216,15 @@ class DSRFReportManager(object):
         file_name_validators.FileNameValidator(expected_components),
         self.logger)
     report_validator.validate_file_names(file_path_to_name_map.values())
-    schema_parser = dsrf_schema_parser.DsrfSchemaParser(
-        avs_xsd_file, dsrf_xsd_file)
     blocks = defaultdict(set)
-    file_validators = schema_parser.parse_xsd_file(self.logger)
     for file_path, file_name in file_path_to_name_map.iteritems():
-      file_parser = dsrf_file_parser.DSRFFileParser(self.logger, file_path)
+      file_parser = dsrf_file_parser.DSRFFileParser(
+          self.logger, dsrf_xsd_file, avs_xsd_file, file_path)
       file_name_dict = file_name_validators.FileNameValidator.split_file_name(
           file_name, expected_components)
       file_number = file_name_dict['x']
       self.logger.info('Start parsing file number %s.', file_number)
-      for block in file_parser.parse_file(file_validators, int(file_number)):
+      for block in file_parser.parse_file(int(file_number)):
         if block.type == block_pb2.BODY:
           for compared_file_number, file_blocks in blocks.iteritems():
             if block.number in file_blocks:
