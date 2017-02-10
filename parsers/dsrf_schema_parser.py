@@ -46,6 +46,9 @@ class DsrfSchemaParser(object):
   """
 
   def __init__(self, avs_xsd_file_name, dsrf_xsd_file_name):
+    self._fixed_string_values = None
+    if avs_xsd_file_name:
+      self._fixed_string_values = self.parse_fixed_strings(avs_xsd_file_name)
     self.dsrf_xsd_file_name = dsrf_xsd_file_name
     self.avs_xsd_file_name = avs_xsd_file_name
     self.simple_types_map = {}

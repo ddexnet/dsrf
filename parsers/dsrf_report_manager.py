@@ -105,7 +105,7 @@ class DSRFReportManager(object):
       log_file_path: The path of the log file, where the library logs will be
                      written to.
     """
-    self.logger = dsrf_logger.DSRFLogger(__name__, log_file_path)
+    self.logger = dsrf_logger.DSRFLogger('dsrf', log_file_path)
     self.logger.info('>>> Running DSRF Library %s <<<' % _get_version())
 
   def write_to_queue(self, block, logger, human_readable=False):

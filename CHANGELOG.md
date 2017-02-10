@@ -3,16 +3,27 @@
 ## Version 1.1.0
 * Library is refactored to support per-profile schemas, in the structure:
       schemas/
+
       ├── avs/
+
       │   ├── 1.0/
+
       │   │   └── read.me
+
       │   ├── 1.1/
+
       │   │   └── avs.xsd
+
       │   └── current/
+
       │       └── avs.xsd
+
       ├── AudioVisualProfile/
+
       │   └── 1.0/
+
       │       └── AudioVisualProfile.xsd
+
       └── UgcProfile/
 
   * Schemas are now installed with the library and read from the installation

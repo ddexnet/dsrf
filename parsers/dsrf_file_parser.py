@@ -119,6 +119,12 @@ class DSRFFileParser(object):
       A row_pb2.Row object.
     """
     row = row_pb2.Row(type=row_type, row_number=row_number)
+    if not self.row_validators_list:
+      sys.stderr.write(
+          '\n' + constants.COLOR_RED +
+          'Schema parsing was unsuccessful. Please check the log file at '
+          + self.logger.log_file_path + constants.ENDC + '\n')
+      sys.exit(-1)
     row_validator = self.row_validators_list[row_type]
     cells = []
     for cell_validator, cell_content in zip(row_validator, line):
@@ -175,11 +181,17 @@ class DSRFFileParser(object):
     if not dsrf_xsd_file:
       # User did not specify one, read from the library.
       profile_name, profile_version = row[2:4]
+      self.logger.info(
+          'Detected profile and version from HEAD: %s (%s)' %
+          (profile_name, profile_version))
       try:
         dsrf_xsd_file = constants.get_xsd_file(profile_name, profile_version)
       except ValueError as e:
         sys.stderr.write(str(e))
-        exit(-1)
+        sys.exit(-1)
+
+    self.logger.info('XSD file location: %s' % dsrf_xsd_file)
+
     schema_parser = dsrf_schema_parser.DsrfSchemaParser(
         self.avs_xsd_file, dsrf_xsd_file)
     return schema_parser.parse_xsd_file(self.logger)
