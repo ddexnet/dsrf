@@ -81,7 +81,8 @@ class DsrfSchemaParser(object):
       return VALIDATOR_TYPES_MAP[cell_type](cell_name, logger, required,
                                             repeated)
     # Simple types.
-    cell_type = cell_type.replace(constants.DSRF_TYPE_PREFIX, '')
+    if cell_type.startswith(constants.DSRF_TYPE_PREFIX):
+      cell_type = cell_type.split(':')[-1]
     if cell_type in self.simple_types_map:
       if (self.simple_types_map[cell_type][1][0].tag ==
           constants.XSD_TAG_PREFIX + 'pattern'):

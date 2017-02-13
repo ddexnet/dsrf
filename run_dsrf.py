@@ -42,9 +42,6 @@ def run_report_manager():
       '--avs_xsd_file', type=str, help='The xsd avs schema file. This file '
       'contains the allowed value set to the fixed string cells.')
   arg_parser.add_argument(
-      '--dsrf_version', type=float, default=constants.DEFAULT_VERSION,
-      help='The format version')
-  arg_parser.add_argument(
       '--log_file', type=str, default='/tmp/example.log',
       help='This file will contain the library logs.')
   arg_parser.add_argument(

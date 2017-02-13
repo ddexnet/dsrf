@@ -1,4 +1,4 @@
-HEAD  ID1 1 2
+HEAD	ID1	UgcProfile	1.1
 #HEAD	MessageVersion	ProfileVersion	MessageId	MessageCreatedDateTime	NumberOfFiles
 #SY02	CommercialModel	UseType	Territory	ServiceDescription	NumberOfUsages
 SY03	AdSupport	Broadcast	AU	AdSupport	108552

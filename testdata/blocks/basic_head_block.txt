@@ -23,7 +23,6 @@ rows {
     cell_type: INTEGER
     integer_value: 1
   }
-
 }
 rows {
   type: "SY03"

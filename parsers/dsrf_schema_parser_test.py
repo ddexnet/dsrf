@@ -43,7 +43,9 @@ class SchemaParserBaseTest(unittest.TestCase):
                        'MW01', 'CU01', 'SU01', 'SU02', 'SU03', 'SU04', 'RU01',
                        'RU02', 'LI01'],
         'UseType': ['AsPerContract', 'Broadcast', 'ConditionalDownload',
-                    'ContentInfluencedStream', 'Display', 'Download']}
+                    'ContentInfluencedStream', 'Display', 'Download'],
+        'ProfileId': ['BasicAudioProfile', 'UGCProfile', 'AudioVisualProfile',
+                      'RoyaltyReportingProfile', 'BroadcastReportingProfile']}
     self.assertEquals(self.dsrf_schema_parser.parse_fixed_strings(filename),
                       expected_dict)
 

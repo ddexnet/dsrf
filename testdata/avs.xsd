@@ -1,60 +1,52 @@
-<xs:schema xmlns:avs="http://ddex.net/xml/avs/avs" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://ddex.net/xml/avs/avs" elementFormDefault="unqualified" attributeFormDefault="unqualified">
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://ddex.net/xml/avs/avs" xmlns:avs="http://ddex.net/xml/avs/avs" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:annotation>
     <xs:documentation>© 2006-2015 Digital Data Exchange, LLC (DDEX)</xs:documentation>
   </xs:annotation>
   <xs:annotation>
-    <xs:documentation>
-      This XML Schema Definition file is, together with all DDEX standards, subject to two licences:
+    <xs:documentation>This XML Schema Definition file is, together with all DDEX standards, subject to two licences:
       If you wish to evaluate whether the standard meets your needs please have a look at the Evaluation Licence at https://kb.ddex.net/display/HBK/Evaluation+Licence+for+DDEX+Standards. If you want to
       implement and use this DDEX standard, please take out an Implementation Licence. For details please go to http://ddex.net/apply-ddex-implementation-licence.
     </xs:documentation>
   </xs:annotation>
   <xs:simpleType name="UseType">
     <xs:annotation>
-      <xs:documentation source="ddex:Definition">
-        A Type of a nature of a Service, or a Release, as used by a Consumer.
+      <xs:documentation source="ddex:Definition">A Type of a nature of a Service, or a Release, as used by a Consumer.
       </xs:documentation>
     </xs:annotation>
     <xs:restriction base="xs:string">
       <xs:enumeration value="AsPerContract">
         <xs:annotation>
-          <xs:documentation source="ddex:Definition">
-            A Type of an Entity used when a MessageSender wishes to indicate that the value within the allowed value set is defined by the contractual relationship between MessageSender and MessageRecipient.
+          <xs:documentation source="ddex:Definition">A Type of an Entity used when a MessageSender wishes to indicate that the value within the allowed value set is defined by the contractual relationship between MessageSender and MessageRecipient.
           </xs:documentation>
         </xs:annotation>
       </xs:enumeration>
       <xs:enumeration value="Broadcast">
         <xs:annotation>
-          <xs:documentation source="ddex:Definition">
-            To Deliver a Resource using radio waves on the radio frequency portion of the electromagnetic spectrum. This allowed value is deprecated. DDEX advises that this value will be removed at a future date and therefore recommends against using it.
+          <xs:documentation source="ddex:Definition">To Deliver a Resource using radio waves on the radio frequency portion of the electromagnetic spectrum. This allowed value is deprecated. DDEX advises that this value will be removed at a future date and therefore recommends against using it.
           </xs:documentation>
         </xs:annotation>
       </xs:enumeration>
       <xs:enumeration value="ConditionalDownload">
         <xs:annotation>
-          <xs:documentation source="ddex:Definition">
-            To Download under a condition (e.g. tethered to a service or device).
+          <xs:documentation source="ddex:Definition">To Download under a condition (e.g. tethered to a service or device).
           </xs:documentation>
         </xs:annotation>
       </xs:enumeration>
       <xs:enumeration value="ContentInfluencedStream">
         <xs:annotation>
-          <xs:documentation source="ddex:Definition">
-            To Stream where the only interactivity provided allows the Consumer to start, stop, pause, fast forward and rewind the Stream, and where there is limited flexibility to influence the content of the Stream.
+          <xs:documentation source="ddex:Definition">To Stream where the only interactivity provided allows the Consumer to start, stop, pause, fast forward and rewind the Stream, and where there is limited flexibility to influence the content of the Stream.
           </xs:documentation>
         </xs:annotation>
       </xs:enumeration>
       <xs:enumeration value="Display">
         <xs:annotation>
-          <xs:documentation source="ddex:Definition">
-            To display a Resource on a device where it will disappear when the device is switched off. This allowed value is deprecated. DDEX advises that this value will be removed at a future date and therefore recommends against using it.
+          <xs:documentation source="ddex:Definition">To display a Resource on a device where it will disappear when the device is switched off. This allowed value is deprecated. DDEX advises that this value will be removed at a future date and therefore recommends against using it.
           </xs:documentation>
         </xs:annotation>
       </xs:enumeration>
       <xs:enumeration value="Download">
         <xs:annotation>
-          <xs:documentation source="ddex:Definition">
-            To transfer a Release from a Service's Computer to a Consumer's Computer for later consumption. This allowed value is deprecated. DDEX advises that this value will be removed at a future date and therefore recommends against using it.
+          <xs:documentation source="ddex:Definition">To transfer a Release from a Service's Computer to a Consumer's Computer for later consumption. This allowed value is deprecated. DDEX advises that this value will be removed at a future date and therefore recommends against using it.
           </xs:documentation>
         </xs:annotation>
       </xs:enumeration>
@@ -67,43 +59,37 @@
     <xs:restriction base="xs:string">
       <xs:enumeration value="HEAD">
         <xs:annotation>
-          <xs:documentation source="ddex:Definition">
-            Global Header Record for all Sales Report Message formatted in accordance with this standard.
+          <xs:documentation source="ddex:Definition">Global Header Record for all Sales Report Message formatted in accordance with this standard.
           </xs:documentation>
         </xs:annotation>
       </xs:enumeration>
       <xs:enumeration value="FOOT">
         <xs:annotation>
-          <xs:documentation source="ddex:Definition">
-            Global Footer Record for all Sales Report Message formatted in accordance with this standard.
+          <xs:documentation source="ddex:Definition">Global Footer Record for all Sales Report Message formatted in accordance with this standard.
           </xs:documentation>
         </xs:annotation>
       </xs:enumeration>
       <xs:enumeration value="FHEA">
         <xs:annotation>
-          <xs:documentation source="ddex:Definition">
-            File Header Record for all Sales Report Message formatted in accordance with this standard if a Sales Report Message is split into several files.
+          <xs:documentation source="ddex:Definition">File Header Record for all Sales Report Message formatted in accordance with this standard if a Sales Report Message is split into several files.
           </xs:documentation>
         </xs:annotation>
       </xs:enumeration>
       <xs:enumeration value="FFOO">
         <xs:annotation>
-          <xs:documentation source="ddex:Definition">
-            File Footer Record for all Sales Report Message formatted in accordance with this standard if a Sales Report Message is split into several files.
+          <xs:documentation source="ddex:Definition">File Footer Record for all Sales Report Message formatted in accordance with this standard if a Sales Report Message is split into several files.
           </xs:documentation>
         </xs:annotation>
       </xs:enumeration>
       <xs:enumeration value="SY01">
         <xs:annotation>
-          <xs:documentation source="ddex:Definition">
-            Basic Summary Record for Usage, Revenue or Sales of Audio Releases or Resources.
+          <xs:documentation source="ddex:Definition">Basic Summary Record for Usage, Revenue or Sales of Audio Releases or Resources.
           </xs:documentation>
         </xs:annotation>
       </xs:enumeration>
       <xs:enumeration value="SY02">
         <xs:annotation>
-          <xs:documentation source="ddex:Definition">
-            UGC Summary Record for Ad-Supported and Interactive Streaming Services.
+          <xs:documentation source="ddex:Definition">UGC Summary Record for Ad-Supported and Interactive Streaming Services.
           </xs:documentation>
         </xs:annotation>
       </xs:enumeration>
@@ -114,57 +100,49 @@
       </xs:enumeration>
       <xs:enumeration value="SY04">
         <xs:annotation>
-          <xs:documentation source="ddex:Definition">
-            Basic Summary Record for Usage, Revenue or Sales of Audio-visual Releases.
+          <xs:documentation source="ddex:Definition">Basic Summary Record for Usage, Revenue or Sales of Audio-visual Releases.
           </xs:documentation>
         </xs:annotation>
       </xs:enumeration>
       <xs:enumeration value="RE01">
         <xs:annotation>
-          <xs:documentation source="ddex:Definition">
-            Basic Audio Release Record to describe audio Releases that have been used or sold.
+          <xs:documentation source="ddex:Definition">Basic Audio Release Record to describe audio Releases that have been used or sold.
           </xs:documentation>
         </xs:annotation>
       </xs:enumeration>
       <xs:enumeration value="RE02">
         <xs:annotation>
-          <xs:documentation source="ddex:Definition">
-            Basic Sub-Release Record to describe Sub-Releases that have been used or sold.
+          <xs:documentation source="ddex:Definition">Basic Sub-Release Record to describe Sub-Releases that have been used or sold.
           </xs:documentation>
         </xs:annotation>
       </xs:enumeration>
       <xs:enumeration value="RE03">
         <xs:annotation>
-          <xs:documentation source="ddex:Definition">
-            Basic Audio-visual Release Record to describe audio Releases that have been used or sold.
+          <xs:documentation source="ddex:Definition">Basic Audio-visual Release Record to describe audio Releases that have been used or sold.
           </xs:documentation>
         </xs:annotation>
       </xs:enumeration>
       <xs:enumeration value="AS01">
         <xs:annotation>
-          <xs:documentation source="ddex:Definition">
-            Basic Sound Recording Record to describe sound recordings and music videos that have been used or sold individually or as part of a Release (without Musical Work Information).
+          <xs:documentation source="ddex:Definition">Basic Sound Recording Record to describe sound recordings and music videos that have been used or sold individually or as part of a Release (without Musical Work Information).
           </xs:documentation>
         </xs:annotation>
       </xs:enumeration>
       <xs:enumeration value="AS02">
         <xs:annotation>
-          <xs:documentation source="ddex:Definition">
-            Basic Sound Recording Record to describe sound recordings and music videos that have been used or sold individually or as part of a Release (with Musical Work Information).
+          <xs:documentation source="ddex:Definition">Basic Sound Recording Record to describe sound recordings and music videos that have been used or sold individually or as part of a Release (with Musical Work Information).
           </xs:documentation>
         </xs:annotation>
       </xs:enumeration>
       <xs:enumeration value="AS03">
         <xs:annotation>
-          <xs:documentation source="ddex:Definition">
-            Basic Record to describe audio-visual Resources that have been used or sold individually or as part of a Release.
+          <xs:documentation source="ddex:Definition">Basic Record to describe audio-visual Resources that have been used or sold individually or as part of a Release.
           </xs:documentation>
         </xs:annotation>
       </xs:enumeration>
       <xs:enumeration value="MW01">
         <xs:annotation>
-          <xs:documentation source="ddex:Definition">
-            Basic Record to describe a Musical Work that has been utilised.
+          <xs:documentation source="ddex:Definition">Basic Record to describe a Musical Work that has been utilised.
           </xs:documentation>
         </xs:annotation>
       </xs:enumeration>
@@ -175,15 +153,13 @@
       </xs:enumeration>
       <xs:enumeration value="SU01">
         <xs:annotation>
-          <xs:documentation source="ddex:Definition">
-            Usage, Revenue or Sales Record for Download Services (to be used in accordance with Clause 7.7).
+          <xs:documentation source="ddex:Definition">Usage, Revenue or Sales Record for Download Services (to be used in accordance with Clause 7.7).
           </xs:documentation>
         </xs:annotation>
       </xs:enumeration>
       <xs:enumeration value="SU02">
         <xs:annotation>
-          <xs:documentation source="ddex:Definition">
-            Usage, Revenue or Sales Record for Streaming Services and Webcasts (to be used in accordance with Clause 7.7).
+          <xs:documentation source="ddex:Definition">Usage, Revenue or Sales Record for Streaming Services and Webcasts (to be used in accordance with Clause 7.7).
           </xs:documentation>
         </xs:annotation>
       </xs:enumeration>
@@ -194,30 +170,58 @@
       </xs:enumeration>
       <xs:enumeration value="SU04">
         <xs:annotation>
-          <xs:documentation source="ddex:Definition">
-            Usage, Revenue or Sales Record for Audio-visual Releases.
+          <xs:documentation source="ddex:Definition">Usage, Revenue or Sales Record for Audio-visual Releases.
           </xs:documentation>
         </xs:annotation>
       </xs:enumeration>
       <xs:enumeration value="RU01">
         <xs:annotation>
-          <xs:documentation source="ddex:Definition">
-            UGC Release Usage Summary Record to provide a summary of the uses of up to 100 uses UGC Releases.
+          <xs:documentation source="ddex:Definition">UGC Release Usage Summary Record to provide a summary of the uses of up to 100 uses UGC Releases.
           </xs:documentation>
         </xs:annotation>
       </xs:enumeration>
       <xs:enumeration value="RU02">
         <xs:annotation>
-          <xs:documentation source="ddex:Definition">
-            UGC Release Usage Record to provide details of the Uses of a single UGC Release.
+          <xs:documentation source="ddex:Definition">UGC Release Usage Record to provide details of the Uses of a single UGC Release.
           </xs:documentation>
         </xs:annotation>
       </xs:enumeration>
       <xs:enumeration value="LI01">
         <xs:annotation>
-          <xs:documentation source="ddex:Definition">
-            Record to Communicate UGC-related Revenues and amounts to Works RightsControllers.
+          <xs:documentation source="ddex:Definition">Record to Communicate UGC-related Revenues and amounts to Works RightsControllers.
           </xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="ProfileId">
+    <xs:annotation>
+      <xs:documentation source="ddex:Definition">A Type of record.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="BasicAudioProfile">
+        <xs:annotation>
+          <xs:documentation source="ddex:Definition">A Composite containing details of a Report for audio-only Usage, Revenue or Sales. This Profile is also for reporting Usage, Revenue or Sales for music videos.</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="UGCProfile">
+        <xs:annotation>
+          <xs:documentation source="ddex:Definition">A Composite containing details of a Report for all Usage, Revenue or Sales for user-generated content.</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="AudioVisualProfile">
+        <xs:annotation>
+          <xs:documentation source="ddex:Definition">A Composite containing details of a Report for all Usages, Revenue and/or Sales for audio-visual Releases, excluding those for music videos.</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="RoyaltyReportingProfile">
+        <xs:annotation>
+          <xs:documentation source="ddex:Definition">A Composite containing details of a Report of royalties based on Usages, Revenues and/or Sales of Releases.</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="BroadcastReportingProfile">
+        <xs:annotation>
+          <xs:documentation source="ddex:Definition">A Composite containing details of a Report of royalties based on Broadcasts of Resources.</xs:documentation>
         </xs:annotation>
       </xs:enumeration>
     </xs:restriction>

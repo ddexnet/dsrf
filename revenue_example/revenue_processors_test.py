@@ -39,9 +39,9 @@ class RevenueProcessorsTest(unittest.TestCase):
     sys.stdout = open('/tmp/queue.txt', 'r+')
 
     dsrf_xsd_file = path.join(
-        path.dirname(__file__), '../schemas/3.0/sales-reporting-flat.xsd')
+        path.dirname(__file__), '../schemas/UgcProfile/1.0/UgcProfile.xsd')
     avs_xsd_file = path.join(
-        path.dirname(__file__), '../schemas/3.0/avs.xsd')
+        path.dirname(__file__), '../schemas/avs/current/avs.xsd')
     files_list = [path.join(
         path.dirname(__file__),
         '../testdata/DSR_TEST_YouTube_AdSupport-'

@@ -122,7 +122,8 @@ class DSRFFileParser(object):
     if not self.row_validators_list:
       sys.stderr.write(
           '\n' + constants.COLOR_RED +
-          'Schema parsing was unsuccessful. Please check the log file at '
+          'Schema parsing was unsuccessful or HEAD row is malformed. Please '
+          'check the log file at '
           + self.logger.log_file_path + constants.ENDC + '\n')
       sys.exit(-1)
     row_validator = self.row_validators_list[row_type]

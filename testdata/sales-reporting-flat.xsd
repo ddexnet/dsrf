@@ -285,7 +285,7 @@ Consumers. </xs:documentation>
       </xs:element>
     </xs:sequence>
   </xs:complexType>
-  <xs:complexType name="FOOT">
+  <xs:complexType name="RecordType-FOOT">
     <xs:annotation>
       <xs:documentation source="ddex:Definition">File Footer Record for all Sales Report Message formatted in accordance with this standard if a Sales Report Message is split into several files.
       </xs:documentation>

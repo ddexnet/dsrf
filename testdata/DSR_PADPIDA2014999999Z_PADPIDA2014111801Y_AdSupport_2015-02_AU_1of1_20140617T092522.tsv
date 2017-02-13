@@ -1,5 +1,5 @@
-HEAD	ID1	1	2
-#HEAD	MessageId	FileNumber	NumberOfFiles
+HEAD	ID1	UgcProfile	1.1	1	2
+#HEAD	MessageId	Profile	ProfileVersion	FileNumber	NumberOfFiles
 #SY02	CommercialModel	UseType	Territory	ServiceDescription	NumberOfUsages
 SY03	AdSupport	Broadcast	AU	AdSupport	108552
 RE01	1	RL1	of:6616065478244fd394695eccdc930bc1

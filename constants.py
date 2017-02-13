@@ -137,7 +137,7 @@ FOOT_ROWS = ['FOOT', 'FFOO']
 FIXED_STRING_PREFIX = 'avs:'
 
 # Simple cells type prefix.
-DSRF_TYPE_PREFIX = 'dsrf:'
+DSRF_TYPE_PREFIX = 'dsrf'
 
 # Gzip compressed file extension.
 GZIP_COMPRESSED_FILE_SUFFIX = '.tsv.gz'

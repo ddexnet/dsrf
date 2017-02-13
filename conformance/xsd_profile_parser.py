@@ -78,7 +78,7 @@ class XSDProfileParser(object):
           % (node_element.attrib.get('name'),
              node_row_type, constants.DSRF_TYPE_PREFIX,
              constants.VALID_ROW_TYPE_PREFIX))
-    node_row_type = node_row_type[len(constants.DSRF_TYPE_PREFIX):]
+    node_row_type = node_row_type.split(':')[-1]
     if node_row_type:
       if constants.is_row_type(node_row_type):
         node.set_row_type(node_row_type[len(constants.VALID_ROW_TYPE_PREFIX):])
