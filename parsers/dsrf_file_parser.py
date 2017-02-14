@@ -173,6 +173,9 @@ class DSRFFileParser(object):
 
     XSD is either user-specified or inferred from the HEAD row.
 
+    Args:
+      row: The parsed row from the TSV file.
+
     Returns:
       row_validators_list:
          A list of subclass of cell_validators.BaseCellValidator.
@@ -188,6 +191,7 @@ class DSRFFileParser(object):
       try:
         dsrf_xsd_file = constants.get_xsd_file(profile_name, profile_version)
       except ValueError as e:
+        self.logger.error(str(e))
         sys.stderr.write(str(e))
         sys.exit(-1)
 
@@ -247,8 +251,6 @@ class DSRFFileParser(object):
         if not current_block.type:
           current_block.type = block_pb2.BODY
           current_block.number = block_number
-          self.logger.info('Start parsing block number %s in file number %s.',
-                           block_number, file_number)
         current_block.rows.extend([row])
       except error.ValidationError as e:
         self.logger.error(e)

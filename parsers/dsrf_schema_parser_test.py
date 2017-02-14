@@ -51,7 +51,7 @@ class SchemaParserBaseTest(unittest.TestCase):
 
   def test_parse_fixed_string_union_valid(self):
     filename = path.join(path.dirname(__file__),
-                                      '../schemas/avs/current/avs.xsd')
+                         '../schemas/avs/current/avs.xsd')
     self.assertIsNotNone(
         self.dsrf_schema_parser.parse_fixed_strings(filename)['TerritoryCode'])
     self.assertIsNotNone(

@@ -84,7 +84,7 @@ class ConformanceProcessorBasicTest(unittest.TestCase):
         files_list, UGC_XSD_1_0, avs_xsd_file, human_readable=False)
 
   def test_process_block(self):
-    """Constructs a node tree.
+    r"""Constructs a node tree.
 
     In addition, reads an ASCII block, serializes and writes it to "stdout" so
     the conformance processor can read it.

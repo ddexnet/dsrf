@@ -44,6 +44,7 @@ class ConformanceBlockProcessor(dsrf_block_processor.BaseBlockProcessor):
 
 
 class ConformanceReportProcessor(dsrf_report_processor.BaseReportProcessor):
+  """Processor for validating conformance."""
 
   def __init__(self, dsrf_xsd_file_name):
     self.dsrf_xsd_file_name = dsrf_xsd_file_name

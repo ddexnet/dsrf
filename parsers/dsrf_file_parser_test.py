@@ -139,10 +139,10 @@ class FileParserTest(unittest.TestCase):
   def test_get_row_object_invalid(self):
     file_row = ['FFOO', '123a']
     row_validators = {
-        'FFOO': [cell_validators.StringValidator(
-                     'RecordType', self.logger, False),
-                 cell_validators.IntegerValidator(
-                     'NumberOfLines', self.logger, False)]}
+        'FFOO': [
+            cell_validators.StringValidator('RecordType', self.logger, False),
+            cell_validators.IntegerValidator(
+                'NumberOfLines', self.logger, False)]}
     parser = self._get_file_parser(row_validators)
     self.assertRaisesRegexp(
         error.CellValidationFailure,

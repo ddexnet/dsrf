@@ -18,7 +18,6 @@
 import argparse
 from os import path
 
-from dsrf import constants
 from dsrf.parsers import dsrf_report_manager
 
 

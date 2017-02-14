@@ -34,7 +34,7 @@ from dsrf.proto import cell_pb2
 
 def _get_version():
   try:
-    # pylint: disable=import-not-at-top
+    # pylint: disable=g-import-not-at-top
     import pkg_resources
     from pkg_resources import get_distribution
   except ImportError:
