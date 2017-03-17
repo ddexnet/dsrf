@@ -7061,7 +7061,7 @@
                <xs:documentation source="ddex:Definition">A Composite containing details of a Report of royalties based on Usages, Revenues and/or Sales of Releases.</xs:documentation>
             </xs:annotation>
          </xs:enumeration>
-         <xs:enumeration value="BroadcastReportingProfile">
+         <xs:enumeration value="RadioBroadcastProfile">
             <xs:annotation>
                <xs:documentation source="ddex:Definition">A Composite containing details of a Report of royalties based on Broadcasts of Resources.</xs:documentation>
             </xs:annotation>

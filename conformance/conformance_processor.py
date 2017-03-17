@@ -112,5 +112,6 @@ if __name__ == '__main__':
   if nr_blocks > 0 and nr_rows > 0:
     print (constants.BOLD + constants.COLOR_GREEN +
            '\nThe conformance validation passed successfully! Validated %s '
-           'blocks (%s rows).' % (nr_blocks, nr_rows)
-           + constants.ENDC)
+           'blocks (%s rows). Note: this assessment does not take cell format '
+           'errors into account. Please check for "ERROR" in the output above.'
+           % (nr_blocks, nr_rows) + constants.ENDC)

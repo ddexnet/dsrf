@@ -2,7 +2,6 @@
 
 ## Version 1.1.0
 * Library is refactored to support per-profile schemas, in the structure:
-
     ```
     schemas/
       ├── avs/
