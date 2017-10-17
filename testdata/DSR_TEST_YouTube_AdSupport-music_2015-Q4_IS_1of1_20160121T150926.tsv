@@ -5,7 +5,7 @@ HEAD	dsrf/30	UGCProfile	1.0	1453417766009915	2016-01-21T15:09:26Z	1	1	2015-10-01
 #MW01.01	BlockId	DspWorkId	ISWC	Title	SubTitle	ComposerAuthor	ComposerAuthorPartyId	Arranger	ArrangerPartyId	MusicPublisher	MusicPublisherPartyId	WorkContributor	WorkContributorPartyId	DataProvider	ProprietaryWorkId
 #RU01	BlockId	SummaryRecordId	DspReleaseId	Usages
 #SU03.01	BlockId	SalesTransactionId	SummaryRecordId	DspReleaseId	Usages	NetRevenue	ValidityPeriodStart	ValidityPeriodEnd
-#LI01	BlockId	SummaryRecordId	RightsController	RightsControllerProprietaryID	RightsControllerWorkID	RightShare%	RightType	AllocatedNetRevenue	AllocatedAmount
+#LI01.01	BlockId	SummaryRecordId	RightsController	RightsControllerProprietaryID	RightsControllerWorkID	RightShare%	RightType	AllocatedNetRevenue	AllocatedAmount
 #FOOT	NumberOfLinesInFile	NumberOfLinesInReport	NumberOfSummaryRecords	NumberOfBlocksInFile	NumberOfBlocksInReport
 SY02.01	1			AdvertisementSupportedModel	Stream	IS	AdSupport-music	1036181		USD	409.05	PUB_2		537927	0.0	0.0	PerformingRight
 SY02.01	1			AdvertisementSupportedModel	Stream	IS	AdSupport-music	575732		USD	359.71	SOC_1		404423	0.0	0.0	PerformingRight
@@ -15,21 +15,21 @@ AS01	1	A935917475088049	A935917475088049	USSM19803037	Sexual Healing		Marvin Gay
 MW01.01	1	A138658048204590		SEXUAL HEALING		DAVID RITZ|M. GAYE|MARVIN GAYE|ODELL BROWN ODELL BROWN	|myns::4534
 RU01	1	1	NDH1bGnNMjw|WqPnZ4I9IdU|i_E9iHuNhVY|FEWp5LvncFY|92vLk0w13N0|UcgpCVhsZwc|h24yfpwJf2w|SN5OwKgbyAk|KVaIovDm9ss|_vdjJqZC2Lo|XiGfR_9vLLA|y4x9zSgkMUc|xkrCSeaGni8|Qsdp4RXKvEg|Y0c6qXYea6s|LoiGR9bHKqg|L6zkk5M0cKI	4323|2334|276|105|25|11|6|5|4|3|2|1|1|1|1|1|1
 SU03.01	1	U1	1	A935917475088049	7810	2.0	20151001	20151231
-LI01	1	1	PUB_2			1.0000	PerformingRight	0.0	125.23
+LI01.01	1	1	PUB_2			1.0000	PerformingRight	0.0	125.23
 AS01	2	A726198037646795	A726198037646795	USUV71101875	All I Want Is You Audio Only		Justin Bieber		PT0H0M0S	SoundRecording
 MW01.01	2	A500871239184096	T9109247316	ALL I WANT IS YOU	myns::4535
 RU01	2	1	Vk0r_mq4O6Q	1704
 SU03.01	2	U1	1	A726198037646795	2045	2.0	20151001	20151231
-LI01	2	1	Residual			1.0000	PerformingRight	1.15	0.0
+LI01.01	2	1	Residual			1.0000	PerformingRight	1.15	0.0
 AS01	3	XMhY7hsbhs4	XMhY7hsbhs4	USRH10903879	This Bitter Earth / On The Nature Of Daylight		Dinah Washington / Max Richter		PT0H0M0S	SoundRecording
 MW01.01	3	A316330592513521	T0702472794	This Bitter Earth		CLYDE OTIS	myns::4536
 RU01	3	1	jXHGoaEtmFM|zjWD0JU92lw|QGtN3lpI2f4|8rluU6BGpKw|CW-GMG6xhtY|BmEhO1OiEkY|skU94oEx-YI|t6PU9WLZW8s|zvxD0uQ_thc|zHPm_iYcyH0|YEP3AlWNSRA|8w5VokaTemE|rcnj5AQKSus|mNg34mFiedQ|gSYOAwDXlJE|TzOFlCIY0H8|XYz8U-KnJwc|5YkMAuQv1FM|x8jnpppFXyc|FoFIUahNwGk|CnzNULfOUmI|8aMQFjMO2hE|UkYeoI-dtp4|7pqb2J9qxMU|O-kwYMxNq4c|CK2Z9-KhFN4|_bTx8GhpoPA|Lsn25j3bMZw|R-sF8xqD15o|xqnWX8UX2r8|o7e4SSXrubs|FhbBZuK4j4w|QqeDOngnSsY|D0TnJUsoR7s|xyyDvTikow4|YKbGhPncG1g|vK79mU3zSCA|5MrLC1wvGpk|2DKg0JQQfU4|bvpbxRlDkIg|54HTkC83cP8|r0jwsbJlM5s|Hi7NWChDRZU|ZbdikSY7sZY|aKMZxZbAfhs|9hVadTexXT0|zG2cruJAbGo|n-lbGU0kswc|mMZB80Mqls0	111|75|65|35|23|18|11|6|6|5|5|5|5|5|5|4|4|3|3|3|2|2|2|2|2|2|2|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1
 SU03.01	3	U1	1	XMhY7hsbhs4	18	0.0	20151001	20151002
-LI01	3	1	PUB_3			1.0000	PerformingRight	0.0	30.32
+LI01.01	3	1	PUB_3			1.0000	PerformingRight	0.0	30.32
 SU03.01	3	U2	1	XMhY7hsbhs4	4	0.0	20151003	20151003
-LI01	3	1	SOC_1			1.0000	PerformingRight	0.0	20.98
+LI01.01	3	1	SOC_1			1.0000	PerformingRight	0.0	20.98
 SU03.01	3	U3	1	XMhY7hsbhs4	258	0.0	20151004	20151203
-LI01	3	1	SOC_1			1.0000	PerformingRight	0.01	10.86
+LI01.01	3	1	SOC_1			1.0000	PerformingRight	0.01	10.86
 SU03.01	3	U4	1	XMhY7hsbhs4	75	3.0	20151204	20151230
-LI01	3	1	PUB_3			1.0000	PerformingRight	0.0	11.49
+LI01.01	3	1	PUB_3			1.0000	PerformingRight	0.0	11.49
 FOOT	35	35	4	3	3

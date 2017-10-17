@@ -58,9 +58,9 @@ def _write_block_to_queue(row_types):
 
 BODY_BLOCK = read_test_block('basic_body_block.txt')
 
-UGC_XSD_1_0 = path.join(
+UGC_XSD_1_1 = path.join(
     path.dirname(__file__),
-    '../schemas/UgcProfile/1.0/UgcProfile.xsd')
+    '../schemas/UgcProfile/1.1.1/UgcProfile.xsd')
 
 
 class ConformanceProcessorBasicTest(unittest.TestCase):
@@ -81,7 +81,7 @@ class ConformanceProcessorBasicTest(unittest.TestCase):
     files_list = [path.join(path.dirname(__file__), filename)]
     sys.stdin = open('/tmp/queue.txt', 'rb')
     report_manager.parse_report(
-        files_list, UGC_XSD_1_0, avs_xsd_file, human_readable=False)
+        files_list, UGC_XSD_1_1, avs_xsd_file, human_readable=False)
 
   def test_process_block(self):
     r"""Constructs a node tree.
@@ -120,7 +120,7 @@ class ConformanceProcessorBasicTest(unittest.TestCase):
     # Verify that two rows were validated successfully.
     nr_rows_validated = conformance_block_processor.process_block(
         self.block_from_ascii(BODY_BLOCK))
-    self.assertEquals(nr_rows_validated, 2)
+    self.assertEqual(nr_rows_validated, 2)
 
   def test_process_report_valid(self):
     """Verifies the conformance validation for a single valid UGC block."""
@@ -147,8 +147,8 @@ class ConformanceProcessorBasicTest(unittest.TestCase):
 
       nr_blocks_validated, nr_rows_validated = report_processor.process_report()
 
-      self.assertEquals(nr_blocks_validated, 1)
-      self.assertEquals(nr_rows_validated, len(valid_row))
+      self.assertEqual(nr_blocks_validated, 1)
+      self.assertEqual(nr_rows_validated, len(valid_row))
 
   def test_process_report_invalid(self):
     """Verifies the conformance validation for a single valid UGC block."""
@@ -186,12 +186,12 @@ class ConformanceProcessorBasicTest(unittest.TestCase):
         '../testdata/DSR_TEST_YouTube_AdSupport-music_2015-Q4_IS_1of1_'
         '20160121T150926.tsv')
     report_processor = conformance_processor.ConformanceReportProcessor(
-        UGC_XSD_1_0)
+        UGC_XSD_1_1)
 
     sys.stdin = open('/tmp/queue.txt', 'rb')
     nr_blocks_validated, nr_rows_validated = report_processor.process_report()
-    self.assertEquals(nr_blocks_validated, 4)
-    self.assertEquals(nr_rows_validated, 21)
+    self.assertEqual(nr_blocks_validated, 4)
+    self.assertEqual(nr_rows_validated, 21)
 
   def test_conformance_end2end_minoccurs_zero(self):
     """Tests the case where an element in a sequence may be omitted."""
@@ -199,11 +199,11 @@ class ConformanceProcessorBasicTest(unittest.TestCase):
         '../testdata/DSR_TEST2_YouTube_AdSupport-music_2015-Q4_IS_1of1_'
         '20160121T150926.tsv')
     report_processor = conformance_processor.ConformanceReportProcessor(
-        UGC_XSD_1_0)
+        UGC_XSD_1_1)
     sys.stdin = open('/tmp/queue.txt', 'rb')
     nr_blocks_validated, nr_rows_validated = report_processor.process_report()
-    self.assertEquals(nr_blocks_validated, 4)
-    self.assertEquals(nr_rows_validated, 20)
+    self.assertEqual(nr_blocks_validated, 4)
+    self.assertEqual(nr_rows_validated, 20)
 
 
 if __name__ == '__main__':

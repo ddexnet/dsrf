@@ -95,7 +95,7 @@ class AllocatedAmountBlockProcessor(dsrf_block_processor.BaseBlockProcessor):
       for row in block.rows:
         if _get_cell(row, 'RightsController') != rights_controller_name:
           continue
-        if row.type == 'LI01':
+        if row.type.startswith('LI01'):
           block_amount += self.process_row(row, rights_controller_name)
 
     return block_amount, block_currency

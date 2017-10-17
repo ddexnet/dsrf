@@ -39,7 +39,7 @@ class RevenueProcessorsTest(unittest.TestCase):
     sys.stdout = open('/tmp/queue.txt', 'r+')
 
     dsrf_xsd_file = path.join(
-        path.dirname(__file__), '../schemas/UgcProfile/1.0/UgcProfile.xsd')
+        path.dirname(__file__), '../schemas/UgcProfile/1.1.1/UgcProfile.xsd')
     avs_xsd_file = path.join(
         path.dirname(__file__), '../schemas/avs/current/avs.xsd')
     files_list = [path.join(
@@ -51,8 +51,8 @@ class RevenueProcessorsTest(unittest.TestCase):
     sys.stdin = open('/tmp/queue.txt', 'rb')
     processor = revenue_processors.CalculateAllocatedAmount('PUB_2')
     amount, currency = processor.process_report()
-    self.assertEquals(amount, 125.23)
-    self.assertEquals(currency, 'USD')
+    self.assertEqual(amount, 125.23)
+    self.assertEqual(currency, 'USD')
 
 
 if __name__ == '__main__':
