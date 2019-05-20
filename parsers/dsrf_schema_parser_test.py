@@ -54,7 +54,7 @@ class SchemaParserBaseTest(unittest.TestCase):
                          '../schemas/avs/current/avs.xsd')
     self.assertIsNotNone(
         self.dsrf_schema_parser.parse_fixed_strings(filename)
-            ['CurrentTerritoryCode'])
+        ['CurrentTerritoryCode'])
     self.assertIsNotNone(
         self.dsrf_schema_parser.parse_fixed_strings(filename)['CurrencyCode'])
     self.assertIsNotNone(

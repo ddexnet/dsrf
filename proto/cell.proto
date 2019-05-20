@@ -25,7 +25,6 @@ enum DataType {
 }
 
 message Cell {
-
   // The name of the cell in the spreadsheet (eg. "RecordType").
   optional string name = 1;
 
@@ -44,5 +43,4 @@ message Cell {
 
   // Contains the boolean values if the cell is of type BOOLEAN.
   repeated bool boolean_value = 6;
-
 }

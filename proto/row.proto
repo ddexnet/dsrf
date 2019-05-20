@@ -19,9 +19,7 @@ import "cell.proto";
 
 package dsrf;
 
-
 message Row {
-
   // The type of the row in the spreadsheet (eg. "MW01").
   optional string type = 1;
 

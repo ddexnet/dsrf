@@ -26,7 +26,6 @@ enum BlockType {
 }
 
 message Block {
-
   // The block's type. We expect every file to contain one HEAD block, one
   // FOOT block and zero or more BODY blocks.
   optional BlockType type = 1;

@@ -32,7 +32,7 @@
          </xs:choice>
       </xs:complexType>
    </xs:element>
-   <xs:element name="AcknowldegementMessage">
+   <xs:element name="AcknowledgementMessage">
       <xs:annotation>
          <xs:documentation source="ddex:Definition">A sales reporting Message in the DSR Message Suite, Flat File Profile, sent to a MusicalWork Licensor.</xs:documentation>
       </xs:annotation>
