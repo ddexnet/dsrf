@@ -42,7 +42,7 @@ class XsdProfileParserTest(unittest.TestCase):
     tree = ElementTree.parse(choice_element)
     root = tree.getroot()
     actual_node = self.profile_parser.create_node(root)
-    self.assertEquals(str(actual_node), '[SY03 or SY04]+')
+    self.assertEqual(str(actual_node), '[SY03 or SY04]+')
 
   def test_get_profile_node(self):
     """Tests the get_profile_node method.
@@ -60,10 +60,9 @@ class XsdProfileParserTest(unittest.TestCase):
     """
     actual_profile_node = self.profile_parser.parse_profile_from_xsd(
         'Ugc')
-    self.assertEquals(
+    self.assertEqual(
         'Sequence ([Sequence (AS01 and MW01*) or AS02] and [RU01 or RU02]+ and'
-        ' SU03+ and LI01*)',
-        str(actual_profile_node))
+        ' SU03+ and LI01*)', str(actual_profile_node))
 
 
 if __name__ == '__main__':

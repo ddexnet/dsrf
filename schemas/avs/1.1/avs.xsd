@@ -9,6 +9,7 @@
    </xs:annotation>
    <xs:annotation>
       <xs:documentation>This XML Schema Definition file is, together with all DDEX standards, subject to two licences: If you wish to evaluate whether the standard meets your needs please have a look at the Evaluation Licence at https://kb.ddex.net/display/HBK/Evaluation+Licence+for+DDEX+Standards. If you want to implement and use this DDEX standard, please take out an Implementation Licence. For details please go to http://ddex.net/apply-ddex-implementation-licence.</xs:documentation>
+      <xs:documentation>AVS 1.1</xs:documentation>
    </xs:annotation>
    <xs:simpleType name="AdditionalVideoType">
       <xs:annotation>

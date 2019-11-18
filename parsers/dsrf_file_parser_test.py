@@ -96,7 +96,7 @@ class FileParserTest(unittest.TestCase):
     valid_row = ['AS02', '3', 'RES2', 'of:e574ecc9b29949b782cf3e4b82f83bdd',
                  'USWWW0124570', 'Dread River (Jordan River)']
     parser = self._get_file_parser()
-    self.assertEquals(parser.get_block_number(valid_row, 3), 3)
+    self.assertEqual(parser.get_block_number(valid_row, 3), 3)
 
   def test_get_block_number_invalid(self):
     invalid_row = ['AS02', 'BL3', 'RES2',
@@ -117,7 +117,7 @@ class FileParserTest(unittest.TestCase):
     cell.cell_type = cell_pb2.STRING
     cell.string_value.append('yt')
     parser = self._get_file_parser()
-    self.assertEquals(parser.get_cell_object(cell_validator, 'yt'), cell)
+    self.assertEqual(parser.get_cell_object(cell_validator, 'yt'), cell)
 
   def setup_foot_row(self):
     row = row_pb2.Row(type='FFOO', row_number=8)
@@ -132,9 +132,8 @@ class FileParserTest(unittest.TestCase):
   def test_get_row_object(self):
     file_row = ['FFOO', '123']
     parser = self._get_file_parser()
-    self.assertEquals(
-        parser.get_row_object(file_row, 'FFOO', 8, 1),
-        self.setup_foot_row())
+    self.assertEqual(
+        parser.get_row_object(file_row, 'FFOO', 8, 1), self.setup_foot_row())
 
   def test_get_row_object_invalid(self):
     file_row = ['FFOO', '123a']
@@ -174,7 +173,7 @@ class FileParserTest(unittest.TestCase):
   def test_get_row_type_valid(self):
     line = ['AS02', 'BL8', '11', 'SR1', 'AdSupport', 'NonInterStream']
     parser = self._get_file_parser()
-    self.assertEquals(parser._get_row_type(line, 3), 'AS02')
+    self.assertEqual(parser._get_row_type(line, 3), 'AS02')
 
   def test_get_row_type_invalid(self):
     line = ['AB12', '8', '11', 'SR1', 'AdSupport', 'NonInterStream']
@@ -193,9 +192,9 @@ class FileParserTest(unittest.TestCase):
     for expected, actual in zip(
         self.expected_blocks, parser.parse_file(1)):
       self.assertMultiLineEqual(str(expected), str(actual))
-      self.assertEquals(self.logger._counts['error'], 0)
-      self.assertEquals(self.logger._counts['warn'], 0)
-      self.assertTrue(self.logger._counts['info'] > 0)
+      self.assertEqual(self.logger._counts['error'], 0)
+      self.assertEqual(self.logger._counts['warn'], 0)
+      self.assertGreater(self.logger._counts['info'], 0)
 
   def test_parse_compressed_file(self):
     filename = path.join(
@@ -205,9 +204,9 @@ class FileParserTest(unittest.TestCase):
     for expected, actual in zip(
         self.expected_blocks, parser.parse_file(1)):
       self.assertMultiLineEqual(str(expected), str(actual))
-      self.assertEquals(self.logger._counts['error'], 0)
-      self.assertEquals(self.logger._counts['warn'], 0)
-      self.assertTrue(self.logger._counts['info'] > 0)
+      self.assertEqual(self.logger._counts['error'], 0)
+      self.assertEqual(self.logger._counts['warn'], 0)
+      self.assertGreater(self.logger._counts['info'], 0)
 
 
 if __name__ == '__main__':

@@ -46,8 +46,8 @@ class SchemaParserBaseTest(unittest.TestCase):
                     'ContentInfluencedStream', 'Display', 'Download'],
         'ProfileId': ['BasicAudioProfile', 'UGCProfile', 'AudioVisualProfile',
                       'RoyaltyReportingProfile', 'BroadcastReportingProfile']}
-    self.assertEquals(self.dsrf_schema_parser.parse_fixed_strings(filename),
-                      expected_dict)
+    self.assertEqual(
+        self.dsrf_schema_parser.parse_fixed_strings(filename), expected_dict)
 
   def test_parse_fixed_string_union_valid(self):
     filename = path.join(path.dirname(__file__),
@@ -97,8 +97,7 @@ class SchemaParserBaseTest(unittest.TestCase):
     self.assertIsInstance(duration_validator, cell_validators.DurationValidator)
     self.assertIsInstance(fixed_string_validator,
                           cell_validators.FixedStringValidator)
-    self.assertEquals(fixed_string_validator.valid_values,
-                      expected_valid_values)
+    self.assertEqual(fixed_string_validator.valid_values, expected_valid_values)
     self.assertIsInstance(
         simple_type_validator, cell_validators.PatternValidator)
 
@@ -183,10 +182,10 @@ class SchemaParserBaseTest(unittest.TestCase):
     for actual_cell, expected_cell in zip(
         rows_validators['SU02'], expected_su02_validators):
       self.assertIsInstance(actual_cell, expected_cell.__class__)
-      self.assertEquals(actual_cell.cell_name, expected_cell.cell_name,
-                        self.logger)
-      self.assertEquals(actual_cell.required, expected_cell.required)
-      self.assertEquals(actual_cell.repeated, expected_cell.repeated)
+      self.assertEqual(actual_cell.cell_name, expected_cell.cell_name,
+                       self.logger)
+      self.assertEqual(actual_cell.required, expected_cell.required)
+      self.assertEqual(actual_cell.repeated, expected_cell.repeated)
 
 
 if __name__ == '__main__':

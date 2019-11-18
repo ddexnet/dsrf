@@ -147,7 +147,7 @@ class DsrfReportManagerTest(unittest.TestCase):
     logger = self.report_manager.parse_report(
         files_list, xsd_filename, avs_filename,
         human_readable=True)
-    self.assertEquals(
+    self.assertEqual(
         logger.first_error,
         'File DSR_PADPIDA2014999999Z_PADPIDA2014111801Y_AdSupport_2015-02_AU_'
         '1of1_20140617T092522.tsv has invalid filename (error = [HEAD: row 1]: '

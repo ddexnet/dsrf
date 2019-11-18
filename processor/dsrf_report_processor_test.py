@@ -67,7 +67,7 @@ class DsrfReportProcessorTest(unittest.TestCase):
       counter += 1
       deserialized_block_str = unicode(actual_block).encode('utf-8').strip()
       self.assertMultiLineEqual(deserialized_block_str, expected_block.strip())
-    self.assertEquals(counter, 2)
+    self.assertEqual(counter, 2)
 
 
 if __name__ == '__main__':

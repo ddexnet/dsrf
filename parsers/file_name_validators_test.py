@@ -45,15 +45,15 @@ class FileNameValidatorTest(unittest.TestCase):
         'ext': 'tsv'}
     actual_file_name_dict, warnings = validator.validate_value(
         self._get_filename())
-    self.assertEquals(set(), warnings)
-    self.assertEquals(actual_file_name_dict, expected_file_name_dict)
+    self.assertEqual(set(), warnings)
+    self.assertEqual(actual_file_name_dict, expected_file_name_dict)
 
   def test_invalid_territory_warns(self):
     validator = file_name_validators.FileNameValidator(
         constants.FILE_NAME_COMPONENTS)
     unused_file_name_dict, warnings = validator.validate_value(
         self._get_filename(territory_of_use_or_sale='potato'))
-    self.assertEquals(len(warnings), 1)
+    self.assertEqual(len(warnings), 1)
     expected_warning = (
         'It is recommended that the TerritoryOfUseOrSale be set to a CISAC TIS '
         'code or a two-letter ISO code (use "multi" or "worldwide" for '
@@ -90,10 +90,10 @@ class FileNameValidatorTest(unittest.TestCase):
         self._get_filename(x='3a'))
 
   def test_file_name_xofy_valid(self):
-    self.assertEquals(
+    self.assertEqual(
         file_name_validators.FileNameValidator.validate_xofy(
             '3', '4', self._get_filename()), ('3', '4'))
-    self.assertEquals(
+    self.assertEqual(
         file_name_validators.FileNameValidator.validate_xofy(
             '4', '4', self._get_filename()), ('4', '4'))
 
@@ -107,7 +107,7 @@ class FileNameValidatorTest(unittest.TestCase):
         self._get_filename(prefix='DSS'))
 
   def test_file_name_prefix_valid(self):
-    self.assertEquals(
+    self.assertEqual(
         file_name_validators.FileNameValidator.validate_prefix(
             'DSR', self._get_filename()), 'DSR')
 
@@ -121,7 +121,7 @@ class FileNameValidatorTest(unittest.TestCase):
         self._get_filename(ext='csv'))
 
   def test_file_name_suffix_valid(self):
-    self.assertEquals(
+    self.assertEqual(
         file_name_validators.FileNameValidator.validate_suffix(
             'tsv', self._get_filename()), 'tsv')
 
@@ -134,7 +134,7 @@ class FileNameValidatorTest(unittest.TestCase):
         'x': '3', 'y': '4', 'MessageCreatedDateTime': '20150723T092522',
         'ext': 'tsv'}
 
-    self.assertEquals(
+    self.assertEqual(
         file_name_validators.FileNameValidator.split_file_name(
             self._get_filename(), constants.FILE_NAME_COMPONENTS),
         expected_file_name_dict_uncompressed)
@@ -145,7 +145,7 @@ class FileNameValidatorTest(unittest.TestCase):
         'MessageNotificationPeriod': '2015-02', 'TerritoryOfUseOrSale': 'AU',
         'x': '3', 'y': '4', 'MessageCreatedDateTime': '20150723T092522',
         'ext': 'tsv.gz'}
-    self.assertEquals(
+    self.assertEqual(
         file_name_validators.FileNameValidator.split_file_name(
             self._get_filename(ext='tsv.gz'), constants.FILE_NAME_COMPONENTS),
         expected_file_name_dict_compressed)

@@ -77,10 +77,9 @@ class DatetimePatternTest(BasePatternTest):
 class GeneralConstantsTest(unittest.TestCase):
 
   def test_file_name_components(self):
-    self.assertEquals(
+    self.assertEqual(
         len(constants.FILE_NAME_COMPONENTS),
-        len(re.split(r'_|of|\.', constants.FILE_NAME_FORMAT))
-    )
+        len(re.split(r'_|of|\.', constants.FILE_NAME_FORMAT)))
 
 
 if __name__ == '__main__':

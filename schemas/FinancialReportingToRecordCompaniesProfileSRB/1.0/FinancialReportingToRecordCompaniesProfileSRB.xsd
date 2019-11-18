@@ -1,0 +1,818 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:dsrf-fr="http://ddex.net/xml/dsrf/3/20191008"
+           xmlns:avs="http://ddex.net/xml/avs/avs"
+           xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://ddex.net/xml/dsrf/3/20191008"
+           elementFormDefault="unqualified"
+           attributeFormDefault="unqualified">
+   <xs:import namespace="http://ddex.net/xml/avs/avs"
+              schemaLocation="../../avs/current/avs.xsd"/>
+   <xs:annotation>
+      <xs:documentation>© 2006-2019 Digital Data Exchange, LLC (DDEX)</xs:documentation>
+      <xs:documentation>This XML Schema Definition file is, together with all DDEX standards, subject to two licences: If you wish to evaluate whether the standard meets your needs please have a look at the Evaluation Licence at https://kb.ddex.net/display/HBK/Evaluation+Licence+for+DDEX+Standards. If you want to implement and use this DDEX standard, please take out an Implementation Licence. For details please go to http://ddex.net/apply-ddex-implementation-licence.</xs:documentation>
+      <xs:documentation>Version 1.0 of the FinancialReportingToRecordCompaniesProfileSRB</xs:documentation>
+    </xs:annotation>
+   <xs:element name="FinancialReportingToRecordCompaniesProfileSRB">
+      <xs:annotation>
+         <xs:documentation source="ddex:Definition">A Composite containing details of Usages, Revenues or Sales from the exploitation of Products based on electronic Releases to be sent to Record Companies or other controllers of rights.</xs:documentation>
+      </xs:annotation>
+      <xs:complexType>
+         <xs:sequence>
+            <xs:element name="RecordType-HEAD" type="dsrf-fr:RecordType-SRHE">
+               <xs:annotation>
+                  <xs:documentation source="ddex:Definition">The MessageHeader for the SalesReportMessage.</xs:documentation>
+               </xs:annotation>
+            </xs:element>
+            <xs:element name="RecordType-SY10"
+                        maxOccurs="unbounded"
+                        type="dsrf-fr:RecordType-SY10">
+               <xs:annotation>
+                  <xs:documentation source="ddex:Definition">A Composite containing details of Usage, Revenue or Sales allocated to that RightsController according to the calculations made by the MessageSender.</xs:documentation>
+               </xs:annotation>
+            </xs:element>
+            <xs:sequence minOccurs="0" maxOccurs="unbounded">
+               <xs:element name="RecordType-SR08" type="dsrf-fr:RecordType-SR08">
+                  <xs:annotation>
+                     <xs:documentation source="ddex:Definition">A Composite containing details to convey Release, Resource and sales/usage information in a single-record.</xs:documentation>
+                  </xs:annotation>
+               </xs:element>
+               <xs:element name="RecordType-DE01" minOccurs="0" type="dsrf-fr:RecordType-DE01">
+                  <xs:annotation>
+                     <xs:documentation source="ddex:Definition">A Composite containing details to convey Release, Resource and sales/usage information in a single-record.</xs:documentation>
+                  </xs:annotation>
+               </xs:element>
+            </xs:sequence>
+            <xs:element name="RecordType-SRFO" type="dsrf-fr:RecordType-SRFO">
+               <xs:annotation>
+                  <xs:documentation source="ddex:Definition">The MessageFooter for the SalesReportMessage.</xs:documentation>
+               </xs:annotation>
+            </xs:element>
+         </xs:sequence>
+      </xs:complexType>
+   </xs:element>
+   <xs:complexType name="RecordType-DE01">
+      <xs:annotation>
+         <xs:documentation source="ddex:Definition">A Composite containing data that cannot be communicated using existing DDEX-defined Record Types.</xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:element name="RecordType">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The Type of the Record; always to contain 'DE01'.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:pattern value="DE01"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:element>
+         <xs:element name="DealSpecificCell " maxOccurs="unbounded" type="xs:string">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">Some deal-specific information.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name="RecordType-SR08">
+      <xs:annotation>
+         <xs:documentation source="ddex:Definition">A Composite containing details to convey Release, Resource and sales/usage information in a single-record block profile variation for Financial Reporting to Record Companies.</xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:element name="RecordType">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The Type of the Record; always to contain 'SR08'.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:pattern value="SR08"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:element>
+         <xs:element name="SalesTransactionId" type="xs:string">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">ProprietaryIdentifier of the Sales Transaction, allocated by the MessageSender, which allows an invoice to be tied back to an individual SalesTransaction composite/record. Taken together with the Message ID this shall be globally and perpetually unique. The SalesTransactionId may change when the report is re-generated.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="ReleaseGRid" minOccurs="0" type="xs:string">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The GRid identifying the Release. This is the preferred Element and is mandatory if a GRid is available. A GRid comprises four parts: the xs:string 'A1', followed by five alphanumeric characters, ten alphanumeric characters and one alphanumeric character. DDEX will enforce the syntax [a-zA-Z0-9]{18} using XML Schema in the future.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="ReleaseICPN" minOccurs="0" type="xs:string">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The ICPN used as proxy for identification of the Release. An ICPN comprises 12 or 13 digits, depending on whether it is an EAN (13) or a UPC (12). 14 character ICPNs are also permitted.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="DspReleaseId" type="xs:string">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The ProprietaryIdentifier of the Release assigned by the MessageSender.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="LabelReleaseId" minOccurs="0" type="xs:string">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The ProprietaryIdentifier of the Release assigned by the RecordCompany that provided the Release information to the MessageSender.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="ProprietaryReleaseId" minOccurs="0" maxOccurs="unbounded">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The ProprietaryIdentifier of the Release preceded by a namespace identifier in the syntax ns::id.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:pattern value=".*::.*"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:element>
+         <xs:element name="ReleaseContextReleaseGRid" minOccurs="0" type="xs:string">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The GRid identifying the Release from which the Release was taken. This is the preferred Element and is mandatory if a GRid is available. A GRid comprises four parts: the xs:string 'A1', followed by five alphanumeric characters, ten alphanumeric characters and and one alphanumeric character. DDEX will enforce the syntax [a-zA-Z0-9]{18} using XML Schema in the future.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="ReleaseType" minOccurs="0" type="avs:ReleaseType">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The form in which a ReleaseCreator anticipates offering the Release to Consumers.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="ReleaseTitle" minOccurs="0" type="xs:string">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The ReferenceTitle of the Release.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="ReleaseSubTitle" minOccurs="0" type="xs:string">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">A Descriptor which is supplementary to, but not contained within, a Title.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="ReleaseDisplayArtistName" minOccurs="0" type="xs:string">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The Name to be used by a DSP when presenting Artist details of the Release to a Consumer.</xs:documentation>
+               <xs:documentation source="ddex:Comment">Further Reading: https://kb.ddex.net/display/HBK/Communicating+Display+Artist(s)+and+Display+Artist+Name(s)</xs:documentation>
+               <xs:documentation source="ddex:Comment">Further Reading: https://kb.ddex.net/display/HBK/DisplayArtistNames+for+Releases+and+Resources</xs:documentation>
+               <xs:documentation source="ddex:Comment">Further Reading: https://kb.ddex.net/display/HBK/DisplayArtist%3F+DisplayArtistName%3F+Contributor%3F+IndirectContributor%3F+What+is+this+all+about%3F</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="ReleaseDisplayArtistPartyId" minOccurs="0">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The PartyId of the DisplayArtist.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:pattern value=".*::.*"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:element>
+         <xs:element name="ResourceISRC" minOccurs="0">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The ISRC (International Standard Recording Code as defined in ISO 3901) for the SoundRecording. An ISRC comprises four parts: two characters, followed by three alphanumeric characters, then two digits and five digits.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:pattern value="[a-zA-Z]{2}[a-zA-Z0-9]{3}[0-9]{7}"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:element>
+         <xs:element name="ResourceISAN" minOccurs="0">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The ISAN (International Standard Audio-visual Number as defined in ISO 15706) for the Video. An ISAN comprises four blocks of four hexadecimal characters followed by a check character followed, optionally, by two further blocks of four hexadecimal characters, followed by a further check character.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:pattern value="[A-Fa-f0-9]{12}|[A-Fa-f0-9]{24}|[A-Fa-f0-9]{16}[A-Za-z][A-Fa-f0-9]{8}[A-Za-z]"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:element>
+         <xs:element name="DspResourceId" minOccurs="0" type="xs:string">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The ProprietaryIdentifier of the Resource assigned by the MessageSender. DspResourceId is mandatory if sales/usages for a Resource are to be reported.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="LabelResourceId" minOccurs="0" type="xs:string">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The ProprietaryIdentifier of the Resource assigned by the RecordCompany (typically also the MessageRecipient).</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="ProprietaryResourceId" minOccurs="0" maxOccurs="unbounded">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The ProprietaryIdentifier of the Resource preceded by a namespace identifier in the syntax ns::id.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:pattern value=".*::.*"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:element>
+         <xs:element name="ResourceContextReleaseGRid" minOccurs="0" type="xs:string">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The GRid identifying the Release from which the Resource was taken. This is the preferred Element and is mandatory if a GRid is available. A GRid comprises four parts: the xs:string 'A1', followed by five alphanumeric characters, ten alphanumeric characters and and one alphanumeric character. DDEX will enforce the syntax [a-zA-Z0-9]{18} using XML Schema in the future.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="ResourceType" minOccurs="0" type="avs:ResourceType">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The Type of the Resource.</xs:documentation>
+               <xs:documentation source="ddex:Comment">Further Reading: https://kb.ddex.net/display/HBK/Resource+Types</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="ResourceTitle" minOccurs="0" type="xs:string">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The ReferenceTitle of the Resource.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="ResourceSubTitle" minOccurs="0" type="xs:string">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">A Descriptor which is supplementary to, but not contained within, a Title.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="ResourceDisplayArtistName" minOccurs="0" type="xs:string">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The Name to be used by a DSP when presenting Artist details of the Resource to a Consumer.</xs:documentation>
+               <xs:documentation source="ddex:Comment">Further Reading: https://kb.ddex.net/display/HBK/Communicating+Display+Artist(s)+and+Display+Artist+Name(s)</xs:documentation>
+               <xs:documentation source="ddex:Comment">Further Reading: https://kb.ddex.net/display/HBK/DisplayArtistNames+for+Releases+and+Resources</xs:documentation>
+               <xs:documentation source="ddex:Comment">Further Reading: https://kb.ddex.net/display/HBK/DisplayArtist%3F+DisplayArtistName%3F+Contributor%3F+IndirectContributor%3F+What+is+this+all+about%3F</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="ResourceDisplayArtistPartyId" minOccurs="0">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The PartyId of the DisplayArtist.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:pattern value=".*::.*"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:element>
+         <xs:element name="SummaryRecordId" type="xs:string">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The Identifier (specific to the Message) of the Summary Record that this Usage, Revenue or Sales Record provides details for.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="SalesTransactionDate" type="dsrf-fr:ddex_IsoDate">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The date of the SalesTransaction. All data below is provided for this date.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="TotalUsages" type="xs:decimal">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The number of usages of the Release or Resource by Consumers that are using the MessageSender service, during the sub-period.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="Returns" type="xs:integer">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The number of Usages of a Release or Resource returned (with refund) by Consumers as a result of a reversal of a SalesTransaction or because of an earlier error in sales reporting. If no returns are to be reported the value should be 0.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="NetUsage" type="xs:decimal">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The number of TotalUsages less the number of Returns in the reporting sub-period.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="WholesalePriceInCurrencyOfTransaction"
+                     minOccurs="0"
+                     type="xs:decimal">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The wholesale price of the Release or Resource in sub-period in the CurrencyOfTransaction. This information does not need to be provided in streaming models.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="WholesalePriceInCurrencyOfAccounting"
+                     minOccurs="0"
+                     type="xs:decimal">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The wholesale price of the Release or Resource in sub-period in the CurrencyOfAccounting. This information does not need to be provided in streaming models.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="SuggestedConsumerPriceInCurrencyOfTransaction"
+                     minOccurs="0"
+                     type="xs:decimal">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">A Price agreed between DSP and MessageRecipient / RightsController for the Usage of the Release or Resource in sub-period in the CurrencyOfTransaction. This information does not need to be provided in streaming models.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="SuggestedConsumerPriceInCurrencyOfAccounting"
+                     minOccurs="0"
+                     type="xs:decimal">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">A Price agreed between DSP and MessageRecipient / RightsController for the Usage of the Release or Resource in sub-period in the CurrencyOfAccounting. This information does not need to be provided in streaming models.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="PriceType" minOccurs="0" type="xs:string">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The Type of the Price. This is often agreed in a rate card between DSP and MessageRecipient / RightsController. Either a PriceType or PriceRangeType (but not both) must be provided.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="PriceRangeType" minOccurs="0" type="xs:string">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">A PriceRange agreed between DSP and  MessageRecipient / RightsController for the Usage of the Release or Resource in sub-period. Either a PriceType or PriceRangeType (but not both) must be provided.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="PriceConsumerPaidExcSalesTaxInCurrencyOfTransaction"
+                     minOccurs="0"
+                     type="xs:decimal">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">A Price paid by Consumers, excluding SalesTax for each SalesTransaction in the CurrencyOfTransaction. This may be a nominal price in sub-period. This information does not need to be provided in streaming models.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="PriceConsumerPaidExcSalesTaxInCurrencyOfAccounting"
+                     minOccurs="0"
+                     type="xs:decimal">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">A Price paid by Consumers, excluding SalesTax for each SalesTransaction in the CurrencyOfAccounting. This may be a nominal price in sub-period. This information does not need to be provided in streaming models.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="DeductionType"
+                     minOccurs="0"
+                     maxOccurs="unbounded"
+                     type="xs:string">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">Different types of deductions that the DSP applies before allocating revenue to the MessageRecipient / RightsController in the CurrencyOfAccounting. This information does not need to be provided in streaming models. The order of the individual data elements in DeductionType, DeductionsInCurrencyOfTransaction and DeductionsInCurrencyOfAccounting shall be the same order so that the recipient is able to relate them correctly.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="DeductionsInCurrencyOfTransaction"
+                     minOccurs="0"
+                     maxOccurs="unbounded"
+                     type="xs:decimal">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">Deductions that the DSP applies before allocating revenue to the MessageRecipient / RightsController in the CurrencyOfAccounting in the CurrencyOfTransaction. One Deduction amount has to be provided for each DeductionType. This information does not need to be provided in streaming models. The order of the individual data elements in DeductionType, DeductionsInCurrencyOfTransaction and DeductionsInCurrencyOfAccounting shall be the same order so that the recipient is able to relate them correctly.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="DeductionsInCurrencyOfAccounting"
+                     minOccurs="0"
+                     maxOccurs="unbounded"
+                     type="xs:decimal">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">Deductions that the DSP applies before allocating revenue to the MessageRecipient / RightsController in the CurrencyOfAccounting in the CurrencyOfAccounting. One Deduction amount has to be provided for each DeductionType. This information does not need to be provided in streaming models. The order of the individual data elements in DeductionType, DeductionsInCurrencyOfTransaction and DeductionsInCurrencyOfAccounting shall be the same order so that the recipient is able to relate them correctly.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="RightSharePercentage" type="xs:decimal">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">Percentage applied to calculate AllocatedNetRevenue owed to the  MessageRecipient / RightsController. This information is especially useful for DJ Mixes.</xs:documentation>
+               <xs:documentation source="ddex:Comment">Further Reading: https://kb.ddex.net/display/HBK/Communication+of+Percentages+in+DDEX</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="CalculatedUnitPriceInCurrencyOfTransaction" type="xs:decimal">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The amount calculated as being allocated to a single transaction in the CurrencyOfTransaction. This may be based on the WholesalePriceInCurrencyOfTransaction, PriceConsumerPaid, PriceType, PriceRangeType or other bilaterally-agreed aspects.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="CalculatedUnitPriceInCurrencyOfAccounting" type="xs:decimal">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The amount calculated as being allocated to a single transaction in the currencyofaccunting. This may be based on the WholesalePriceInCurrencyOfAccounting, PriceConsumerPaid, PriceType, PriceRangeType or other bilaterally-agreed aspects.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="AllocatedRevenueInCurrencyOfTransaction" type="xs:decimal">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The amount allocated to the MessageRecipient / RightsController for the Usages reported in the CurrencyOfTransaction. The AllocatedRevenueInCurrencyOfTransaction would typically be the product of CalculatedUnitPriceInCurrencyOfTransaction and AllocatedUsages.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="AllocatedRevenueInCurrencyOfAccounting" type="xs:decimal">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The amount allocated to the MessageRecipient / RightsController for the Usages reported in the CurrencyOfAccounting. The AllocatedRevenueInCurrencyOfAccounting would typically be the product of CalculatedUnitPriceInCurrencyOfAccounting and AllocatedUsages.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="AllocatedNetRevenueInCurrencyOfTransaction" type="xs:decimal">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">Net Revenue generated by the DSP that is to be allocated to a Release or Resource in the CurrencyOfTransaction.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="AllocatedNetRevenueInCurrencyOfAccounting" type="xs:decimal">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">Net Revenue generated by the DSP that is to be allocated to a Release or Resource in the CurrencyOfAccounting.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="CopyrightObligationWithDSP" type="xs:boolean">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The flag that indicates whether the obligation for reporting sale/usages to the owners or controllers of embedded MusicalWorks lies with the DSP (true) or not (false). </xs:documentation>
+            </xs:annotation>
+         </xs:element>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name="RecordType-SRFO">
+      <xs:annotation>
+         <xs:documentation source="ddex:Definition">A Composite placed at the end of each Single-Record Block Variant sales/usage report.</xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:element name="RecordType">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The Type of the Record; always to contain 'SRFO'.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:pattern value="SRFO"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:element>
+         <xs:element name="NumberOfLinesInReport" type="xs:integer">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">Number of data lines communicated in the Sales Report Message, including Header and Footer Records as well as empty Records (in accordance with Clause 6.6.7 of Part 1 of the Digital Sales Report Message Suite Standard) and commented-out Records (in accordance with Clause 6.6.9 of Part 1 of the Digital Sales Report Message Suite Standard).</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="NumberOfSummaryRecords" type="xs:integer">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">Number of Summary Records communicated in the Sales Report Message.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name="RecordType-SRHE">
+      <xs:annotation>
+         <xs:documentation source="ddex:Definition">A Composite placed at the beginning of each  Single-Record Block Variant SalesReportMessage providing information about the Message, such as MessageSender, MessageRecipient and a Message creation time stamp.</xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:element name="RecordType">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The Type of the Record; always to contain 'HEAD'.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:pattern value="HEAD"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:element>
+         <xs:element name="MessageVersion">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The Version of the Message. This shall be in the form dsrf/xxx/yyy/zzz with xxx being the version number of Part 1 (Architecture); yyy being the version number of Part 2 (Allowed Value Sets) and zzz being the version number of Part 8 (Record Type Definitions) that is needed to ingest the Message.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:pattern value="dsrf/"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:element>
+         <xs:element name="Profile" type="avs:ProfileId">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The Identifier of the Profile used for the Message.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="ProfileVersion" type="xs:string">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The Identifier of the Version of the Profile used for the Message. The value for this field is defined in the relevant Profile standard.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="MessageId" type="xs:string">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">A string used to uniquely identify the Message. The MessageId shall be, in combination with the MessageSender Identifier, globally unique. Thus, a MessageSender shall never re-use a MessageId.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="MessageCreatedDateTime" type="xs:dateTime">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The DateTime on which the Message was created (the only allowed format is ISO 8601:2004: YYYY-MM-DDThh:mm:ssTZD).</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="FileNumber">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">Sequence number of the File within the Sales Report Message. This shall always be set to '1'. This Cell is included to make the HEAD record compatible between Single Record Block Variants (where it is permitted to split sales/usage reports into multiple files) and Multiple Record Block Variants (where it is not permitted to split sales/usage reports into multiple files).</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:pattern value="1"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:element>
+         <xs:element name="NumberOfFiles">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The number of Files that the Sales Report Message is provided in. This shall always be set to '1'. This Cell is included to make the HEAD record compatible between Single Record Block Variants (where it is permitted to split sales/usage reports into multiple files) and Multiple Record Block Variants (where it is not permitted to split sales/usage reports into multiple files).</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:pattern value="1"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:element>
+         <xs:element name="UsageStartDate" type="dsrf-fr:ddex_IsoDate">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The StartDate of the reporting Period covered by the Message (in ISO 8601:2004 format). This is a string with the syntax YYYY[-MM[-DD]].</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="UsageEndDate" type="dsrf-fr:ddex_IsoDate">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The EndDate of the reporting Period covered by the Message (in ISO 8601:2004 format). This is a string with the syntax YYYY[-MM[-DD]].</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="SenderPartyId">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The DDEX PartyId (DPID) of the MessageSender.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:pattern value="PADPIDA[a-zA-Z0-9]+"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:element>
+         <xs:element name="SenderName" type="xs:string">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The Full Name of the MessageSender.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="ServiceDescription" minOccurs="0" type="xs:string">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The service name (e.g. a service tier) under which the SalesTransaction took place. The ServiceDescription may not contain space characters or underscores. The ServiceDescription shall only be used if it aids the MessageRecipient in determining the sales context(s) of the Message. The ServiceDesctiption is intended to be a human-readable expression of the totality of the services reported in the Message. For sales/usage reports covering one sales context (see Clause 6.5 in Part 1) this should be the same is being the same string used in the file name (see Clause 9.1 in Part 1) and the single Summary Record contained in the Message. For sales reports covering multiple sale contexts, the ServiceDescription in the Header should be the same as on the file name and represent a human-readable summary of the sales contexts provided in the Summary Records.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="RecipientPartyId" minOccurs="0">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The DDEX PartyId (DPID) of the MessageRecipient. This element is mandatory when the Sales Report Message is sent to one MessageRecipient and must not be included when the Sales Report Message is sent to more than one MessageRecipient.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:pattern value="PADPIDA[a-zA-Z0-9]+"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:element>
+         <xs:element name="RecipientName" minOccurs="0" type="xs:string">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The Full Name of the MessageRecipient. This element is mandatory when the Sales Report Message is sent to one MessageRecipient and must not be included when the Sales Report Message is sent to more than one MessageRecipient.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="RepresentedRepertoire"
+                     minOccurs="0"
+                     maxOccurs="unbounded"
+                     type="xs:string">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">Content owners represented by the MessageRecipient. This only needs to be provided if there are more than one repertoires being administered by the MessageRecipient.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name="RecordType-SY10">
+      <xs:annotation>
+         <xs:documentation source="ddex:Definition">A Composite containing basic summary information about Usages, Revenues or Sales being reported to RecordCompanies and companies that hold rights in SoundRecordings or Releases.</xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:element name="RecordType">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The Type of the Record; always to contain 'SY10'.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:pattern value="SY10"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:element>
+         <xs:element name="SummaryRecordId" type="xs:string">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The Identifier (specific to the Message) of the Summary Record. This Identifier shall be used by Usage/Revenue/Sales Records to indicate to which Summary Record they provide details.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="DistributionChannelName" minOccurs="0" type="xs:string">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The Party that generated the sales/usages reported in this Sales/Usage Report. DistributionChannelName needs to be provided if the Message Sender offers multiple distribution channels that need to be differentiated in this Sales/Usage Report.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="DistributionChannelDPID" minOccurs="0">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The DDEX Party ID of the DistributionChannelName. DistributionChannelDPID needs to be provided if the Message Sender offers multiple distribution channels that need to be differentiated in this Sales/Usage Report. Note: this terms differs from DistributionChannel as used in the Electronic Release Notification where a Distribution Channel is the specific DSP through which a Release may be made available. This may, or may not, map to a DistributionChannel as used in a sales/usage report.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:pattern value="PADPIDA[a-zA-Z0-9]+"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:element>
+         <xs:element name="CommercialModel" type="avs:CommercialModelType">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The Type of CommercialModel of the SalesTransaction. The CommercialModel defines how a Consumer has paid for access to a Service or Release / Resource.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="UseType" type="avs:UseType">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The nature of a Service as used by a Consumer. This also allows the communication of Device Usages (that is, which type of device a consumer was using to access the Release/Resource) by using the appropriate use type 'UseAsDevice'.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="ReportingPeriodStartDate" type="dsrf-fr:ddex_IsoDate">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The StartDate of the reporting Period covered by the Summary Record (in ISO 8601:2004 format) to allow reporting per-subscriber minima in a more granular form than for the overall reporting period. This is a string with the syntax YYYY[-MM[-DD]]. The ReportingPeriodStartDate must not be earlier than than the UsageEndDate provided in the relevant header record.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="ReportingPeriodEndDate" type="dsrf-fr:ddex_IsoDate">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The EndDate of the reporting Period covered by the Summary Record (in ISO 8601:2004 format) to allow reporting per-subscriber minima in a more granular form than for the overall reporting period. This is a string with the syntax YYYY[-MM[-DD]]. The ReportingPeriodEndDate must not be later than than the UsageEndDate provided in the relevant header record and must not be earlier than the ReportingPeriodStartDate.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="SubscriberType" minOccurs="0" type="xs:string">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The type of Subscriber. Sender and Recipient will need to agree values for this field. SubscriberType needs to be provided if the sales report covers subscriptions.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="Subscribers" minOccurs="0" type="xs:decimal">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The number of Subscribers to a Service for each SubscriberType. Subscribers needs to be provided if the sales report covers subscriptions.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="ActiveSubscribers" minOccurs="0" type="xs:decimal">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The number of active Subscribers to a Service for each SubscriberType. ActiveSubscribers needs to be provided if the sales report covers subscriptions.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="PromotionalActivity" minOccurs="0" type="xs:string">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">A Description of a promotional activity. PromotionalActivity needs to be provided if a specific promotional activity was active at the time of the sale/use and which may have impacted on the sale/use.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="Territory" type="avs:CurrentTerritoryCode">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The Territory for which the Sale/Usage is reported.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="ServiceDescription" minOccurs="0" type="xs:string">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The service name (e.g. a service tier) under which the SalesTransaction took place. The ServiceDescription may not contain space characters or underscores. ServiceDescription shall be provided if a MessageSender offers multiple services that need to be differentiated in this sales/usage report.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="OfferType" minOccurs="0" type="xs:string">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">Information on the type of offer involved in the consumer transaction. Sender and Recipient will need to agree values for this field.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="Quality" minOccurs="0" type="xs:string">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">Information on the quality of the Resources / Releases involved in the consumer transaction.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="Usages" type="xs:decimal">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The number of Usages of the Release or Resource provided to Consumers, including any sales adjustments. Sales adjustments include e.g. file failures. The Releases or Resources to be reported here include all Releases or Resources provided across the service, not just the ones that are are controlled by the MessageRecipient / RightsController, according to the knowledge of the MessageSender at the time of sending the message. This allows the MessageRecipient / RightsController to calculate its market share of uses.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="AllocatedUsages" type="xs:decimal">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The number of Usages of the Release or Resource provided to Consumers, including any sales adjustments. Sales adjustments include e.g. file failures. The Releases or Resources to be reported here are those controlled by the MessageRecipient / RightsController, according to the knowledge of the MessageSender at the time of sending the message.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="Returns" type="xs:decimal">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The number of Usages of a Release or Resource returned (with refund) by Consumers as a result of a reversal of a SalesTransaction or because of an earlier error in sales reporting. If no returns are to be reported the value should be 0.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="MusicUsageRatio" type="xs:decimal">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">Percentage of music usage on a Service.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="CurrencyOfTransaction" type="avs:CurrencyCode">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The Currency in which the SalesTransactions have occurred (represented by an ISO 4217 CurrencyCode). This may be the same as the CurrencyOfAccounting.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="CurrencyOfAccounting" type="avs:CurrencyCode">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The Currency in which the SalesTransactions are accounted (represented by an ISO 4217 CurrencyCode).</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="ExchangeRate" type="xs:decimal">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The rate used to convert from the CurrencyOfTransaction to the CurrencyOfAccounting.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="ExchangeRateSource" minOccurs="0" type="xs:string">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The source of the ExchangeRate.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="DateOfCurrencyExchange" minOccurs="0" type="xs:dateTime">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The date and time on which the ExchangeRate was determined. The only allowed format is ISO 8601:2004: YYYY-MM-DDThh:mm:ssTZD). If an EndDateOfCurrencyExchange is also provided, the DateOfCurrencyExchange provides the start date and time of the period over which the exchange rate was averaged. The DateOfCurrencyExchange shall be provided if an ExchangeRate is provided.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="GrossRevenueInCurrencyOfTransaction"
+                     minOccurs="0"
+                     type="xs:decimal">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">Gross Revenue of the DSP generated from the distribution of Releases or Resources in the CurrencyOfTransaction. This cell needs to be provided if applicable to the deal. When provided, the next cell needs to be provided as well.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="GrossRevenueInCurrencyOfAccounting"
+                     minOccurs="0"
+                     type="xs:decimal">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">Gross Revenue of the DSP generated from the distribution of Releases or Resources in the CurrencyOfAccounting. This cell needs to be provided if applicable to the deal. When provided, the previous cell needs to be provided as well.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="CalculationType"
+                     minOccurs="0"
+                     maxOccurs="unbounded"
+                     type="xs:string">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The type of the Calculation made to the amounts reported in this Record. Types might include minimum amount or rate payable. Sender and Recipient will need to agree values for this field.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="CalculationValue"
+                     minOccurs="0"
+                     maxOccurs="unbounded"
+                     type="xs:decimal">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The value of the minimum amount or rate payable indicated by the corresponding value in CalculationType. One CalculationValue needs to be provided for each CalculationType.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="DeductionType"
+                     minOccurs="0"
+                     maxOccurs="unbounded"
+                     type="xs:string">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">Different types of deductions that the DSP applies before allocating revenue to the DSP / MessageSender. DeductionType needs to be provided if applicable to the deal. When provided, the next two need to be provided as well.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="DeductionsInCurrencyOfTransaction"
+                     maxOccurs="unbounded"
+                     type="xs:decimal">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">Deductions that the DSP applies before allocating revenue to the MessageRecipient / RightsController in the CurrencyOfTransaction. One Deduction amount has to be provided for each DeductionType.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="DeductionsInCurrencyOfAccounting"
+                     maxOccurs="unbounded"
+                     type="xs:decimal">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">Deductions that the DSP applies before allocating revenue to the MessageRecipient / RightsController in the CurrencyOfAccounting. One Deduction amount has to be provided for each DeductionType.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="NetRevenueInCurrencyOfTransaction" type="xs:decimal">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">Net Revenue of the DSP generated from the distribution of Releases or Resources, as well as sales of products based on Releases or Resources in the CurrencyOfTransaction.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="NetRevenueInCurrencyOfAccounting" type="xs:decimal">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">Net Revenue of the DSP generated from the distribution of Releases or Resources, as well as sales of products based on Releases or Resources in the CurrencyOfAccounting.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="AllocatedRevenueInCurrencyOfTransaction" type="xs:decimal">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The amount allocated to the MessageRecipient / RightsController for the Usages reported in the CurrencyOfTransaction.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="AllocatedRevenueInCurrencyOfAccounting" type="xs:decimal">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The amount allocated to the MessageRecipient / RightsController for the Usages reported in the CurrencyOfAccounting.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="AllocatedNetRevenueInCurrencyOfTransaction" type="xs:decimal">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">Net Revenue generated that is to be allocated to the MessageRecipient / RightsController in the CurrencyOfTransaction.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="AllocatedNetRevenueInCurrencyOfAccounting" type="xs:decimal">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">Net Revenue generated that is to be allocated to the MessageRecipient / RightsController in the CurrencyOfAccounting.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="RightsControllerMarketShare" minOccurs="0" type="xs:decimal">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">Market share as defined by the contract between sender and recipient. RightsControllerMarketShare needs to be provided if required in the agreement between MessageSender and MessageRecipient. </xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="SubscriptionFeeInCurrencyOfTransaction"
+                     minOccurs="0"
+                     type="xs:decimal">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">Price for one subscription generated by the DSP in the CurrencyOfTransaction. SubscriptionFeeInCurrencyOfTransaction needs to be provided if required in the agreement between MessageSender and MessageRecipient.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="SubscriptionFeeInCurrencyOfAccounting" type="xs:decimal">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">Price for one subscription generated by the DSP in the CurrencyOfAccounting.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="UsageIndependentFeeType"
+                     minOccurs="0"
+                     maxOccurs="unbounded"
+                     type="xs:string">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The type of a Fee payable payable to the RightsController independent from any usage generated based on RightsController's content. UsageIndependentFeeType must be provided when Fees are applicable; Sender and Recipient will need to agree values for this field.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="UsageIndependentFeeInCurrencyOfTransaction"
+                     minOccurs="0"
+                     maxOccurs="unbounded"
+                     type="xs:decimal">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">Fee payable to the RightsController independent from any usage generated based on RightsController's content in the CurrencyOfTransaction. One  UsageIndependentFeeInCurrencyOfTransaction needs to be provided for each UsageIndependentFeeType.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="UsageIndependentFeeInCurrencyOfAccounting"
+                     minOccurs="0"
+                     maxOccurs="unbounded"
+                     type="xs:decimal">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">Fee payable to the RightsController independent from any usage generated based on RightsController's content in the CurrencyOfAccounting. One  UsageIndependentFeeInCurrencyOfAccounting needs to be provided for each UsageIndependentFeeType.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="FinalTotalAmountInCurrencyOfTransaction" type="xs:decimal">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The total Amount of all allocated amounts in the CurrencyOfTransaction, including the UsageIndependentFeeInCurrencyOfTransaction, reported in this Record.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="FinalTotalAmountInCurrencyOfAccounting" type="xs:decimal">
+            <xs:annotation>
+               <xs:documentation source="ddex:Definition">The total Amount of all allocated amounts in the CurrencyOfAccounting, including the UsageIndependentFeeInCurrencyOfAccounting, reported in this Record.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:simpleType name="ddex_IsoDate">
+      <xs:annotation>
+         <xs:documentation source="ddex:Definition">A Date represented in ISO 8601:2004 format: YYYY[-MM[-DD]].</xs:documentation>
+         <xs:documentation source="ddex:Comment">Format: A Date represented as a calendar Year, Month or Day (in ISO 8601:2004 format: YYYY, YYYY-MM or YYYY-MM-DD).</xs:documentation>
+      </xs:annotation>
+      <xs:restriction base="xs:string">
+         <xs:pattern value="[0-9]{4}(-[0-9]{2}){0,1}(-[0-9]{2}){0,1}"/>
+      </xs:restriction>
+   </xs:simpleType>
+</xs:schema>

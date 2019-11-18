@@ -68,7 +68,7 @@ class ReportFilesValidatorsTest(unittest.TestCase):
               'TerritoryOfUseOrSale': 'AU', 'x': '4', 'y': '4',
               'MessageCreatedDateTime': '20150723T092522', 'ext': 'tsv.gz'}
     }
-    self.assertEquals(actual_file_name_dicts, expected_file_name_dicts)
+    self.assertEqual(actual_file_name_dicts, expected_file_name_dicts)
 
   def test_missing_file(self):
     files_list = [

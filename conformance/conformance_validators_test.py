@@ -68,15 +68,14 @@ class RowValidatorsTest(unittest.TestCase):
     one_valid_row = [RowTest('c', 4)]
     two_valid_rows = [RowTest('a', 1), RowTest('b', 2)]
     three_valid_rows = [RowTest('a', 1), RowTest('b', 2), RowTest('c', 3)]
-    self.assertEquals(
+    self.assertEqual(
         conformance_validators.validate_node(
             self.root, one_valid_row, index=0, block_number=4, file_number=3),
         1)
-    self.assertEquals(
-        conformance_validators.validate_node(
-            self.root, two_valid_rows, 0, 3, 2),
-        2)
-    self.assertEquals(
+    self.assertEqual(
+        conformance_validators.validate_node(self.root, two_valid_rows, 0, 3,
+                                             2), 2)
+    self.assertEqual(
         conformance_validators.validate_node(
             self.root, three_valid_rows, index=0, block_number=5,
             file_number=1), 3)
@@ -93,10 +92,9 @@ class RowValidatorsTest(unittest.TestCase):
         Actual structure:
         \['a'\]
     """).lstrip()
-    self.assertRaisesRegexp(
-        error.BlockConformanceFailure,
-        expected_error, conformance_validators.validate_node, self.root,
-        one_invalid_rows, 0, 4, 8)
+    self.assertRaisesRegexp(error.BlockConformanceFailure, expected_error,
+                            conformance_validators.validate_node, self.root,
+                            one_invalid_rows, 0, 4, 8)
 
   def test_validate_node_invalid_rows(self):
     two_invalid_rows = [RowTest('a', 6), RowTest('d', 7)]
@@ -110,13 +108,13 @@ class RowValidatorsTest(unittest.TestCase):
         Actual structure:
         \['a', 'd'\]
     """).lstrip()
-    self.assertRaisesRegexp(
-        error.BlockConformanceFailure,
-        expected_error, conformance_validators.validate_node, self.root,
-        two_invalid_rows, 0, 5, 8)
+    self.assertRaisesRegexp(error.BlockConformanceFailure, expected_error,
+                            conformance_validators.validate_node, self.root,
+                            two_invalid_rows, 0, 5, 8)
 
   def test_node_to_string(self):
-    self.assertEquals(str(self.root), '[Sequence (a and b) or c]+')
+    self.assertEqual(str(self.root), '[Sequence (a and b) or c]+')
+
 
 if __name__ == '__main__':
   unittest.main()

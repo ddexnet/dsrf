@@ -11,6 +11,7 @@
    <xs:annotation>
       <xs:documentation>© 2006-2017 Digital Data Exchange, LLC (DDEX)</xs:documentation>
       <xs:documentation>This XML Schema Definition file is, together with all DDEX standards, subject to two licences: If you wish to evaluate whether the standard meets your needs please have a look at the Evaluation Licence at https://kb.ddex.net/display/HBK/Evaluation+Licence+for+DDEX+Standards. If you want to implement and use this DDEX standard, please take out an Implementation Licence. For details please go to http://ddex.net/apply-ddex-implementation-licence.</xs:documentation>
+      <xs:documentation>AudioVisualProfile 1.0</xs:documentation>
    </xs:annotation>
    <xs:element name="AudioVisualProfile">
       <xs:annotation>
