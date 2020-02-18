@@ -1,3 +1,4 @@
+# Lint as: python2, python3
 # Copyright 2015 Google Inc. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,6 +15,10 @@
 # ==============================================================================
 
 """The library conformance tool."""
+
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
 
 import argparse
 import sys
@@ -110,8 +115,9 @@ if __name__ == '__main__':
         + str(e) + conformance_validators.QUANTIFIER_STR + constants.ENDC)
     sys.exit(-1)
   if nr_blocks > 0 and nr_rows > 0:
-    print (constants.BOLD + constants.COLOR_GREEN +
-           '\nThe conformance validation passed successfully! Validated %s '
-           'blocks (%s rows). Note: this assessment does not take cell format '
-           'errors into account. Please check for "ERROR" in the output above.'
-           % (nr_blocks, nr_rows) + constants.ENDC)
+    print(
+        (constants.BOLD + constants.COLOR_GREEN +
+         '\nThe conformance validation passed successfully! Validated %s '
+         'blocks (%s rows). Note: this assessment does not take cell format '
+         'errors into account. Please check for "ERROR" in the output above.' %
+         (nr_blocks, nr_rows) + constants.ENDC))

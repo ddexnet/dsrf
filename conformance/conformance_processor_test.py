@@ -1,3 +1,4 @@
+# Lint as: python2, python3
 # Copyright 2015 Google Inc. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,12 +16,16 @@
 
 """Tests for dsrf.conformance.conformance_processor."""
 
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+
 import os
 from os import path
 import sys
 import unittest
 
-from google.protobuf import text_format
+import six
 
 from dsrf import constants
 from dsrf.conformance import conformance_processor
@@ -28,6 +33,7 @@ from dsrf.conformance import conformance_validators
 from dsrf.conformance import error
 from dsrf.parsers import dsrf_report_manager
 from dsrf.proto import block_pb2
+from google.protobuf import text_format
 
 
 def read_test_block(file_name):
@@ -52,7 +58,8 @@ def _write_block_to_queue(row_types):
   ugc_block = _create_test_block(row_types)
   queue_fd = os.open('/tmp/queue.txt', os.O_RDWR)
   os.write(queue_fd, ugc_block.SerializeToString())
-  os.write(queue_fd, bytes('\n' + constants.QUEUE_DELIMITER + '\n'))
+  os.write(queue_fd,
+           bytes('\n' + six.ensure_str(constants.QUEUE_DELIMITER) + '\n'))
   sys.stdin = open('/tmp/queue.txt', 'rb')
 
 

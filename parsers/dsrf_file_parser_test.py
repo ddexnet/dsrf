@@ -1,3 +1,4 @@
+# Lint as: python2, python3
 # Copyright 2015 Google Inc. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,10 +16,15 @@
 
 """Tests for dsrf_file_parser."""
 
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+
 from os import path
 import unittest
+import six
 
-from google.protobuf import text_format
+from six.moves import zip
 
 from dsrf import dsrf_logger
 from dsrf import error
@@ -27,6 +33,7 @@ from dsrf.parsers import dsrf_file_parser
 from dsrf.proto import block_pb2
 from dsrf.proto import cell_pb2
 from dsrf.proto import row_pb2
+from google.protobuf import text_format
 
 
 def read_test_block(file_name):
@@ -103,11 +110,11 @@ class FileParserTest(unittest.TestCase):
                    'of:e574ecc9b29949b782cf3e4b82f83bdd', 'USWWW0124570',
                    'Dread River (Jordan River)']
     parser = self._get_file_parser()
-    self.assertRaisesRegexp(
-        error.RowValidationFailure,
+    with six.assertRaisesRegex(
+        self, error.RowValidationFailure,
         'Row number 3 \\(file=filename\\) is invalid \\(error=The block id "BL'
-        '3" in line number 3 was expected to be an integer.\\)',
-        parser.get_block_number, invalid_row, 3)
+        '3" in line number 3 was expected to be an integer.\\)'):
+      parser.get_block_number(invalid_row, 3)
 
   def test_get_cell_object(self):
     cell_validator = cell_validators.StringValidator('ServiceDescription',
@@ -143,11 +150,11 @@ class FileParserTest(unittest.TestCase):
             cell_validators.IntegerValidator(
                 'NumberOfLines', self.logger, False)]}
     parser = self._get_file_parser(row_validators)
-    self.assertRaisesRegexp(
-        error.CellValidationFailure,
+    with six.assertRaisesRegex(
+        self, error.CellValidationFailure,
         r'Cell "NumberOfLines" contains invalid value "123a". Value was '
-        r'expected to be an integer. \[Block: 1, Row: 8, file=filename\]',
-        parser.get_row_object, file_row, 'FFOO', 8, 1)
+        r'expected to be an integer. \[Block: 1, Row: 8, file=filename\]'):
+      parser.get_row_object(file_row, 'FFOO', 8, 1)
 
   @classmethod
   def block_from_ascii(cls, text):
@@ -178,11 +185,11 @@ class FileParserTest(unittest.TestCase):
   def test_get_row_type_invalid(self):
     line = ['AB12', '8', '11', 'SR1', 'AdSupport', 'NonInterStream']
     parser = self._get_file_parser()
-    self.assertRaisesRegexp(
-        error.RowValidationFailure,
+    with six.assertRaisesRegex(
+        self, error.RowValidationFailure,
         'Row number 3 \\(file=filename\\) is invalid \\(error=Row type AB12 '
-        'does not exist in the XSD. Valid row types are:',
-        parser._get_row_type, line, 3)
+        'does not exist in the XSD. Valid row types are:'):
+      parser._get_row_type(line, 3)
 
   def test_parse_uncompressed_file(self):
     filename = path.join(

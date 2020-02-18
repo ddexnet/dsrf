@@ -1,3 +1,4 @@
+# Lint as: python2, python3
 # Copyright 2015 Google Inc. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -105,7 +106,7 @@ class DsrfSchemaParser(object):
     return int(min_occurs) == 1
 
   def is_repeated(self, element):
-    if 'maxOccurs' in element.attrib.keys():
+    if 'maxOccurs' in list(element.attrib.keys()):
       return element.attrib['maxOccurs'].lower() == 'unbounded'
     return False
 

@@ -1,3 +1,4 @@
+# Lint as: python2, python3
 # Copyright 2015 Google Inc. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,16 +16,21 @@
 
 """Setup configuration for the python dsrf modules."""
 
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+
 import collections
+import distutils.spawn
 import os
 import subprocess
 import sys
 
-from distutils.spawn import find_executable
 from setuptools import find_packages
 from setuptools import findall
 from setuptools import setup
 from setuptools.command.build_py import build_py
+import six
 
 
 def _find_protoc_path():
@@ -32,7 +38,7 @@ def _find_protoc_path():
   if 'PROTOC' in os.environ and os.path.exists(os.environ['PROTOC']):
     protoc_path = os.environ['PROTOC']
   else:
-    protoc_path = find_executable('protoc')
+    protoc_path = distutils.spawn.find_executable('protoc')
 
   if protoc_path is None:
     sys.stderr.write(
@@ -91,11 +97,11 @@ def _find_data_files():
   """
   data_files = collections.defaultdict(list)
   for filepath in findall('schemas'):
-    if not filepath.endswith('.xsd'):
+    if not six.ensure_str(filepath).endswith('.xsd'):
       continue
     directory, unused_filename = os.path.split(filepath)
     data_files[os.path.join('dsrf', directory)].append(filepath)
-  return [(k, v) for k, v in data_files.iteritems()]
+  return [(k, v) for k, v in six.iteritems(data_files)]
 
 
 def _find_dsrf_packages():

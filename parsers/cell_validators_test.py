@@ -1,3 +1,4 @@
+# Lint as: python2, python3
 # Copyright 2015 Google Inc. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +15,13 @@
 # ==============================================================================
 
 
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+
 import unittest
+
+import six
 
 from dsrf import dsrf_logger
 from dsrf import error
@@ -57,7 +64,7 @@ class BaseValidatorTest(unittest.TestCase):
                   (invalid_value, type(self.get_validator()).__name__))
 
   def test_transformed_vals(self):
-    for val, expected_transform in self.transformed_val_map.iteritems():
+    for val, expected_transform in six.iteritems(self.transformed_val_map):
       transformed_val = self.get_validator().validate_value(
           val, 9, 'dsrf_1of1_file.tsv', '1')
       if transformed_val != expected_transform:
@@ -78,13 +85,13 @@ class StringValidatorTest(BaseValidatorTest):
   def test_non_utf8(self):
     validator = cell_validators.StringValidator(
         'string_cell', self.logger, required=False, repeated=False)
-    self.assertRaisesRegexp(
-        error.BadUnicodeError,
+    with six.assertRaisesRegex(
+        self, error.BadUnicodeError,
         r'Cell "string_cell" contained a non-utf8 string: "\'\\xc3\\xc3\'". '
         r'Error detail: "\'utf8\' codec can\'t decode byte 0xc3 in position 0:'
         r' invalid continuation byte". \[Block: 10, Row: 80, '
-        r'file=filename.tsv\].',
-        validator.validate_value, NON_UTF8_DATA, 80, 'filename.tsv', 10)
+        r'file=filename.tsv\].'):
+      validator.validate_value(NON_UTF8_DATA, 80, 'filename.tsv', 10)
 
 
 class IntegerValidatorTest(BaseValidatorTest):
@@ -139,11 +146,11 @@ class DurationValidatorTest(BaseValidatorTest):
   def test_required(self):
     validator = cell_validators.DurationValidator(
         'duration_cell', self.logger, required=True, repeated=False)
-    self.assertRaisesRegexp(
-        error.RequiredCellMissing,
+    with six.assertRaisesRegex(
+        self, error.RequiredCellMissing,
         r'Cell "duration_cell" is required. Value was expected to be ISO 8601 '
-        r'duration\. \[Block: 1, Row: 9, file=some_file\.csv\]\.',
-        validator.validate_value, '', 9, 'some_file.csv', '1')
+        r'duration\. \[Block: 1, Row: 9, file=some_file\.csv\]\.'):
+      validator.validate_value('', 9, 'some_file.csv', '1')
 
 
 class DatetimeValidatorTest(BaseValidatorTest):
@@ -173,11 +180,11 @@ class FixedStringValidatorTest(BaseValidatorTest):
   def test_case_preserved(self):
     validator = cell_validators.FixedStringValidator(
         ['MyCamelCaseIsImportant'], 'RecordType', self.logger)
-    self.assertRaisesRegexp(
-        error.CellValidationFailure,
+    with six.assertRaisesRegex(
+        self, error.CellValidationFailure,
         r'Value was expected to be one of the following: '
-        r'\[\'MyCamelCaseIsImportant\'\].',
-        validator.validate_value, 'WrongValue', 9, 'some_file.csv', '1')
+        r'\[\'MyCamelCaseIsImportant\'\].'):
+      validator.validate_value('WrongValue', 9, 'some_file.csv', '1')
 
 
 if __name__ == '__main__':

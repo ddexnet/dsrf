@@ -17,6 +17,7 @@
 
 import textwrap
 import unittest
+import six
 from dsrf.conformance import conformance_validators
 from dsrf.conformance import error
 
@@ -92,9 +93,9 @@ class RowValidatorsTest(unittest.TestCase):
         Actual structure:
         \['a'\]
     """).lstrip()
-    self.assertRaisesRegexp(error.BlockConformanceFailure, expected_error,
-                            conformance_validators.validate_node, self.root,
-                            one_invalid_rows, 0, 4, 8)
+    with six.assertRaisesRegex(self, error.BlockConformanceFailure,
+                               expected_error):
+      conformance_validators.validate_node(self.root, one_invalid_rows, 0, 4, 8)
 
   def test_validate_node_invalid_rows(self):
     two_invalid_rows = [RowTest('a', 6), RowTest('d', 7)]
@@ -108,9 +109,9 @@ class RowValidatorsTest(unittest.TestCase):
         Actual structure:
         \['a', 'd'\]
     """).lstrip()
-    self.assertRaisesRegexp(error.BlockConformanceFailure, expected_error,
-                            conformance_validators.validate_node, self.root,
-                            two_invalid_rows, 0, 5, 8)
+    with six.assertRaisesRegex(self, error.BlockConformanceFailure,
+                               expected_error):
+      conformance_validators.validate_node(self.root, two_invalid_rows, 0, 5, 8)
 
   def test_node_to_string(self):
     self.assertEqual(str(self.root), '[Sequence (a and b) or c]+')

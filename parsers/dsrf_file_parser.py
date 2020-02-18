@@ -1,3 +1,4 @@
+# Lint as: python2, python3
 # Copyright 2015 Google Inc. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,10 +20,16 @@ The input of this component is a single file from a ddex report, and a list of
 cell and row validators.
 The output is a list of protocol buffer block objects.
 """
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+
 import csv
 import gzip
 from os import path
 import sys
+
+from six.moves import zip
 
 from dsrf import constants
 from dsrf import error
@@ -164,8 +171,8 @@ class DSRFFileParser(object):
     if self.row_validators_list and row_type not in self.row_validators_list:
       raise error.RowValidationFailure(
           row_number, self.file_name,
-          'Row type %s does not exist in the XSD. Valid row types are: %s. ' % (
-              row_type, self.row_validators_list.keys()))
+          'Row type %s does not exist in the XSD. Valid row types are: %s. ' %
+          (row_type, list(self.row_validators_list.keys())))
     return row_type
 
   def get_row_validators(self, row):

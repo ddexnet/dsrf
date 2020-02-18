@@ -1,3 +1,4 @@
+# Lint as: python2, python3
 # Copyright 2015 Google Inc. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,6 +16,10 @@
 
 """The constants of the dsrf parsing library."""
 
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+
 import collections
 import os
 from os import path
@@ -22,6 +27,7 @@ import re
 import sys
 
 import pkg_resources
+import six
 
 
 def get_xsd_directory():
@@ -50,7 +56,7 @@ def get_xsd_files():
     all_files.extend(
         os.path.join(root, filename)
         for filename in files
-        if filename.endswith('.xsd'))
+        if six.ensure_str(filename).endswith('.xsd'))
 
   schemas = collections.defaultdict(dict)
   for xsd_file in all_files:
@@ -106,7 +112,7 @@ VALID_ROW_TYPE_PREFIX = 'RecordType-'
 
 
 def is_row_type(s):
-  return s.startswith(VALID_ROW_TYPE_PREFIX)
+  return six.ensure_str(s).startswith(VALID_ROW_TYPE_PREFIX)
 
 # In the TSV, versioned row types contain periods, eg. "SY02.01".
 VERSIONED_TSV_ROW_TYPE_PATTERN = re.compile(r'^[A-Z]{2}\d{2}\.\d{2}$')

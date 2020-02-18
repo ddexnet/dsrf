@@ -1,3 +1,4 @@
+# Lint as: python2, python3
 # Copyright 2015 Google Inc. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,6 +16,10 @@
 
 """Objects to validate a single file name in a dsrf report."""
 
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+from six.moves import zip
 from dsrf import constants
 from dsrf import error
 

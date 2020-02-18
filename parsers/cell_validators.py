@@ -1,3 +1,4 @@
+# Lint as: python2, python3
 # Copyright 2015 Google Inc. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,7 +16,13 @@
 
 """Objects to validate the cells in a Flat File."""
 
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+
 import re
+
+import six
 
 from dsrf import constants
 from dsrf import error
@@ -110,7 +117,7 @@ class StringValidator(BaseCellValidator):
       self._raise_validation_failure(value, row_number, file_name, block_number)
       return
     try:
-      return unicode(value, 'utf-8')
+      return six.text_type(value, 'utf-8')
     except UnicodeDecodeError as e:
       raise error.BadUnicodeError(
           self.cell_name, row_number, file_name, block_number, value, str(e))

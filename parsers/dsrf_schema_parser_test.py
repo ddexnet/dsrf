@@ -1,3 +1,4 @@
+# Lint as: python2, python3
 # Copyright 2015 Google Inc. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,9 +15,16 @@
 # ==============================================================================
 
 
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+
 from os import path
 import unittest
 from xml.etree import ElementTree
+
+import six
+from six.moves import zip
 
 from dsrf import constants
 from dsrf import dsrf_logger
@@ -64,8 +72,8 @@ class SchemaParserBaseTest(unittest.TestCase):
   def test_parse_fixed_string_union_invalid(self):
     filename = path.join(
         path.dirname(__file__), '../testdata/avs_schema_parser_test.xsd')
-    self.assertRaisesRegexp(
-        KeyError, '', self.dsrf_schema_parser.parse_fixed_strings, filename)
+    with six.assertRaisesRegex(self, KeyError, ''):
+      self.dsrf_schema_parser.parse_fixed_strings(filename)
 
   def test_get_cell_validator(self):
     """Tests the successful path."""
@@ -84,9 +92,14 @@ class SchemaParserBaseTest(unittest.TestCase):
         'PT123645', 'xs:duration', True, False, self.logger)
     fixed_string_validator = self.dsrf_schema_parser.get_cell_validator(
         'UseType', 'avs:UseType', True, False, self.logger)
-    self.dsrf_schema_parser.simple_types_map['ddex_IsoDate'] = (
-        [[], [ElementTree.Element(tag=constants.XSD_TAG_PREFIX + 'pattern',
-                                  attrib={'value': 'pattern'})]])
+    self.dsrf_schema_parser.simple_types_map['ddex_IsoDate'] = ([
+        [],
+        [
+            ElementTree.Element(
+                tag=six.ensure_str(constants.XSD_TAG_PREFIX) + 'pattern',
+                attrib={'value': 'pattern'})
+        ]
+    ])
     simple_type_validator = self.dsrf_schema_parser.get_cell_validator(
         '2015-02', 'dsrf:ddex_IsoDate', True, False, self.logger)
 
@@ -109,8 +122,8 @@ class SchemaParserBaseTest(unittest.TestCase):
     for element in root:
       # Testing a single row, FileHeader, that contains all the exist
       # validators.
-      if (element.tag == constants.XSD_TAG_PREFIX + 'complexType' and
-          element.attrib['name'] == 'FileHeader'):
+      if (element.tag == six.ensure_str(constants.XSD_TAG_PREFIX) +
+          'complexType' and element.attrib['name'] == 'FileHeader'):
         row_cells = self.dsrf_schema_parser.get_dsrf_xsd_cells(
             element, self.logger)
         # RecordType
@@ -132,22 +145,23 @@ class SchemaParserBaseTest(unittest.TestCase):
     for element in root:
       # Testing a single row, FileHeader, that contains all the exist
       # validators.
-      if (element.tag == constants.XSD_TAG_PREFIX + 'complexType' and
-          element.attrib['name'] == 'FileHeader'):
-        self.assertRaisesRegexp(
-            error.XsdParsingFailure, 'Unexpected error while parsing the xsd '
+      if (element.tag == six.ensure_str(constants.XSD_TAG_PREFIX) +
+          'complexType' and element.attrib['name'] == 'FileHeader'):
+        with six.assertRaisesRegex(
+            self, error.XsdParsingFailure,
+            'Unexpected error while parsing the xsd '
             'file sales-reporting-flat.xsd \\(error = The cell type xs:stringg '
             'does not exist in the provided configuration files. Please make '
-            'sure you use the right files and version.\\).',
-            self.dsrf_schema_parser.get_dsrf_xsd_cells, element, self.logger)
+            'sure you use the right files and version.\\).'):
+          self.dsrf_schema_parser.get_dsrf_xsd_cells(element, self.logger)
 
   def test_parse_xsd_file_not_exist(self):
     """Tests a case of xsd file not exist."""
     avs_filename = path.join(path.dirname(__file__), '../testdata/avs.xsd')
     schema_parser = dsrf_schema_parser.DsrfSchemaParser(avs_filename, '')
-    self.assertRaisesRegexp(
-        IOError, 'No such file or directory: \'\'',
-        schema_parser.parse_xsd_file, self.logger)
+    with six.assertRaisesRegex(self, IOError,
+                               'No such file or directory: \'\''):
+      schema_parser.parse_xsd_file(self.logger)
 
   def test_parse_xsd_file_valid_row_types_in_a_specific_row(self):
     """Tests the expected cells in a specific row."""

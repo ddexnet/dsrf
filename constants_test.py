@@ -1,3 +1,4 @@
+# Lint as: python2, python3
 # Copyright 2015 Google Inc. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,8 +16,14 @@
 
 """Tests for constants."""
 
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+
 import re
 import unittest
+
+import six
 
 from dsrf import constants
 
@@ -79,7 +86,7 @@ class GeneralConstantsTest(unittest.TestCase):
   def test_file_name_components(self):
     self.assertEqual(
         len(constants.FILE_NAME_COMPONENTS),
-        len(re.split(r'_|of|\.', constants.FILE_NAME_FORMAT)))
+        len(re.split(r'_|of|\.', six.ensure_str(constants.FILE_NAME_FORMAT))))
 
 
 if __name__ == '__main__':

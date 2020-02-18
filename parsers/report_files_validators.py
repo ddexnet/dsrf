@@ -1,3 +1,4 @@
+# Lint as: python2, python3
 # Copyright 2015 Google Inc. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,6 +16,10 @@
 
 """Validates the report's file names."""
 
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+from six.moves import range
 from dsrf import constants
 from dsrf import error
 
@@ -78,7 +83,7 @@ class ReportFilesValidator(object):
           # First file in the list, nothing to compare to yet.
           file_name_dicts[file_number] = file_name_dict
           continue
-        compared_file = file_name_dicts.values()[0]
+        compared_file = list(file_name_dicts.values())[0]
         file_name_dicts[file_number] = file_name_dict
 
         # Validate match file name parts.
@@ -90,7 +95,7 @@ class ReportFilesValidator(object):
       except error.ReportValidationFailure as e:
         self.logger.error(e)
     self.logger.raise_if_fatal_errors_found()
-    report_files_number = file_name_dicts.values()[0]['y']
+    report_files_number = list(file_name_dicts.values())[0]['y']
     for num in range(1, int(report_files_number) + 1):
       if str(num) not in file_name_dicts:
         raise error.ReportValidationFailure(

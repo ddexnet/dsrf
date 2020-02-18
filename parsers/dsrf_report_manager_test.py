@@ -1,3 +1,4 @@
+# Lint as: python2, python3
 # -*- coding: utf-8 -*-
 # Copyright 2015 Google Inc. All Rights Reserved.
 #
@@ -16,16 +17,21 @@
 
 """Tests for dsrf_report_manager."""
 
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+
 from os import path
 import sys
 import unittest
 
-from google.protobuf import text_format
+import six
 
 from dsrf import constants
 from dsrf import error
 from dsrf.parsers import dsrf_report_manager
 from dsrf.proto import block_pb2
+from google.protobuf import text_format
 
 
 def read_test_block(file_name):
@@ -78,14 +84,13 @@ class DsrfReportManagerTest(unittest.TestCase):
         'x': '3', 'y': '4', 'MessageCreatedDateTime': '20150723T092522',
         'ext': 'tsv'}
 
-    self.assertRaisesRegexp(
-        error.FileNameValidationFailure,
+    with six.assertRaisesRegex(
+        self, error.FileNameValidationFailure,
         'File DSR_PADPIDA2014999999Z_PADPIDA2014111801Y_AdSupport_2015-02_AU_'
         '3of4_20150723T092522.tsv has invalid filename \\(error = \\[FHEA: '
         'row 3\\]: The cell "FileNumber" with the value "1" does not match the '
-        'file name part "x" with the value "3" in file number 3.\\).',
-        self.report_manager.validate_head_block, block, file_name,
-        file_name_dict)
+        'file name part "x" with the value "3" in file number 3.\\).'):
+      self.report_manager.validate_head_block(block, file_name, file_name_dict)
 
   def test_validate_head_block_multi_service(self):
     block = self.block_from_ascii(
@@ -114,7 +119,7 @@ class DsrfReportManagerTest(unittest.TestCase):
         files_list, dsrf_xsd_file, avs_xsd_file,
         human_readable=True, write_head=False)
     self.assertMultiLineEqual(
-        BODY_BLOCK + '\n' + constants.QUEUE_DELIMITER + '\n',
+        BODY_BLOCK + '\n' + six.ensure_str(constants.QUEUE_DELIMITER) + '\n',
         open('/tmp/queue.txt', 'r').read())
 
   def test_parse_report_valid_not_human_readable(self):
@@ -129,9 +134,10 @@ class DsrfReportManagerTest(unittest.TestCase):
         files_list, dsrf_xsd_file, avs_xsd_file,
         human_readable=False, write_head=False)
     serialized_block_str = open('/tmp/queue.txt', 'r').read().split(
-        '\n' + constants.QUEUE_DELIMITER)[0]
-    deserialized_block_str = unicode(
-        block_pb2.Block.FromString(serialized_block_str)).encode('utf-8')
+        six.ensure_str('\n' + six.ensure_str(constants.QUEUE_DELIMITER)))[0]
+    deserialized_block_str = six.ensure_binary(
+        six.text_type(block_pb2.Block.FromString(serialized_block_str)),
+        'utf-8')
     self.assertMultiLineEqual(BODY_BLOCK, deserialized_block_str)
 
   def test_parse_report_head_mismatch(self):
@@ -166,25 +172,29 @@ class DsrfReportManagerTest(unittest.TestCase):
                       path.dirname(__file__),
                       '../testdata/DSR_PADPIDA2014999999Z_PADPIDA2014111801Y_'
                       'AdSupport_2015-02_AU_1of2_20150723T092522.tsv')]
-    self.assertRaisesRegexp(
-        error.ReportValidationFailure, 'The block number 1 is not unique. It '
-        'appears in files number: 1 and 2.',
-        self.report_manager.parse_report, files_list, dsrf_xsd_file,
-        avs_xsd_file, human_readable=True)
+    with six.assertRaisesRegex(
+        self, error.ReportValidationFailure,
+        'The block number 1 is not unique. It '
+        'appears in files number: 1 and 2.'):
+      self.report_manager.parse_report(
+          files_list, dsrf_xsd_file, avs_xsd_file, human_readable=True)
 
   def test_party_filename_head_mismatch(self):
     file_name_dict = {'MessageSender': 'Someone'}
     message_sender_cells = {
         'SenderPartyId': 'PADPIDA2014999999Z',
         'SenderName': 'SomeoneElse'}
-    self.assertRaisesRegexp(
-        error.FileNameValidationFailure,
+    with six.assertRaisesRegex(
+        self, error.FileNameValidationFailure,
         r'File filename\.tsv has invalid filename \(error = The MessageSender '
         r'value in the filename \("Someone"\) did not match either of the '
         r'SenderPartyId \("PADPIDA2014999999Z"\) or the SenderName '
-        r'\("SomeoneElse"\) in the HEAD row\)\.',
-        dsrf_report_manager._validate_party_filename, 'filename.tsv',
-        file_name_dict, message_sender_cells, 'Sender')
+        r'\("SomeoneElse"\) in the HEAD row\)\.'):
+      dsrf_report_manager._validate_party_filename('filename.tsv',
+                                                   file_name_dict,
+                                                   message_sender_cells,
+                                                   'Sender')
+
 
 if __name__ == '__main__':
   unittest.main()

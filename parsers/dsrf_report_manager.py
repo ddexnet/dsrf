@@ -1,3 +1,4 @@
+# Lint as: python2, python3
 # Copyright 2015 Google Inc. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,10 +18,16 @@
 
 Parses a flat file report to verified block objects.
 """
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+
 from collections import defaultdict
 import os
 from os import path
 import sys
+
+import six
 
 from dsrf import constants
 from dsrf import dsrf_logger
@@ -71,7 +78,7 @@ def _validate_party_filename(
     party_type: Either 'Sender' or 'Recipient'
   """
   if (party_cells and
-      file_name_dict['Message' + party_type] not in party_cells.values()):
+      file_name_dict['Message' + party_type] not in list(party_cells.values())):
     raise error.FileNameValidationFailure(
         file_name,
         'The Message%(party_type)s value in the filename '
@@ -121,7 +128,7 @@ class DSRFReportManager(object):
     """
     output = None
     if human_readable:
-      output = unicode(block).encode('utf8')
+      output = six.ensure_binary(six.text_type(block), 'utf8')
     else:
       output = block.SerializeToString()
     try:
@@ -176,7 +183,7 @@ class DSRFReportManager(object):
     if len(service_descriptions) == 1:
       # There's only one type of ServiceDescription being communicated, it must
       # match the filename.
-      row, cell = service_descriptions.values()[0]
+      row, cell = list(service_descriptions.values())[0]
       if file_name_dict['ServiceDescription'] not in service_descriptions:
         _raise_filename_validation_error(
             file_name, row.type, row.row_number,
@@ -215,9 +222,9 @@ class DSRFReportManager(object):
     report_validator = report_files_validators.ReportFilesValidator(
         file_name_validators.FileNameValidator(expected_components),
         self.logger)
-    report_validator.validate_file_names(file_path_to_name_map.values())
+    report_validator.validate_file_names(list(file_path_to_name_map.values()))
     blocks = defaultdict(set)
-    for file_path, file_name in file_path_to_name_map.iteritems():
+    for file_path, file_name in six.iteritems(file_path_to_name_map):
       file_parser = dsrf_file_parser.DSRFFileParser(
           self.logger, dsrf_xsd_file, avs_xsd_file, file_path)
       file_name_dict = file_name_validators.FileNameValidator.split_file_name(
@@ -226,7 +233,7 @@ class DSRFReportManager(object):
       self.logger.info('Start parsing file number %s.', file_number)
       for block in file_parser.parse_file(int(file_number)):
         if block.type == block_pb2.BODY:
-          for compared_file_number, file_blocks in blocks.iteritems():
+          for compared_file_number, file_blocks in six.iteritems(blocks):
             if block.number in file_blocks:
               raise error.ReportValidationFailure(
                   'The block number %s is not unique. It appears in files '

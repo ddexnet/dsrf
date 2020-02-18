@@ -17,6 +17,8 @@
 
 import unittest
 
+import six
+
 from dsrf import constants
 from dsrf import dsrf_logger
 from dsrf import error
@@ -78,10 +80,9 @@ class ReportFilesValidatorsTest(unittest.TestCase):
         '20150723T092522.tsv.gz',
         'DSR_PADPIDA2014999999Z_PADPIDA2014111801Y_AdSupport_2015-02_AU_4of4_'
         '20150723T092522.tsv.gz']
-    self.assertRaisesRegexp(
-        error.ReportValidationFailure,
-        'File number 1 is missing in the report.',
-        self.validator.validate_file_names, files_list)
+    with six.assertRaisesRegex(self, error.ReportValidationFailure,
+                               'File number 1 is missing in the report.'):
+      self.validator.validate_file_names(files_list)
 
   def test_mismatch_file(self):
     files_list = [
@@ -93,13 +94,13 @@ class ReportFilesValidatorsTest(unittest.TestCase):
         '20150723T092522.tsv.gz',
         'DSR_PADPIDA2014999999Z_PADPIDA2014111801Y_AdSupport_2015-02_AU_4of4_'
         '20150723T092522.tsv.gz']
-    self.assertRaisesRegexp(
-        error.ReportValidationFailure,
+    with six.assertRaisesRegex(
+        self, error.ReportValidationFailure,
         'File DSR_PADPIDA2_PADPIDA2014111801Y_AdSupport_2015-02_AU_2of4_'
         '20150723T092522.tsv.gz has invalid filename \\(error = The '
         'MessageRecipient value "PADPIDA2" is expected to match the other files'
-        ' in the report and be "PADPIDA2014999999Z".\\).',
-        self.validator.validate_file_names, files_list)
+        ' in the report and be "PADPIDA2014999999Z".\\).'):
+      self.validator.validate_file_names(files_list)
 
   def test_mismatch_file_without_fail_fast(self):
     self.validator = report_files_validators.ReportFilesValidator(
@@ -114,11 +115,11 @@ class ReportFilesValidatorsTest(unittest.TestCase):
         '20150723T092522.tsv.gz',
         'DSR_PADPIDA2014999999Z_PADPIDA2014111801Y_AdSupport_2015-02_AU_4of4_'
         '20150723T092522.tsv.gz']
-    self.assertRaisesRegexp(
-        error.ReportValidationFailure,
+    with six.assertRaisesRegex(
+        self, error.ReportValidationFailure,
         'Found 1 fatal error\\(s\\) and 0 warnings, please check log file at '
-        '"/tmp/example.log" for details.\nFirst error: File ',  # truncated
-        self.validator.validate_file_names, files_list)
+        '"/tmp/example.log" for details.\nFirst error: File '):
+      self.validator.validate_file_names(files_list)
 
   def test_file_numbers_repetition(self):
     files_list = [
@@ -130,16 +131,15 @@ class ReportFilesValidatorsTest(unittest.TestCase):
         '20150723T092522.tsv.gz',
         'DSR_PADPIDA2014999999Z_PADPIDA2014111801Y_AdSupport_2015-02_AU_4of4_'
         '20150723T092522.tsv.gz']
-    self.assertRaisesRegexp(
-        error.ReportValidationFailure, 'File number 2 is not unique.',
-        self.validator.validate_file_names, files_list)
+    with six.assertRaisesRegex(self, error.ReportValidationFailure,
+                               'File number 2 is not unique.'):
+      self.validator.validate_file_names(files_list)
 
   def test_empty_list(self):
     files_list = []
-    self.assertRaisesRegexp(
-        error.ReportValidationFailure,
-        'Please provide a non-empty list of files.',
-        self.validator.validate_file_names, files_list)
+    with six.assertRaisesRegex(self, error.ReportValidationFailure,
+                               'Please provide a non-empty list of files.'):
+      self.validator.validate_file_names(files_list)
 
 
 if __name__ == '__main__':
