@@ -14,7 +14,6 @@
 # limitations under the License.
 # ==============================================================================
 
-
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
@@ -37,7 +36,8 @@ from google.protobuf import text_format
 def read_test_block(file_name):
   return open(
       path.join(path.dirname(__file__), '../testdata/blocks/' + file_name),
-      'r').read()
+      'rb').read()
+
 
 BASIC_HEAD_BLOCK = read_test_block('basic_head_block.txt')
 BASIC_BODY_BLOCK = read_test_block('basic_body_block.txt')
@@ -59,11 +59,9 @@ class DsrfReportProcessorTest(unittest.TestCase):
     body_block = self.block_from_ascii(BASIC_BODY_BLOCK)
     queue_fd = os.open('/tmp/queue.txt', os.O_RDWR)
     os.write(queue_fd, head_block.SerializeToString())
-    os.write(queue_fd,
-             bytes('\n' + six.ensure_str(constants.QUEUE_DELIMITER) + '\n'))
+    os.write(queue_fd, b'\n' + constants.QUEUE_DELIMITER + b'\n')
     os.write(queue_fd, body_block.SerializeToString())
-    os.write(queue_fd,
-             bytes('\n' + six.ensure_str(constants.QUEUE_DELIMITER) + '\n'))
+    os.write(queue_fd, b'\n' + constants.QUEUE_DELIMITER + b'\n')
     sys.stdin = open('/tmp/queue.txt', 'rb')
 
   def test_read_blocks_from_queue(self):
@@ -74,9 +72,10 @@ class DsrfReportProcessorTest(unittest.TestCase):
         report_processor.read_blocks_from_queue(),
         [BASIC_HEAD_BLOCK, BASIC_BODY_BLOCK]):
       counter += 1
-      deserialized_block_str = six.ensure_binary(
-          six.text_type(actual_block), 'utf-8').strip()
-      self.assertMultiLineEqual(deserialized_block_str, expected_block.strip())
+      deserialized_block_str = six.ensure_text(
+          six.text_type(actual_block)).strip()
+      self.assertMultiLineEqual(deserialized_block_str,
+                                expected_block.strip().decode('utf-8'))
     self.assertEqual(counter, 2)
 
 

@@ -14,7 +14,6 @@
 # limitations under the License.
 # ==============================================================================
 
-
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
@@ -26,7 +25,6 @@ import six
 from dsrf import dsrf_logger
 from dsrf import error
 from dsrf.parsers import cell_validators
-
 
 NON_UTF8_DATA = b'\xC3\xC3'
 
@@ -53,8 +51,8 @@ class BaseValidatorTest(unittest.TestCase):
   def test_invalid_values(self):
     for invalid_value in self.invalid_values:
       try:
-        self.get_validator().validate_value(
-            invalid_value, 8, 'dsrf_1of1_file.tsv', '1')
+        self.get_validator().validate_value(invalid_value, 8,
+                                            'dsrf_1of1_file.tsv', '1')
       except Exception as e:  # pylint: disable=broad-except
         if not isinstance(e, error.CellValidationFailure):
           self.fail('Value "%s" not handled gracefully by %s: %s' %
@@ -70,8 +68,8 @@ class BaseValidatorTest(unittest.TestCase):
       if transformed_val != expected_transform:
         self.fail(
             'Value "%s" transforms to "%s" instead of "%s" (validator: %s) .' %
-            (val, transformed_val, expected_transform,
-             type(self.get_validator())))
+            (val, transformed_val, expected_transform, type(
+                self.get_validator())))
 
 
 class StringValidatorTest(BaseValidatorTest):
@@ -85,12 +83,8 @@ class StringValidatorTest(BaseValidatorTest):
   def test_non_utf8(self):
     validator = cell_validators.StringValidator(
         'string_cell', self.logger, required=False, repeated=False)
-    with six.assertRaisesRegex(
-        self, error.BadUnicodeError,
-        r'Cell "string_cell" contained a non-utf8 string: "\'\\xc3\\xc3\'". '
-        r'Error detail: "\'utf8\' codec can\'t decode byte 0xc3 in position 0:'
-        r' invalid continuation byte". \[Block: 10, Row: 80, '
-        r'file=filename.tsv\].'):
+    with six.assertRaisesRegex(self, error.CellValidationFailure,
+                               r'Cell "string_cell" contains invalid value'):
       validator.validate_value(NON_UTF8_DATA, 80, 'filename.tsv', 10)
 
 
@@ -106,8 +100,13 @@ class IntegerValidatorTest(BaseValidatorTest):
 class BooleanValidatorTest(BaseValidatorTest):
   valid_values = ['True', 'False', 'TRUE', 'false', 'FaLsE']
   invalid_values = [True, 0, 10.2, list(), set(), '', 'YouTube']
-  transformed_val_map = {'True': True, 'False': False, 'TRUE': True,
-                         'false': False, 'FaLsE': False}
+  transformed_val_map = {
+      'True': True,
+      'False': False,
+      'TRUE': True,
+      'false': False,
+      'FaLsE': False
+  }
 
   def get_validator(self):
     return cell_validators.BooleanValidator('boolean_cell', self.logger)
@@ -124,20 +123,27 @@ class DecimalValidatorTest(BaseValidatorTest):
 
 class PatternValidatorTest(BaseValidatorTest):
   valid_values = ['PADPIDA0', 'PADPIDAA', 'PADPIDAa']
-  invalid_values = ['PADPIDA', 'PADPID', 'YouTube', 'PADPIDA ', True, 0, 10.2,
-                    list(), set(), '']
-  transformed_val_map = {'PADPIDA0': 'PADPIDA0', 'PADPIDAA': 'PADPIDAA',
-                         'PADPIDAa': 'PADPIDAa'}
+  invalid_values = [
+      'PADPIDA', 'PADPID', 'YouTube', 'PADPIDA ', True, 0, 10.2,
+      list(),
+      set(), ''
+  ]
+  transformed_val_map = {
+      'PADPIDA0': 'PADPIDA0',
+      'PADPIDAA': 'PADPIDAA',
+      'PADPIDAa': 'PADPIDAa'
+  }
 
   def get_validator(self):
-    return cell_validators.PatternValidator(
-        'PADPIDA[a-zA-Z0-9]+', 'pattern_cell', self.logger)
+    return cell_validators.PatternValidator('PADPIDA[a-zA-Z0-9]+',
+                                            'pattern_cell', self.logger)
 
 
 class DurationValidatorTest(BaseValidatorTest):
   valid_values = [
       'P1Y2M10DT2H30M', 'PT12M', 'PT1H22M30S', 'PT12H23M45S', 'PT12M', 'PT12S',
-      'PT12H23M23S', 'PT12M36S']
+      'PT12H23M23S', 'PT12M36S'
+  ]
   invalid_values = ['P', 'P12', '12T12', True, 0, 10.2, list(), set(), '']
 
   def get_validator(self):
@@ -155,12 +161,16 @@ class DurationValidatorTest(BaseValidatorTest):
 
 class DatetimeValidatorTest(BaseValidatorTest):
   valid_values = ['2014-12-14T10:05:00Z', '2014-12-14T10:05:00+08:00']
-  invalid_values = ['', '20141214T10:05:00Z', '2014-12-14T100500Z',
-                    '2014-12-14T10:05:00', '2014-12-14T10:05:0008:00', True, 0,
-                    10.2, list(), set()]
+  invalid_values = [
+      '', '20141214T10:05:00Z', '2014-12-14T100500Z', '2014-12-14T10:05:00',
+      '2014-12-14T10:05:0008:00', True, 0, 10.2,
+      list(),
+      set()
+  ]
   transformed_val_map = {
       '2014-12-14T10:05:00Z': '2014-12-14T10:05:00Z',
-      '2014-12-14T10:05:00+08:00': '2014-12-14T10:05:00+08:00'}
+      '2014-12-14T10:05:00+08:00': '2014-12-14T10:05:00+08:00'
+  }
 
   def get_validator(self):
     return cell_validators.DateTimeValidator('datetime_cell', self.logger)
@@ -169,8 +179,14 @@ class DatetimeValidatorTest(BaseValidatorTest):
 class FixedStringValidatorTest(BaseValidatorTest):
   valid_values = ['HEAD', 'FOOT', 'FHEA', 'FFOO', 'SY01', 'RE01']
   invalid_values = ['RE02', True, 0, 10.2, list(), set(), '']
-  transformed_val_map = {'HEAD': 'HEAD', 'FOOT': 'FOOT', 'FHEA': 'FHEA',
-                         'FFOO': 'FFOO', 'SY01': 'SY01', 'RE01': 'RE01'}
+  transformed_val_map = {
+      'HEAD': 'HEAD',
+      'FOOT': 'FOOT',
+      'FHEA': 'FHEA',
+      'FFOO': 'FFOO',
+      'SY01': 'SY01',
+      'RE01': 'RE01'
+  }
 
   def get_validator(self):
     return cell_validators.FixedStringValidator(
@@ -178,8 +194,8 @@ class FixedStringValidatorTest(BaseValidatorTest):
         self.logger)
 
   def test_case_preserved(self):
-    validator = cell_validators.FixedStringValidator(
-        ['MyCamelCaseIsImportant'], 'RecordType', self.logger)
+    validator = cell_validators.FixedStringValidator(['MyCamelCaseIsImportant'],
+                                                     'RecordType', self.logger)
     with six.assertRaisesRegex(
         self, error.CellValidationFailure,
         r'Value was expected to be one of the following: '

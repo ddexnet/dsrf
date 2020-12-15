@@ -14,7 +14,6 @@
 # limitations under the License.
 # ==============================================================================
 
-
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
@@ -37,8 +36,8 @@ class SchemaParserBaseTest(unittest.TestCase):
 
   def setUp(self):
     avs_filename = path.join(path.dirname(__file__), '../testdata/avs.xsd')
-    xsd_filename = path.join(path.dirname(__file__),
-                             '../testdata/sales-reporting-flat.xsd')
+    xsd_filename = path.join(
+        path.dirname(__file__), '../testdata/sales-reporting-flat.xsd')
     self.dsrf_schema_parser = dsrf_schema_parser.DsrfSchemaParser(
         avs_filename, xsd_filename)
     self.logger = dsrf_logger.DSRFLogger(__name__, '/tmp/example.log', True)
@@ -46,28 +45,34 @@ class SchemaParserBaseTest(unittest.TestCase):
   def test_parse_fixed_strings(self):
     filename = path.join(path.dirname(__file__), '../testdata/avs.xsd')
     expected_dict = {
-        'RecordType': ['HEAD', 'FOOT', 'FHEA', 'FFOO', 'SY01', 'SY02', 'SY03',
-                       'SY04', 'RE01', 'RE02', 'RE03', 'AS01', 'AS02', 'AS03',
-                       'MW01', 'CU01', 'SU01', 'SU02', 'SU03', 'SU04', 'RU01',
-                       'RU02', 'LI01'],
-        'UseType': ['AsPerContract', 'Broadcast', 'ConditionalDownload',
-                    'ContentInfluencedStream', 'Display', 'Download'],
-        'ProfileId': ['BasicAudioProfile', 'UGCProfile', 'AudioVisualProfile',
-                      'RoyaltyReportingProfile', 'BroadcastReportingProfile']}
+        'RecordType': [
+            'HEAD', 'FOOT', 'FHEA', 'FFOO', 'SY01', 'SY02', 'SY03', 'SY04',
+            'RE01', 'RE02', 'RE03', 'AS01', 'AS02', 'AS03', 'MW01', 'CU01',
+            'SU01', 'SU02', 'SU03', 'SU04', 'RU01', 'RU02', 'LI01'
+        ],
+        'UseType': [
+            'AsPerContract', 'Broadcast', 'ConditionalDownload',
+            'ContentInfluencedStream', 'Display', 'Download'
+        ],
+        'ProfileId': [
+            'BasicAudioProfile', 'UGCProfile', 'AudioVisualProfile',
+            'RoyaltyReportingProfile', 'BroadcastReportingProfile'
+        ]
+    }
     self.assertEqual(
         self.dsrf_schema_parser.parse_fixed_strings(filename), expected_dict)
 
   def test_parse_fixed_string_union_valid(self):
-    filename = path.join(path.dirname(__file__),
-                         '../schemas/avs/current/avs.xsd')
+    filename = path.join(
+        path.dirname(__file__), '../schemas/avs/current/avs.xsd')
     self.assertIsNotNone(
         self.dsrf_schema_parser.parse_fixed_strings(filename)
         ['CurrentTerritoryCode'])
     self.assertIsNotNone(
         self.dsrf_schema_parser.parse_fixed_strings(filename)['CurrencyCode'])
     self.assertIsNotNone(
-        self.dsrf_schema_parser.parse_fixed_strings(filename)[
-            'CurrentTerritoryCode'])
+        self.dsrf_schema_parser.parse_fixed_strings(filename)
+        ['CurrentTerritoryCode'])
 
   def test_parse_fixed_string_union_invalid(self):
     filename = path.join(
@@ -79,7 +84,8 @@ class SchemaParserBaseTest(unittest.TestCase):
     """Tests the successful path."""
     expected_valid_values = [
         'AsPerContract', 'Broadcast', 'ConditionalDownload',
-        'ContentInfluencedStream', 'Display', 'Download']
+        'ContentInfluencedStream', 'Display', 'Download'
+    ]
     integer_validator = self.dsrf_schema_parser.get_cell_validator(
         'FileNumber', 'xs:integer', True, False, self.logger)
     string_validator = self.dsrf_schema_parser.get_cell_validator(
@@ -96,7 +102,7 @@ class SchemaParserBaseTest(unittest.TestCase):
         [],
         [
             ElementTree.Element(
-                tag=six.ensure_str(constants.XSD_TAG_PREFIX) + 'pattern',
+                constants.XSD_TAG_PREFIX + 'pattern',
                 attrib={'value': 'pattern'})
         ]
     ])
@@ -111,24 +117,24 @@ class SchemaParserBaseTest(unittest.TestCase):
     self.assertIsInstance(fixed_string_validator,
                           cell_validators.FixedStringValidator)
     self.assertEqual(fixed_string_validator.valid_values, expected_valid_values)
-    self.assertIsInstance(
-        simple_type_validator, cell_validators.PatternValidator)
+    self.assertIsInstance(simple_type_validator,
+                          cell_validators.PatternValidator)
 
   def test_get_cells(self):
-    xsd_filename = path.join(path.dirname(__file__),
-                             '../testdata/sales-reporting-flat.xsd')
+    xsd_filename = path.join(
+        path.dirname(__file__), '../testdata/sales-reporting-flat.xsd')
     tree = ElementTree.parse(xsd_filename)
     root = tree.getroot()
     for element in root:
       # Testing a single row, FileHeader, that contains all the exist
       # validators.
-      if (element.tag == six.ensure_str(constants.XSD_TAG_PREFIX) +
-          'complexType' and element.attrib['name'] == 'FileHeader'):
+      if (element.tag == constants.XSD_TAG_PREFIX + 'complexType' and
+          element.attrib['name'] == 'FileHeader'):
         row_cells = self.dsrf_schema_parser.get_dsrf_xsd_cells(
             element, self.logger)
         # RecordType
-        self.assertIsInstance(
-            row_cells[0], cell_validators.FixedStringValidator)
+        self.assertIsInstance(row_cells[0],
+                              cell_validators.FixedStringValidator)
         # MessageID
         self.assertIsInstance(row_cells[1], cell_validators.StringValidator)
         # FileNumber
@@ -138,15 +144,15 @@ class SchemaParserBaseTest(unittest.TestCase):
 
   def test_get_cell_validator_handles_typo(self):
     """Tests a case of typo mistake in the file."""
-    xsd_filename = path.join(path.dirname(__file__),
-                             '../testdata/wrong_format.xsd')
+    xsd_filename = path.join(
+        path.dirname(__file__), '../testdata/wrong_format.xsd')
     tree = ElementTree.parse(xsd_filename)
     root = tree.getroot()
     for element in root:
       # Testing a single row, FileHeader, that contains all the exist
       # validators.
-      if (element.tag == six.ensure_str(constants.XSD_TAG_PREFIX) +
-          'complexType' and element.attrib['name'] == 'FileHeader'):
+      if (element.tag == constants.XSD_TAG_PREFIX + 'complexType' and
+          element.attrib['name'] == 'FileHeader'):
         with six.assertRaisesRegex(
             self, error.XsdParsingFailure,
             'Unexpected error while parsing the xsd '
@@ -193,8 +199,8 @@ class SchemaParserBaseTest(unittest.TestCase):
         cell_validators.BooleanValidator('PreviewAvailable', self.logger, False,
                                          False),
     ]
-    for actual_cell, expected_cell in zip(
-        rows_validators['SU02'], expected_su02_validators):
+    for actual_cell, expected_cell in zip(rows_validators['SU02'],
+                                          expected_su02_validators):
       self.assertIsInstance(actual_cell, expected_cell.__class__)
       self.assertEqual(actual_cell.cell_name, expected_cell.cell_name,
                        self.logger)

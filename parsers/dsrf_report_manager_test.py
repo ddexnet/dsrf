@@ -14,7 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ==============================================================================
-
 """Tests for dsrf_report_manager."""
 
 from __future__ import absolute_import
@@ -35,9 +34,11 @@ from google.protobuf import text_format
 
 
 def read_test_block(file_name):
-  return open(
-      path.join(path.dirname(__file__), '../testdata/blocks/' + file_name),
-      'r').read()
+  return bytes(
+      open(
+          path.join(path.dirname(__file__), '../testdata/blocks/' + file_name),
+          'rb').read())
+
 
 HEAD_BLOCK = read_test_block('basic_head_block.txt')
 BODY_BLOCK = read_test_block('basic_body_block.txt')
@@ -64,12 +65,17 @@ class DsrfReportManagerTest(unittest.TestCase):
     file_name = ('DSR_PADPIDA2014999999Z_PADPIDA2014111801Y_AdSupport_2015-02_'
                  'AU_1of1_20150723T092522.tsv')
     file_name_dict = {
-        'DSR': 'DSR', 'MessageRecipient': 'PADPIDA2014999999Z',
+        'DSR': 'DSR',
+        'MessageRecipient': 'PADPIDA2014999999Z',
         'MessageSender': 'PADPIDA2014801Y',
         'ServiceDescription': 'AdSupport',
-        'MessageNotificationPeriod': '2015-02', 'TerritoryOfUseOrSale': 'AU',
-        'x': '1', 'y': '1', 'MessageCreatedDateTime': '20150723T092522',
-        'ext': 'tsv'}
+        'MessageNotificationPeriod': '2015-02',
+        'TerritoryOfUseOrSale': 'AU',
+        'x': '1',
+        'y': '1',
+        'MessageCreatedDateTime': '20150723T092522',
+        'ext': 'tsv'
+    }
     self.report_manager.validate_head_block(block, file_name, file_name_dict)
 
   def test_validate_head_block_invalid(self):
@@ -77,12 +83,17 @@ class DsrfReportManagerTest(unittest.TestCase):
     file_name = ('DSR_PADPIDA2014999999Z_PADPIDA2014111801Y_AdSupport_2015-02_'
                  'AU_3of4_20150723T092522.tsv')
     file_name_dict = {
-        'DSR': 'DSR', 'MessageRecipient': 'PADPIDA2014999999Z',
+        'DSR': 'DSR',
+        'MessageRecipient': 'PADPIDA2014999999Z',
         'MessageSender': 'PADPIDA2014111801Y',
         'ServiceDescription': 'AdSupport',
-        'MessageNotificationPeriod': '2015-02', 'TerritoryOfUseOrSale': 'AU',
-        'x': '3', 'y': '4', 'MessageCreatedDateTime': '20150723T092522',
-        'ext': 'tsv'}
+        'MessageNotificationPeriod': '2015-02',
+        'TerritoryOfUseOrSale': 'AU',
+        'x': '3',
+        'y': '4',
+        'MessageCreatedDateTime': '20150723T092522',
+        'ext': 'tsv'
+    }
 
     with six.assertRaisesRegex(
         self, error.FileNameValidationFailure,
@@ -98,61 +109,74 @@ class DsrfReportManagerTest(unittest.TestCase):
     file_name = ('DSR_PADPIDA2014999999Z_PADPIDA2014111801Y_Multi_2015-02_'
                  'AU_1of1_20150723T092522.tsv')
     file_name_dict = {
-        'DSR': 'DSR', 'MessageRecipient': 'PADPIDA2014999999Z',
+        'DSR': 'DSR',
+        'MessageRecipient': 'PADPIDA2014999999Z',
         'MessageSender': 'PADPIDA2014111801Y',
         'ServiceDescription': 'Multi',
-        'MessageNotificationPeriod': '2015-02', 'TerritoryOfUseOrSale': 'AU',
-        'x': '1', 'y': '1', 'MessageCreatedDateTime': '20150723T092522',
-        'ext': 'tsv'}
+        'MessageNotificationPeriod': '2015-02',
+        'TerritoryOfUseOrSale': 'AU',
+        'x': '1',
+        'y': '1',
+        'MessageCreatedDateTime': '20150723T092522',
+        'ext': 'tsv'
+    }
 
     self.report_manager.validate_head_block(block, file_name, file_name_dict)
 
   def test_parse_report_valid_human_readable(self):
     dsrf_xsd_file = path.join(
         path.dirname(__file__), '../testdata/sales-reporting-flat.xsd')
-    avs_xsd_file = path.join(
-        path.dirname(__file__), '../testdata/avs.xsd')
-    files_list = [path.join(
-        path.dirname(__file__), '../testdata/DSR_PADPIDA2014999999Z_'
-        'PADPIDA2014111801Y_AdSupport_2015-02_AU_1of1_20150723T092522.tsv')]
+    avs_xsd_file = path.join(path.dirname(__file__), '../testdata/avs.xsd')
+    files_list = [
+        path.join(
+            path.dirname(__file__), '../testdata/DSR_PADPIDA2014999999Z_'
+            'PADPIDA2014111801Y_AdSupport_2015-02_AU_1of1_20150723T092522.tsv')
+    ]
     self.report_manager.parse_report(
-        files_list, dsrf_xsd_file, avs_xsd_file,
-        human_readable=True, write_head=False)
-    self.assertMultiLineEqual(
-        BODY_BLOCK + '\n' + six.ensure_str(constants.QUEUE_DELIMITER) + '\n',
-        open('/tmp/queue.txt', 'r').read())
+        files_list,
+        dsrf_xsd_file,
+        avs_xsd_file,
+        human_readable=True,
+        write_head=False)
+    self.assertMultiLineEqual((BODY_BLOCK + b'\n' + constants.QUEUE_DELIMITER +
+                               b'\n').decode('utf-8'),
+                              open('/tmp/queue.txt', 'r').read())
 
   def test_parse_report_valid_not_human_readable(self):
     dsrf_xsd_file = path.join(
         path.dirname(__file__), '../testdata/sales-reporting-flat.xsd')
-    avs_xsd_file = path.join(
-        path.dirname(__file__), '../testdata/avs.xsd')
-    files_list = [path.join(
-        path.dirname(__file__), '../testdata/DSR_PADPIDA2014999999Z_'
-        'PADPIDA2014111801Y_AdSupport_2015-02_AU_1of1_20150723T092522.tsv')]
+    avs_xsd_file = path.join(path.dirname(__file__), '../testdata/avs.xsd')
+    files_list = [
+        path.join(
+            path.dirname(__file__), '../testdata/DSR_PADPIDA2014999999Z_'
+            'PADPIDA2014111801Y_AdSupport_2015-02_AU_1of1_20150723T092522.tsv')
+    ]
     self.report_manager.parse_report(
-        files_list, dsrf_xsd_file, avs_xsd_file,
-        human_readable=False, write_head=False)
-    serialized_block_str = open('/tmp/queue.txt', 'r').read().split(
-        six.ensure_str('\n' + six.ensure_str(constants.QUEUE_DELIMITER)))[0]
-    deserialized_block_str = six.ensure_binary(
-        six.text_type(block_pb2.Block.FromString(serialized_block_str)),
-        'utf-8')
-    self.assertMultiLineEqual(BODY_BLOCK, deserialized_block_str)
+        files_list,
+        dsrf_xsd_file,
+        avs_xsd_file,
+        human_readable=False,
+        write_head=False)
+    serialized_block_str = open('/tmp/queue.txt',
+                                'rb').read().split(b'\n' +
+                                                   constants.QUEUE_DELIMITER)[0]
+    deserialized_block_str = six.text_type(
+        block_pb2.Block.FromString(serialized_block_str))
+    self.assertMultiLineEqual(
+        BODY_BLOCK.decode('utf-8'), deserialized_block_str)
 
   def test_parse_report_head_mismatch(self):
-    """The cell RecipientPartyId mismatch the file name part RecipientMessage.
-    """
+    """The cell RecipientPartyId mismatch the file name part RecipientMessage."""
     xsd_filename = path.join(
         path.dirname(__file__), '../testdata/sales-reporting-flat.xsd')
-    avs_filename = path.join(
-        path.dirname(__file__), '../testdata/avs.xsd')
-    files_list = [path.join(
-        path.dirname(__file__), '../testdata/DSR_PADPIDA2014999999Z_'
-        'PADPIDA2014111801Y_AdSupport_2015-02_AU_1of1_20140617T092522.tsv')]
+    avs_filename = path.join(path.dirname(__file__), '../testdata/avs.xsd')
+    files_list = [
+        path.join(
+            path.dirname(__file__), '../testdata/DSR_PADPIDA2014999999Z_'
+            'PADPIDA2014111801Y_AdSupport_2015-02_AU_1of1_20140617T092522.tsv')
+    ]
     logger = self.report_manager.parse_report(
-        files_list, xsd_filename, avs_filename,
-        human_readable=True)
+        files_list, xsd_filename, avs_filename, human_readable=True)
     self.assertEqual(
         logger.first_error,
         'File DSR_PADPIDA2014999999Z_PADPIDA2014111801Y_AdSupport_2015-02_AU_'
@@ -163,15 +187,16 @@ class DsrfReportManagerTest(unittest.TestCase):
   def test_parse_report_repeated_block_number(self):
     dsrf_xsd_file = path.join(
         path.dirname(__file__), '../testdata/sales-reporting-flat.xsd')
-    avs_xsd_file = path.join(
-        path.dirname(__file__), '../testdata/avs.xsd')
-    files_list = [path.join(
-        path.dirname(__file__), '../testdata/DSR_PADPIDA2014999999Z_'
-        'PADPIDA2014111801Y_AdSupport_2015-02_AU_2of2_20150723T092522.tsv'),
-                  path.join(
-                      path.dirname(__file__),
-                      '../testdata/DSR_PADPIDA2014999999Z_PADPIDA2014111801Y_'
-                      'AdSupport_2015-02_AU_1of2_20150723T092522.tsv')]
+    avs_xsd_file = path.join(path.dirname(__file__), '../testdata/avs.xsd')
+    files_list = [
+        path.join(
+            path.dirname(__file__), '../testdata/DSR_PADPIDA2014999999Z_'
+            'PADPIDA2014111801Y_AdSupport_2015-02_AU_2of2_20150723T092522.tsv'),
+        path.join(
+            path.dirname(__file__),
+            '../testdata/DSR_PADPIDA2014999999Z_PADPIDA2014111801Y_'
+            'AdSupport_2015-02_AU_1of2_20150723T092522.tsv')
+    ]
     with six.assertRaisesRegex(
         self, error.ReportValidationFailure,
         'The block number 1 is not unique. It '
@@ -183,7 +208,8 @@ class DsrfReportManagerTest(unittest.TestCase):
     file_name_dict = {'MessageSender': 'Someone'}
     message_sender_cells = {
         'SenderPartyId': 'PADPIDA2014999999Z',
-        'SenderName': 'SomeoneElse'}
+        'SenderName': 'SomeoneElse'
+    }
     with six.assertRaisesRegex(
         self, error.FileNameValidationFailure,
         r'File filename\.tsv has invalid filename \(error = The MessageSender '

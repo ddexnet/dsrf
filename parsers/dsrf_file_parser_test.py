@@ -39,7 +39,8 @@ from google.protobuf import text_format
 def read_test_block(file_name):
   return open(
       path.join(path.dirname(__file__), '../testdata/blocks/' + file_name),
-      'r').read()
+      'rb').read()
+
 
 HEAD_BLOCK = read_test_block('basic_head_block.txt')
 BODY_BLOCK = read_test_block('basic_body_block.txt')

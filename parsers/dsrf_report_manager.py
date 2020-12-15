@@ -13,7 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ==============================================================================
-
 """The dsrf library manager.
 
 Parses a flat file report to verified block objects.
@@ -48,27 +47,24 @@ def _get_version():
     return '[Version Unknown - ImportError]'
 
   try:
-    return 'v%s - %s' % (
-        get_distribution('dsrf').version, get_distribution('dsrf').location)
+    return 'v%s - %s' % (get_distribution('dsrf').version,
+                         get_distribution('dsrf').location)
   except pkg_resources.DistributionNotFound:
     return '[Version Unknown - DistributionNotFound]'
 
 
-def _raise_filename_validation_error(
-    file_name, row_number, row_type, cell_name, cell_value, filename_part,
-    filename_value, file_number):
+def _raise_filename_validation_error(file_name, row_number, row_type, cell_name,
+                                     cell_value, filename_part, filename_value,
+                                     file_number):
   raise error.FileNameValidationFailure(
-      file_name,
-      '[%s: row %s]: The cell "%s" with the value "%s" does '
+      file_name, '[%s: row %s]: The cell "%s" with the value "%s" does '
       'not match the file name part "%s" with the value "%s" in file '
-      'number %s.' % (
-          row_number, row_type,
-          cell_name, cell_value, filename_part,
-          filename_value, file_number))
+      'number %s.' % (row_number, row_type, cell_name, cell_value,
+                      filename_part, filename_value, file_number))
 
 
-def _validate_party_filename(
-    file_name, file_name_dict, party_cells, party_type):
+def _validate_party_filename(file_name, file_name_dict, party_cells,
+                             party_type):
   """Message Sender/Recipient values in the filename must match the HEAD.
 
   Args:
@@ -80,8 +76,7 @@ def _validate_party_filename(
   if (party_cells and
       file_name_dict['Message' + party_type] not in list(party_cells.values())):
     raise error.FileNameValidationFailure(
-        file_name,
-        'The Message%(party_type)s value in the filename '
+        file_name, 'The Message%(party_type)s value in the filename '
         '("%(filename_value)s") did not match either of the '
         '%(party_type)sPartyId ("%(party_id)s") or the %(party_type)sName '
         '("%(party_name)s") in the HEAD row' % {
@@ -110,7 +105,7 @@ class DSRFReportManager(object):
 
     Args:
       log_file_path: The path of the log file, where the library logs will be
-                     written to.
+        written to.
     """
     self.logger = dsrf_logger.DSRFLogger('dsrf', log_file_path)
     self.logger.info('>>> Running DSRF Library %s <<<' % _get_version())
@@ -124,17 +119,16 @@ class DSRFReportManager(object):
       block: A block_pb2.Block object to write.
       logger: Logger object.
       human_readable: If True, write to the queue the block in a human readable
-                      form. Otherwise, Write the block as a raw bytes.
+        form. Otherwise, Write the block as a raw bytes.
     """
     output = None
     if human_readable:
-      output = six.ensure_binary(six.text_type(block), 'utf8')
+      output = six.ensure_binary(six.text_type(block), 'latin')
     else:
       output = block.SerializeToString()
     try:
       os.write(sys.stdout.fileno(), output)
-      os.write(sys.stdout.fileno(),
-               bytes('\n' + constants.QUEUE_DELIMITER + '\n'))
+      os.write(sys.stdout.fileno(), b'\n' + constants.QUEUE_DELIMITER + b'\n')
     except OSError as e:
       logger.exception('Could not write to queue: %s', e)
       sys.stderr.write(
@@ -149,7 +143,7 @@ class DSRFReportManager(object):
       block: A block_pb2.Block object.
       file_name: The block file name.
       file_name_dict: A dictionary containing the different components of the
-                      filename, keyed by the component names.
+        filename, keyed by the component names.
                       (eg. {'x': 3, 'ext': 'tsv.gz'}).
     """
     message_recipient_cells = defaultdict(str)
@@ -166,39 +160,47 @@ class DSRFReportManager(object):
               cell.name]
           if cell.cell_type == cell_pb2.INTEGER:
             if int(file_name_dict[filename_part]) not in cell.integer_value:
-              _raise_filename_validation_error(
-                  file_name, row.type, row.row_number, cell.name,
-                  '%d' % cell.integer_value[0], filename_part,
-                  file_name_dict[filename_part], file_name_dict['x'])
+              _raise_filename_validation_error(file_name, row.type,
+                                               row.row_number, cell.name,
+                                               '%d' % cell.integer_value[0],
+                                               filename_part,
+                                               file_name_dict[filename_part],
+                                               file_name_dict['x'])
           elif cell.cell_type == cell_pb2.STRING:
             if filename_part == 'ServiceDescription':
               service_descriptions[cell.string_value[0]] = (row, cell)
               continue
             if file_name_dict[filename_part] not in cell.string_value:
-              _raise_filename_validation_error(
-                  file_name, row.type, row.row_number,
-                  cell.name, cell.string_value, filename_part,
-                  file_name_dict[filename_part], file_name_dict['x'])
+              _raise_filename_validation_error(file_name, row.type,
+                                               row.row_number, cell.name,
+                                               cell.string_value, filename_part,
+                                               file_name_dict[filename_part],
+                                               file_name_dict['x'])
 
     if len(service_descriptions) == 1:
       # There's only one type of ServiceDescription being communicated, it must
       # match the filename.
       row, cell = list(service_descriptions.values())[0]
       if file_name_dict['ServiceDescription'] not in service_descriptions:
-        _raise_filename_validation_error(
-            file_name, row.type, row.row_number,
-            cell.name, cell.string_value, filename_part,
-            file_name_dict[filename_part], file_name_dict['x'])
+        _raise_filename_validation_error(file_name, row.type, row.row_number,
+                                         cell.name, cell.string_value,
+                                         filename_part,
+                                         file_name_dict[filename_part],
+                                         file_name_dict['x'])
 
-    _validate_party_filename(
-        file_name, file_name_dict, message_recipient_cells, 'Recipient')
+    _validate_party_filename(file_name, file_name_dict, message_recipient_cells,
+                             'Recipient')
 
-    _validate_party_filename(
-        file_name, file_name_dict, message_sender_cells, 'Sender')
+    _validate_party_filename(file_name, file_name_dict, message_sender_cells,
+                             'Sender')
     block.filename = file_name
 
-  def parse_report(self, files_list, dsrf_xsd_file, avs_xsd_file,
-                   human_readable=False, write_head=True):
+  def parse_report(self,
+                   files_list,
+                   dsrf_xsd_file,
+                   avs_xsd_file,
+                   human_readable=False,
+                   write_head=True):
     """Parses a dsrf report to block objects.
 
     The blocks are transferred to the queue.
@@ -208,14 +210,15 @@ class DSRFReportManager(object):
       dsrf_xsd_file: Optional user-provided path to custom XSD.
       avs_xsd_file: Optional user-provided path to custom AVS XSD.
       human_readable: If True, write the block to the queue in a human readable
-                      form. Otherwise, write the block as a raw bytes.
+        form. Otherwise, write the block as a raw bytes.
       write_head: If set to False, the header will not be written to the queue.
 
     Returns:
       dsrf_logger.DSRFLogger object.
     """
     file_path_to_name_map = {
-        file_path: path.basename(file_path) for file_path in files_list}
+        file_path: path.basename(file_path) for file_path in files_list
+    }
 
     expected_components = constants.FILE_NAME_COMPONENTS
     self.logger.info('Validating the report file names.')
@@ -225,8 +228,8 @@ class DSRFReportManager(object):
     report_validator.validate_file_names(list(file_path_to_name_map.values()))
     blocks = defaultdict(set)
     for file_path, file_name in six.iteritems(file_path_to_name_map):
-      file_parser = dsrf_file_parser.DSRFFileParser(
-          self.logger, dsrf_xsd_file, avs_xsd_file, file_path)
+      file_parser = dsrf_file_parser.DSRFFileParser(self.logger, dsrf_xsd_file,
+                                                    avs_xsd_file, file_path)
       file_name_dict = file_name_validators.FileNameValidator.split_file_name(
           file_name, expected_components)
       file_number = file_name_dict['x']
@@ -256,7 +259,6 @@ class DSRFReportManager(object):
     try:
       self.logger.raise_if_fatal_errors_found()
     except error.ReportValidationFailure as e:
-      sys.stderr.write(
-          constants.COLOR_RED + constants.BOLD + '\n[Cell validation] '
-          + str(e) + constants.ENDC)
+      sys.stderr.write(constants.COLOR_RED + constants.BOLD +
+                       '\n[Cell validation] ' + str(e) + constants.ENDC)
     return self.logger

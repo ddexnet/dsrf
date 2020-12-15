@@ -211,7 +211,7 @@ MESSAGE_SENDER_MATCH = ['SenderPartyId', 'SenderName']
 # In the default implementation, the serialized proto objects are written as a
 # byte stream. This delimiter enables the reader of the stream to reconstruct
 # the individual protos.
-QUEUE_DELIMITER = '==PIPE_PROTO_DELIMITER=='
+QUEUE_DELIMITER = b'==PIPE_PROTO_DELIMITER=='
 
 # The xs:duration cell pattern.
 DURATION_PATTERN = re.compile(

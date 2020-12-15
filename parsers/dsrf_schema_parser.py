@@ -19,10 +19,9 @@
 from os import path
 from xml.etree import ElementTree
 
-import cell_validators
-
 from dsrf import constants
 from dsrf import error
+from dsrf.parsers import cell_validators
 
 # A map between the xsd types to their cell validator objects.
 VALIDATOR_TYPES_MAP = {

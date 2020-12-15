@@ -23,6 +23,8 @@ from __future__ import print_function
 import argparse
 import sys
 
+import six
+
 from dsrf import constants
 from dsrf.conformance import conformance_validators
 from dsrf.conformance import error
@@ -87,9 +89,10 @@ class ConformanceReportProcessor(dsrf_report_processor.BaseReportProcessor):
         self.parse_xsd(block)
 
       sys.stderr.write(
-          constants.COLOR_GREEN + '\r[Block conformance] Blocks validated: %s '
-          '(rows validated: %s)' % (
-              nr_blocks_validated, nr_rows_validated) + constants.ENDC)
+          six.ensure_str(constants.COLOR_GREEN) +
+          '\r[Block conformance] Blocks validated: %s '
+          '(rows validated: %s)' % (nr_blocks_validated, nr_rows_validated) +
+          constants.ENDC)
       nr_rows_validated += self.block_processor.process_block(block)
       nr_blocks_validated += 1
     return nr_blocks_validated, nr_rows_validated
@@ -111,12 +114,14 @@ if __name__ == '__main__':
     nr_blocks, nr_rows = conformance_processor.process_report()
   except error.BlockConformanceFailure as e:
     sys.stderr.write(
-        constants.COLOR_RED + constants.BOLD + '\n[Conformance validation] '
-        + str(e) + conformance_validators.QUANTIFIER_STR + constants.ENDC)
+        six.ensure_str(constants.COLOR_RED) + six.ensure_str(constants.BOLD) +
+        '\n[Conformance validation] ' + str(e) +
+        conformance_validators.QUANTIFIER_STR + constants.ENDC)
     sys.exit(-1)
   if nr_blocks > 0 and nr_rows > 0:
     print(
-        (constants.BOLD + constants.COLOR_GREEN +
+        (six.ensure_str(constants.BOLD) +
+         six.ensure_str(constants.COLOR_GREEN) +
          '\nThe conformance validation passed successfully! Validated %s '
          'blocks (%s rows). Note: this assessment does not take cell format '
          'errors into account. Please check for "ERROR" in the output above.' %

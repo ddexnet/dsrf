@@ -56,6 +56,6 @@ rows {
   cells {
     name: "Title"
     cell_type: STRING
-    string_value: "Lët Më Gët | Thîś \"Rîght"
+    string_value: "L\303\253t M\303\253 G\303\253t | Th\303\256\305\233 \"R\303\256ght"
   }
 }

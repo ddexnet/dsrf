@@ -22,8 +22,6 @@ from __future__ import print_function
 
 import re
 
-import six
-
 from dsrf import constants
 from dsrf import error
 from dsrf.proto import cell_pb2
@@ -116,11 +114,7 @@ class StringValidator(BaseCellValidator):
     if not isinstance(value, str):
       self._raise_validation_failure(value, row_number, file_name, block_number)
       return
-    try:
-      return six.text_type(value, 'utf-8')
-    except UnicodeDecodeError as e:
-      raise error.BadUnicodeError(
-          self.cell_name, row_number, file_name, block_number, value, str(e))
+    return value
 
   def get_cell_type(self):
     return cell_pb2.STRING

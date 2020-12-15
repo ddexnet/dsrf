@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ==============================================================================
-
 """Process the block objects, by a custom logic."""
 import sys
 
@@ -51,7 +50,7 @@ class BaseReportProcessor(object):
       if constants.QUEUE_DELIMITER in line:
         block = block_pb2.Block()
         try:
-          block.ParseFromString('\n'.join(message_lines))
+          block.ParseFromString(b'\n'.join(message_lines))
         except message_mod.DecodeError:
           sys.stderr.write(
               'ERROR: Can not read protocol buffer from queue. Is '
@@ -62,7 +61,7 @@ class BaseReportProcessor(object):
         yield block
         message_lines = []
       else:
-        message_lines.append(line.rstrip('\n'))
+        message_lines.append(line.rstrip(bytes('\n', encoding='utf8')))
 
   def process_report(self):
     for block in self.read_blocks_from_queue():

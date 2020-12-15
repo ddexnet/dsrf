@@ -13,7 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ==============================================================================
-
 """Tests for dsrf.conformance.conformance_processor."""
 
 from __future__ import absolute_import
@@ -24,8 +23,6 @@ import os
 from os import path
 import sys
 import unittest
-
-import six
 
 from dsrf import constants
 from dsrf.conformance import conformance_processor
@@ -38,8 +35,8 @@ from google.protobuf import text_format
 
 def read_test_block(file_name):
   return open(
-      path.join(
-          path.dirname(__file__), '../testdata/blocks/' + file_name)).read()
+      path.join(path.dirname(__file__), '../testdata/blocks/' + file_name),
+      encoding='utf-8').read()
 
 
 def _create_test_block(row_types):
@@ -58,16 +55,14 @@ def _write_block_to_queue(row_types):
   ugc_block = _create_test_block(row_types)
   queue_fd = os.open('/tmp/queue.txt', os.O_RDWR)
   os.write(queue_fd, ugc_block.SerializeToString())
-  os.write(queue_fd,
-           bytes('\n' + six.ensure_str(constants.QUEUE_DELIMITER) + '\n'))
+  os.write(queue_fd, bytes(b'\n' + constants.QUEUE_DELIMITER + b'\n'))
   sys.stdin = open('/tmp/queue.txt', 'rb')
 
 
 BODY_BLOCK = read_test_block('basic_body_block.txt')
 
 UGC_XSD_1_1 = path.join(
-    path.dirname(__file__),
-    '../schemas/UgcProfile/1.1.1/UgcProfile.xsd')
+    path.dirname(__file__), '../schemas/UgcProfile/1.1.1/UgcProfile.xsd')
 
 
 class ConformanceProcessorBasicTest(unittest.TestCase):
@@ -115,8 +110,8 @@ class ConformanceProcessorBasicTest(unittest.TestCase):
     sequence.add_child(as02)
     mw01 = conformance_validators.Node()
     mw01.set_row_type('MW01')
-    choice = conformance_validators.Node(max_occurs=float('inf'),
-                                         is_choice=True)
+    choice = conformance_validators.Node(
+        max_occurs=float('inf'), is_choice=True)
     choice.add_child(sequence)
     choice.add_child(mw01)
     root = conformance_validators.Node()

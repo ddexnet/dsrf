@@ -221,9 +221,9 @@ class DSRFFileParser(object):
     row_number = 0
     block_number = 0
     if self.is_compressed():
-      tsv = gzip.open(self.file_path, 'rU')
+      tsv = gzip.open(self.file_path, 'rt', encoding='utf-8')
     else:
-      tsv = open(self.file_path, 'rU')
+      tsv = open(self.file_path, 'rt', encoding='utf-8')
     current_block = block_pb2.Block(file_number=file_number)
     self.logger.info(
         'Start parsing the HEAD block in file number %s.', file_number)
